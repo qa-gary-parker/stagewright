@@ -6,12 +6,20 @@ const GOOGLE_SHEETS_WEBHOOK = import.meta.env.VITE_GOOGLE_SHEETS_WEBHOOK;
 export default function EmailSignup() {
   const [email, setEmail] = useState('');
   const [company, setCompany] = useState('');
+  const [honeypot, setHoneypot] = useState(''); // Anti-spam: bots fill this, humans don't see it
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Anti-spam: if honeypot field is filled, silently "succeed" without submitting
+    if (honeypot) {
+      setSubmitted(true);
+      return;
+    }
+
     setLoading(true);
     setError('');
 
@@ -73,6 +81,17 @@ export default function EmailSignup() {
                 </p>
 
                 <form onSubmit={handleSubmit} className="max-w-2xl mx-auto space-y-4">
+                  {/* Honeypot field - hidden from humans, bots fill it */}
+                  <input
+                    type="text"
+                    name="website"
+                    value={honeypot}
+                    onChange={(e) => setHoneypot(e.target.value)}
+                    className="absolute -left-[9999px]"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    aria-hidden="true"
+                  />
                   <div>
                     <input
                       type="email"
@@ -171,23 +190,9 @@ export default function EmailSignup() {
                 <h2 className="text-4xl font-bold text-white mb-4">
                   You're on the List!
                 </h2>
-                <p className="text-xl text-blue-100 mb-8">
+                <p className="text-xl text-blue-100">
                   Thanks for joining! We'll send you an invite as soon as we launch.
                 </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <button
-                    onClick={() => window.open('https://twitter.com/intent/tweet?text=Just%20joined%20the%20waitlist%20for%20StageWright%20-%20the%20smart%20test%20reporting%20platform%20for%20Playwright!', '_blank')}
-                    className="px-6 py-3 bg-white text-blue-600 font-semibold rounded-lg hover:bg-blue-50 transition-all"
-                  >
-                    Share on Twitter
-                  </button>
-                  <button
-                    onClick={() => setSubmitted(false)}
-                    className="px-6 py-3 bg-white/20 hover:bg-white/30 text-white font-semibold rounded-lg transition-all border border-white/20"
-                  >
-                    Add Another Email
-                  </button>
-                </div>
               </motion.div>
             )}
           </div>
