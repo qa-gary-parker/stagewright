@@ -54,6 +54,11 @@ export default function Hero() {
             stiffness: 100
           }}
         >
+          <img
+            src="/logo.png"
+            alt="StageWright Logo"
+            className="w-24 h-24 mx-auto mb-6"
+          />
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-sm font-medium mb-8">
             <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
             Now accepting early access signups
