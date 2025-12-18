@@ -60,7 +60,7 @@ export default function EmailSignup() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="bg-gradient-to-br from-green-600 via-green-700 to-emerald-800 rounded-3xl p-12 shadow-2xl relative overflow-hidden"
+          className="bg-gradient-to-br from-green-600 via-green-700 to-emerald-800 rounded-2xl md:rounded-3xl p-6 md:p-12 shadow-2xl relative overflow-hidden"
         >
           {/* Animated background pattern */}
           <div className="absolute inset-0 opacity-10">
@@ -73,10 +73,10 @@ export default function EmailSignup() {
           <div className="relative z-10">
             {!submitted ? (
               <>
-                <h2 className="text-4xl md:text-5xl font-bold text-white text-center mb-4">
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white text-center mb-4">
                   Join the Waitlist
                 </h2>
-                <p className="text-xl text-green-100 text-center mb-8 max-w-2xl mx-auto">
+                <p className="text-base sm:text-xl text-green-100 text-center mb-6 sm:mb-8 max-w-2xl mx-auto">
                   Be among the first to experience StageWright. Get early access, exclusive updates, and special launch pricing.
                 </p>
 
@@ -99,7 +99,7 @@ export default function EmailSignup() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="your.email@company.com"
-                      className="w-full px-6 py-4 rounded-lg text-lg bg-white/90 backdrop-blur-sm text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-4 focus:ring-white/50 transition-all"
+                      className="w-full px-4 sm:px-6 py-3 sm:py-4 rounded-lg text-base sm:text-lg bg-white/90 backdrop-blur-sm text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-4 focus:ring-white/50 transition-all"
                     />
                   </div>
 
@@ -109,14 +109,14 @@ export default function EmailSignup() {
                       value={company}
                       onChange={(e) => setCompany(e.target.value)}
                       placeholder="Company name (optional)"
-                      className="w-full px-6 py-4 rounded-lg text-lg bg-white/90 backdrop-blur-sm text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-4 focus:ring-white/50 transition-all"
+                      className="w-full px-4 sm:px-6 py-3 sm:py-4 rounded-lg text-base sm:text-lg bg-white/90 backdrop-blur-sm text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-4 focus:ring-white/50 transition-all"
                     />
                   </div>
 
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full px-8 py-4 bg-white text-green-700 text-lg font-bold rounded-lg hover:bg-green-50 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full px-6 sm:px-8 py-3 sm:py-4 bg-white text-green-700 text-base sm:text-lg font-bold rounded-lg hover:bg-green-50 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {loading ? (
                       <span className="flex items-center justify-center gap-2">
@@ -145,33 +145,33 @@ export default function EmailSignup() {
                   </p>
                 </form>
 
-                <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/10">
-                    <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-                      <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="mt-8 sm:mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 text-center">
+                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-white/10">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white/10 rounded-lg flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                      <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                       </svg>
                     </div>
-                    <h3 className="text-white font-semibold mb-2">Early Access</h3>
-                    <p className="text-green-200 text-sm">Be first to try new features</p>
+                    <h3 className="text-white font-semibold text-sm sm:text-base mb-1 sm:mb-2">Early Access</h3>
+                    <p className="text-green-200 text-xs sm:text-sm">Be first to try new features</p>
                   </div>
-                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/10">
-                    <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-                      <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-white/10">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white/10 rounded-lg flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                      <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                     </div>
-                    <h3 className="text-white font-semibold mb-2">Special Pricing</h3>
-                    <p className="text-green-200 text-sm">Exclusive launch discounts</p>
+                    <h3 className="text-white font-semibold text-sm sm:text-base mb-1 sm:mb-2">Special Pricing</h3>
+                    <p className="text-green-200 text-xs sm:text-sm">Exclusive launch discounts</p>
                   </div>
-                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/10">
-                    <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-                      <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-white/10">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white/10 rounded-lg flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                      <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                       </svg>
                     </div>
-                    <h3 className="text-white font-semibold mb-2">Direct Feedback</h3>
-                    <p className="text-green-200 text-sm">Shape the product roadmap</p>
+                    <h3 className="text-white font-semibold text-sm sm:text-base mb-1 sm:mb-2">Direct Feedback</h3>
+                    <p className="text-green-200 text-xs sm:text-sm">Shape the product roadmap</p>
                   </div>
                 </div>
               </>

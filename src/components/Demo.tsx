@@ -233,30 +233,31 @@ export default function Demo() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-10 sm:mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6 tracking-tight px-2">
             See StageWright in Action
           </h2>
-          <p className="text-lg text-slate-400 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg text-slate-400 max-w-2xl mx-auto px-2">
             A beautiful, centralized dashboard for all your Playwright test results, artifacts, and analytics.
           </p>
         </motion.div>
 
         {/* Tab Navigation */}
-        <div className="flex flex-wrap justify-center mb-8 gap-2 md:gap-4">
+        <div className="flex flex-wrap justify-center mb-6 sm:mb-8 gap-2">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`px-4 md:px-6 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center gap-2 ${
+              className={`px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-lg text-xs sm:text-sm md:text-base font-semibold transition-all duration-300 flex items-center gap-1.5 sm:gap-2 ${
                 activeTab === tab.id
                   ? 'bg-green-600 text-white shadow-lg scale-105'
                   : 'bg-slate-800/50 text-slate-400 hover:text-white hover:bg-slate-700/50'
               }`}
             >
               {tab.icon}
-              {tab.label}
+              <span className="hidden sm:inline">{tab.label}</span>
+              <span className="sm:hidden">{tab.id === 'ai' ? 'AI' : tab.id === 'tests' ? 'Tests' : tab.id === 'dashboard' ? 'Stats' : 'Gallery'}</span>
             </button>
           ))}
         </div>
@@ -273,15 +274,15 @@ export default function Demo() {
           {activeTab === 'dashboard' && (
             <div className="space-y-8">
               {/* Header with Stats */}
-              <div className="flex flex-col lg:flex-row gap-8 items-start">
+              <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-center lg:items-start">
                 {/* Progress Ring */}
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center shrink-0">
                   <ProgressRing value={92} color="#22c55e" />
                   <span className="text-slate-400 text-sm mt-2">Pass Rate</span>
                 </div>
 
                 {/* Stats Grid */}
-                <div className="grid grid-cols-2 md:grid-cols-5 gap-4 flex-1">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 sm:gap-4 flex-1 w-full">
                   {[
                     { label: 'Passed', value: passed, color: 'text-green-400', bg: 'bg-green-500/10' },
                     { label: 'Failed', value: failed, color: 'text-red-400', bg: 'bg-red-500/10' },
@@ -294,10 +295,10 @@ export default function Demo() {
                       initial={{ scale: 0.8, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
                       transition={{ duration: 0.5 }}
-                      className={`${stat.bg} rounded-xl p-4 text-center border border-slate-700/50`}
+                      className={`${stat.bg} rounded-lg sm:rounded-xl p-3 sm:p-4 text-center border border-slate-700/50`}
                     >
-                      <div className={`text-3xl font-bold ${stat.color}`}>{stat.value}</div>
-                      <div className="text-slate-400 text-sm">{stat.label}</div>
+                      <div className={`text-2xl sm:text-3xl font-bold ${stat.color}`}>{stat.value}</div>
+                      <div className="text-slate-400 text-xs sm:text-sm">{stat.label}</div>
                     </motion.div>
                   ))}
                 </div>
@@ -378,22 +379,22 @@ export default function Demo() {
                         : 'border-slate-700/50 hover:border-slate-600'
                     }`}
                   >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                      <div className="flex items-start sm:items-center gap-3 sm:gap-4">
                         <GradeBadge grade={test.grade} />
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <h4 className="text-white font-medium">{test.name}</h4>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <h4 className="text-white font-medium text-sm sm:text-base">{test.name}</h4>
                             <StatusBadge status={test.status} />
                           </div>
-                          <div className="text-slate-500 text-sm flex items-center gap-4 mt-1">
+                          <div className="text-slate-500 text-xs sm:text-sm flex flex-wrap items-center gap-2 sm:gap-4 mt-1">
                             <span className="flex items-center gap-1">{Icons.folder} {test.file}</span>
                             <span className="flex items-center gap-1">{Icons.clock} {test.duration}s</span>
                             {test.retries > 0 && <span className="flex items-center gap-1">{Icons.refresh} {test.retries} retries</span>}
                           </div>
                         </div>
                       </div>
-                      <div className="flex gap-2">
+                      <div className="hidden sm:flex gap-2 shrink-0">
                         <div className="p-2 bg-slate-700/50 text-slate-500 rounded">
                           {Icons.image}
                         </div>
@@ -675,14 +676,14 @@ export default function Demo() {
           {activeTab === 'ai' && (
             <div className="space-y-8">
               {/* AI Hero Banner */}
-              <div className="bg-gradient-to-r from-green-600/20 via-emerald-600/20 to-green-600/20 rounded-2xl p-8 border border-green-500/30">
-                <div className="flex items-center gap-3">
-                  <div className="p-3 bg-green-500/20 rounded-xl text-green-400">
+              <div className="bg-gradient-to-r from-green-600/20 via-emerald-600/20 to-green-600/20 rounded-xl sm:rounded-2xl p-4 sm:p-8 border border-green-500/30">
+                <div className="flex items-start sm:items-center gap-3">
+                  <div className="p-2 sm:p-3 bg-green-500/20 rounded-lg sm:rounded-xl text-green-400 shrink-0">
                     {Icons.ai}
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold text-white">AI-Powered Test Intelligence</h3>
-                    <p className="text-slate-400">Automatic failure analysis, pattern detection, and actionable recommendations</p>
+                    <h3 className="text-lg sm:text-2xl font-bold text-white">AI-Powered Test Intelligence</h3>
+                    <p className="text-slate-400 text-xs sm:text-base">Automatic failure analysis, pattern detection, and actionable recommendations</p>
                   </div>
                 </div>
               </div>
@@ -692,12 +693,12 @@ export default function Demo() {
                 <h4 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
                   <span className="text-green-400">{Icons.target}</span> Intelligent Failure Clustering
                 </h4>
-                <div className="bg-slate-900/50 rounded-lg p-6 border border-slate-700">
-                  <div className="flex items-start gap-4">
-                    <div className="p-3 bg-red-500/10 rounded-lg text-red-400">
+                <div className="bg-slate-900/50 rounded-lg p-4 sm:p-6 border border-slate-700">
+                  <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4">
+                    <div className="p-2 sm:p-3 bg-red-500/10 rounded-lg text-red-400 shrink-0">
                       {Icons.alert}
                     </div>
-                    <div className="flex-1">
+                    <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-3 mb-2">
                         <h5 className="text-white font-semibold">TimeoutError Cluster</h5>
                         <span className="px-2 py-0.5 bg-red-500/20 text-red-400 text-xs rounded">2 tests affected</span>
@@ -709,25 +710,25 @@ export default function Demo() {
                         <div className="flex items-center gap-2 text-green-400 font-semibold mb-3">
                           {Icons.ai} Root Cause Analysis
                         </div>
-                        <p className="text-slate-300 text-sm leading-relaxed mb-3">
+                        <p className="text-slate-300 text-xs sm:text-sm leading-relaxed mb-3">
                           These failures share a common pattern: all are waiting for elements with
-                          <code className="bg-slate-800 px-1.5 py-0.5 rounded mx-1">.payment-*</code> selectors.
-                          Cross-referencing with your git history, this correlates with commit <code className="bg-slate-800 px-1.5 py-0.5 rounded mx-1">a3f2b1c</code> from 2 days ago which refactored the payment module.
+                          <code className="bg-slate-800 px-1 sm:px-1.5 py-0.5 rounded mx-0.5 sm:mx-1 text-xs break-all">.payment-*</code> selectors.
+                          Cross-referencing with your git history, this correlates with commit <code className="bg-slate-800 px-1 sm:px-1.5 py-0.5 rounded mx-0.5 sm:mx-1 text-xs">a3f2b1c</code> from 2 days ago which refactored the payment module.
                         </p>
                         <div className="border-t border-slate-700 pt-3 mt-3">
-                          <div className="text-white text-sm font-medium mb-2">Suggested Fixes:</div>
-                          <ul className="text-slate-300 text-sm space-y-2">
+                          <div className="text-white text-xs sm:text-sm font-medium mb-2">Suggested Fixes:</div>
+                          <ul className="text-slate-300 text-xs sm:text-sm space-y-2">
                             <li className="flex items-start gap-2">
-                              <span className="text-green-400 mt-0.5">1.</span>
-                              Update selector to <code className="bg-slate-800 px-1.5 py-0.5 rounded">.payment-submit-btn</code> (new class name)
+                              <span className="text-green-400 mt-0.5 shrink-0">1.</span>
+                              <span>Update selector to <code className="bg-slate-800 px-1 py-0.5 rounded text-xs break-all">.payment-submit-btn</code> (new class name)</span>
                             </li>
                             <li className="flex items-start gap-2">
-                              <span className="text-green-400 mt-0.5">2.</span>
-                              Add explicit wait for payment iframe: <code className="bg-slate-800 px-1.5 py-0.5 rounded">page.waitForSelector('iframe[name="payment"]')</code>
+                              <span className="text-green-400 mt-0.5 shrink-0">2.</span>
+                              <span>Add explicit wait for payment iframe: <code className="bg-slate-800 px-1 py-0.5 rounded text-xs break-all">page.waitForSelector('iframe[name="payment"]')</code></span>
                             </li>
                             <li className="flex items-start gap-2">
-                              <span className="text-green-400 mt-0.5">3.</span>
-                              Consider using data-testid attributes for more stable selectors
+                              <span className="text-green-400 mt-0.5 shrink-0">3.</span>
+                              <span>Consider using data-testid attributes for more stable selectors</span>
                             </li>
                           </ul>
                         </div>
@@ -755,24 +756,24 @@ export default function Demo() {
                       transition={{ delay: i * 0.15 }}
                       className="bg-slate-900/50 rounded-lg p-5 border border-slate-700 hover:border-slate-600 transition-colors"
                     >
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex items-start gap-4">
-                          <div className={`w-3 h-3 rounded-full mt-1.5 ${
+                      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                        <div className="flex items-start gap-3 sm:gap-4">
+                          <div className={`w-3 h-3 rounded-full mt-1.5 shrink-0 ${
                             rec.color === 'red' ? 'bg-red-500' :
                             rec.color === 'yellow' ? 'bg-yellow-500' : 'bg-green-500'
                           }`} />
                           <div>
-                            <div className="flex items-center gap-2 mb-1">
-                              <h5 className="text-white font-medium">{rec.title}</h5>
+                            <div className="flex flex-wrap items-center gap-2 mb-1">
+                              <h5 className="text-white font-medium text-sm sm:text-base">{rec.title}</h5>
                               <span className={`text-xs px-2 py-0.5 rounded ${
                                 rec.color === 'red' ? 'bg-red-500/20 text-red-400' :
                                 rec.color === 'yellow' ? 'bg-yellow-500/20 text-yellow-400' : 'bg-green-500/20 text-green-400'
                               }`}>{rec.priority}</span>
                             </div>
-                            <p className="text-slate-400 text-sm">{rec.desc}</p>
+                            <p className="text-slate-400 text-xs sm:text-sm">{rec.desc}</p>
                           </div>
                         </div>
-                        <div className="shrink-0 px-4 py-2 bg-green-600/50 text-white/70 text-sm rounded-lg">
+                        <div className="shrink-0 px-3 sm:px-4 py-2 bg-green-600/50 text-white/70 text-xs sm:text-sm rounded-lg self-start ml-6 sm:ml-0">
                           {rec.action}
                         </div>
                       </div>
