@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-4 text-center md:text-left">
-            <img src="/logo.png" alt="StageWright Logo" className="w-12 h-12" />
+            <img src="/logo.png" alt="StageWright Logo" className="w-14 h-14 rounded-xl" />
             <div>
               <h3 className="text-2xl font-bold text-white mb-1">
                 Stage<span className="text-blue-400">Wright</span>

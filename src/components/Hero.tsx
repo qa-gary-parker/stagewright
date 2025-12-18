@@ -57,7 +57,7 @@ export default function Hero() {
           <img
             src="/logo.png"
             alt="StageWright Logo"
-            className="w-24 h-24 mx-auto mb-6"
+            className="w-32 h-32 mx-auto mb-6 rounded-2xl"
           />
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-sm font-medium mb-8">
             <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
