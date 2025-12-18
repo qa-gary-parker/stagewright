@@ -370,12 +370,12 @@ export default function Demo() {
                         </div>
                       </div>
                       <div className="flex gap-2">
-                        <button className="p-2 bg-slate-700 text-slate-300 rounded hover:bg-slate-600">
+                        <div className="p-2 bg-slate-700/50 text-slate-500 rounded">
                           {Icons.image}
-                        </button>
-                        <button className="p-2 bg-slate-700 text-slate-300 rounded hover:bg-slate-600">
+                        </div>
+                        <div className="p-2 bg-slate-700/50 text-slate-500 rounded">
                           {Icons.search}
-                        </button>
+                        </div>
                       </div>
                     </div>
 
@@ -431,7 +431,7 @@ export default function Demo() {
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ delay: 0.1 }}
-                  className="bg-slate-900/50 rounded-lg overflow-hidden border border-slate-700 hover:border-blue-500 transition-all cursor-pointer group"
+                  className="bg-slate-900/50 rounded-lg overflow-hidden border border-slate-700 group"
                 >
                   <div className="aspect-video bg-slate-800 relative overflow-hidden">
                     {/* Mock Login Page Screenshot */}
@@ -451,9 +451,6 @@ export default function Demo() {
                         </div>
                       </div>
                     </div>
-                    <div className="absolute inset-0 bg-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <span className="text-white font-semibold text-sm">View</span>
-                    </div>
                   </div>
                   <div className="p-3">
                     <div className="text-white text-sm font-medium truncate">login-page.png</div>
@@ -466,7 +463,7 @@ export default function Demo() {
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ delay: 0.2 }}
-                  className="bg-slate-900/50 rounded-lg overflow-hidden border border-slate-700 hover:border-blue-500 transition-all cursor-pointer group"
+                  className="bg-slate-900/50 rounded-lg overflow-hidden border border-slate-700 group"
                 >
                   <div className="aspect-video bg-slate-800 relative overflow-hidden">
                     {/* Mock Dashboard Screenshot */}
@@ -498,9 +495,6 @@ export default function Demo() {
                         </div>
                       </div>
                     </div>
-                    <div className="absolute inset-0 bg-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <span className="text-white font-semibold text-sm">View</span>
-                    </div>
                   </div>
                   <div className="p-3">
                     <div className="text-white text-sm font-medium truncate">dashboard.png</div>
@@ -513,7 +507,7 @@ export default function Demo() {
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ delay: 0.3 }}
-                  className="bg-slate-900/50 rounded-lg overflow-hidden border border-red-500/50 hover:border-red-500 transition-all cursor-pointer group"
+                  className="bg-slate-900/50 rounded-lg overflow-hidden border border-red-500/50 group"
                 >
                   <div className="aspect-video bg-slate-800 relative overflow-hidden">
                     {/* Mock Error Screenshot */}
@@ -532,9 +526,6 @@ export default function Demo() {
                       </div>
                     </div>
                     <div className="absolute top-3 right-3 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded font-medium">FAILED</div>
-                    <div className="absolute inset-0 bg-red-500/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <span className="text-white font-semibold text-sm">View</span>
-                    </div>
                   </div>
                   <div className="p-3">
                     <div className="text-white text-sm font-medium truncate">checkout-error.png</div>
@@ -547,7 +538,7 @@ export default function Demo() {
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ delay: 0.4 }}
-                  className="bg-slate-900/50 rounded-lg overflow-hidden border border-slate-700 hover:border-blue-500 transition-all cursor-pointer group"
+                  className="bg-slate-900/50 rounded-lg overflow-hidden border border-slate-700 group"
                 >
                   <div className="aspect-video bg-slate-800 relative overflow-hidden">
                     {/* Mock Cart Screenshot */}
@@ -576,9 +567,6 @@ export default function Demo() {
                         </div>
                       </div>
                     </div>
-                    <div className="absolute inset-0 bg-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <span className="text-white font-semibold text-sm">View</span>
-                    </div>
                   </div>
                   <div className="p-3">
                     <div className="text-white text-sm font-medium truncate">cart-items.png</div>
@@ -596,7 +584,7 @@ export default function Demo() {
                     initial={{ scale: 0.8, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ delay: 0.5 + i * 0.1 }}
-                    className="bg-slate-900/50 rounded-lg overflow-hidden border border-slate-700 hover:border-purple-500 transition-all cursor-pointer group"
+                    className="bg-slate-900/50 rounded-lg overflow-hidden border border-slate-700 group"
                   >
                     <div className="aspect-video bg-gradient-to-br from-purple-900/30 to-slate-800 flex items-center justify-center relative">
                       <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-sm">
@@ -623,7 +611,7 @@ export default function Demo() {
                     initial={{ scale: 0.8, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ delay: 0.7 + i * 0.1 }}
-                    className="bg-slate-900/50 rounded-lg overflow-hidden border border-slate-700 hover:border-green-500 transition-all cursor-pointer group"
+                    className="bg-slate-900/50 rounded-lg overflow-hidden border border-slate-700 group"
                   >
                     <div className="aspect-video bg-gradient-to-br from-green-900/20 to-slate-800 flex items-center justify-center relative">
                       <div className="text-center">
@@ -638,18 +626,14 @@ export default function Demo() {
                         <div className="text-white text-sm font-medium truncate">{trace.name}</div>
                         <div className="text-slate-500 text-xs">{trace.size}</div>
                       </div>
-                      <button className="flex items-center gap-1 px-3 py-1.5 bg-green-600 text-white text-xs rounded hover:bg-green-700 transition-colors">
+                      <div className="flex items-center gap-1 px-3 py-1.5 bg-green-600/50 text-white/70 text-xs rounded">
                         {Icons.download}
-                      </button>
+                      </div>
                     </div>
                   </motion.div>
                 ))}
               </div>
 
-              {/* Lightbox Preview Hint */}
-              <div className="text-center text-slate-500 text-sm mt-6">
-                Click any screenshot to open in full-screen lightbox with navigation
-              </div>
             </div>
           )}
 
@@ -754,9 +738,9 @@ export default function Demo() {
                             <p className="text-slate-400 text-sm">{rec.desc}</p>
                           </div>
                         </div>
-                        <button className="shrink-0 px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors">
+                        <div className="shrink-0 px-4 py-2 bg-blue-600/50 text-white/70 text-sm rounded-lg">
                           {rec.action}
-                        </button>
+                        </div>
                       </div>
                     </motion.div>
                   ))}
