@@ -23,8 +23,8 @@ The landing page is feature-complete with email waitlist signup functionality. A
 | `Hero.tsx` | Main hero section with animated background blobs, headline, and CTA buttons |
 | `Features.tsx` | 9-feature grid showcasing product capabilities, CI integrations, cloud storage, and roadmap |
 | `Demo.tsx` | Interactive tabbed demo with 4 views: AI Analysis, Test Results, Dashboard, Gallery |
-| `EmailSignup.tsx` | Waitlist signup form with email/company fields, stores to localStorage |
-| `Footer.tsx` | Site footer with navigation links and legal |
+| `EmailSignup.tsx` | Waitlist signup form with email/company fields, sends to Google Sheets |
+| `Footer.tsx` | Minimal site footer with branding and copyright |
 
 ## Features Showcased
 
@@ -57,6 +57,47 @@ The landing page is feature-complete with email waitlist signup functionality. A
 - Smart Test Selection (Planned)
 - Team Dashboard (Planned)
 
+## Waitlist Setup (Google Sheets)
+
+The email signup form sends data to a Google Sheets webhook. To set up:
+
+### 1. Create a Google Sheet
+Create a new Google Sheet with columns: `Timestamp`, `Email`, `Company`
+
+### 2. Add Google Apps Script
+Go to **Extensions > Apps Script** and paste this code:
+
+```javascript
+function doPost(e) {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  const data = JSON.parse(e.postData.contents);
+
+  sheet.appendRow([
+    data.timestamp || new Date().toISOString(),
+    data.email,
+    data.company
+  ]);
+
+  return ContentService
+    .createTextOutput(JSON.stringify({ status: 'success' }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+```
+
+### 3. Deploy as Web App
+1. Click **Deploy > New deployment**
+2. Select **Web app** as the type
+3. Set **Execute as:** "Me"
+4. Set **Who has access:** "Anyone"
+5. Click **Deploy** and authorize
+6. Copy the Web app URL
+
+### 4. Configure Environment Variable
+Add the URL to Vercel:
+- Go to your Vercel project settings
+- Add environment variable: `VITE_GOOGLE_SHEETS_WEBHOOK` = your script URL
+- Redeploy
+
 ## Development
 
 ```bash
@@ -82,10 +123,11 @@ The design draws inspiration from:
 ## Open TODOs
 
 ### Landing Page
-- [ ] Connect email signup to actual backend/API (currently stores to localStorage)
-- [ ] Add real domain and deploy to stagewright.dev
+- [x] Connect email signup to Google Sheets via Apps Script webhook
+- [x] Deploy to Vercel (stagewright.vercel.app)
 - [ ] Set up analytics tracking
 - [ ] Add meta tags and Open Graph images for social sharing
+- [ ] Custom domain (stagewright.dev)
 
 ### Parent Project (playwright-smart-reporter)
 - [ ] Implement S3 attachment storage (paused during landing page work)
@@ -116,4 +158,4 @@ stagewright-landing/
 
 - All inflated/unverified statistics have been removed to maintain credibility
 - The demo section shows mockups of the product interface, not actual screenshots
-- Email signups are stored in localStorage under key `stagewright-waitlist` until backend integration
+- Email signups are sent to Google Sheets (falls back to localStorage if webhook not configured)

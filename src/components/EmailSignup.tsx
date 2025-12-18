@@ -1,29 +1,47 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 
+const GOOGLE_SHEETS_WEBHOOK = import.meta.env.VITE_GOOGLE_SHEETS_WEBHOOK;
+
 export default function EmailSignup() {
   const [email, setEmail] = useState('');
   const [company, setCompany] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError('');
 
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    try {
+      if (GOOGLE_SHEETS_WEBHOOK) {
+        await fetch(GOOGLE_SHEETS_WEBHOOK, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email,
+            company: company || 'Not provided',
+            timestamp: new Date().toISOString(),
+          }),
+        });
+        // no-cors mode doesn't give us response status, so we assume success
+      } else {
+        console.warn('VITE_GOOGLE_SHEETS_WEBHOOK not configured, storing locally only');
+        const waitlist = JSON.parse(localStorage.getItem('stagewright-waitlist') || '[]');
+        waitlist.push({ email, company, timestamp: new Date().toISOString() });
+        localStorage.setItem('stagewright-waitlist', JSON.stringify(waitlist));
+      }
 
-    // For now, just log to console (you can integrate with your backend later)
-    console.log('Waitlist signup:', { email, company, timestamp: new Date().toISOString() });
-
-    // Store in localStorage for demo
-    const waitlist = JSON.parse(localStorage.getItem('stagewright-waitlist') || '[]');
-    waitlist.push({ email, company, timestamp: new Date().toISOString() });
-    localStorage.setItem('stagewright-waitlist', JSON.stringify(waitlist));
-
-    setSubmitted(true);
-    setLoading(false);
+      setSubmitted(true);
+    } catch (err) {
+      console.error('Waitlist signup error:', err);
+      setError('Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -93,6 +111,12 @@ export default function EmailSignup() {
                       'Get Early Access'
                     )}
                   </button>
+
+                  {error && (
+                    <p className="text-sm text-red-200 text-center bg-red-500/20 rounded-lg py-2">
+                      {error}
+                    </p>
+                  )}
 
                   <p className="text-sm text-blue-200 text-center flex items-center justify-center gap-2">
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
