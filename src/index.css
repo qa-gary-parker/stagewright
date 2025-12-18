@@ -4,7 +4,7 @@
   body {
     @apply antialiased;
     letter-spacing: -0.015em;
-    background: linear-gradient(180deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+    background: linear-gradient(180deg, #0f1419 0%, #1a1f2e 50%, #0f1419 100%);
     min-height: 100vh;
   }
 
@@ -30,7 +30,7 @@
     content: '';
     position: absolute;
     inset: -2px;
-    background: linear-gradient(90deg, #3b82f6, #8b5cf6, #3b82f6);
+    background: linear-gradient(90deg, #22c55e, #4ade80, #22c55e);
     background-size: 200% 100%;
     border-radius: inherit;
     z-index: -1;
@@ -66,9 +66,9 @@
     box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.4);
   }
 
-  /* Gradient text */
+  /* Gradient text - green theme matching Playwright/logo */
   .gradient-text {
-    background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #f472b6 100%);
+    background: linear-gradient(135deg, #4ade80 0%, #22c55e 50%, #16a34a 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;

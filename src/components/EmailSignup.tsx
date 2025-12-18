@@ -60,7 +60,7 @@ export default function EmailSignup() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="bg-gradient-to-br from-blue-600 via-blue-700 to-purple-700 rounded-3xl p-12 shadow-2xl relative overflow-hidden"
+          className="bg-gradient-to-br from-green-600 via-green-700 to-emerald-800 rounded-3xl p-12 shadow-2xl relative overflow-hidden"
         >
           {/* Animated background pattern */}
           <div className="absolute inset-0 opacity-10">
@@ -76,7 +76,7 @@ export default function EmailSignup() {
                 <h2 className="text-4xl md:text-5xl font-bold text-white text-center mb-4">
                   Join the Waitlist
                 </h2>
-                <p className="text-xl text-blue-100 text-center mb-8 max-w-2xl mx-auto">
+                <p className="text-xl text-green-100 text-center mb-8 max-w-2xl mx-auto">
                   Be among the first to experience StageWright. Get early access, exclusive updates, and special launch pricing.
                 </p>
 
@@ -116,7 +116,7 @@ export default function EmailSignup() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full px-8 py-4 bg-white text-blue-700 text-lg font-bold rounded-lg hover:bg-blue-50 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full px-8 py-4 bg-white text-green-700 text-lg font-bold rounded-lg hover:bg-green-50 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {loading ? (
                       <span className="flex items-center justify-center gap-2">
@@ -137,7 +137,7 @@ export default function EmailSignup() {
                     </p>
                   )}
 
-                  <p className="text-sm text-blue-200 text-center flex items-center justify-center gap-2">
+                  <p className="text-sm text-green-200 text-center flex items-center justify-center gap-2">
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                     </svg>
@@ -153,7 +153,7 @@ export default function EmailSignup() {
                       </svg>
                     </div>
                     <h3 className="text-white font-semibold mb-2">Early Access</h3>
-                    <p className="text-blue-200 text-sm">Be first to try new features</p>
+                    <p className="text-green-200 text-sm">Be first to try new features</p>
                   </div>
                   <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/10">
                     <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center mx-auto mb-4">
@@ -162,7 +162,7 @@ export default function EmailSignup() {
                       </svg>
                     </div>
                     <h3 className="text-white font-semibold mb-2">Special Pricing</h3>
-                    <p className="text-blue-200 text-sm">Exclusive launch discounts</p>
+                    <p className="text-green-200 text-sm">Exclusive launch discounts</p>
                   </div>
                   <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/10">
                     <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center mx-auto mb-4">
@@ -171,7 +171,7 @@ export default function EmailSignup() {
                       </svg>
                     </div>
                     <h3 className="text-white font-semibold mb-2">Direct Feedback</h3>
-                    <p className="text-blue-200 text-sm">Shape the product roadmap</p>
+                    <p className="text-green-200 text-sm">Shape the product roadmap</p>
                   </div>
                 </div>
               </>
@@ -190,7 +190,7 @@ export default function EmailSignup() {
                 <h2 className="text-4xl font-bold text-white mb-4">
                   You're on the List!
                 </h2>
-                <p className="text-xl text-blue-100">
+                <p className="text-xl text-green-100">
                   Thanks for joining! We'll send you an invite as soon as we launch.
                 </p>
               </motion.div>

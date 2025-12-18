@@ -251,7 +251,7 @@ export default function Demo() {
               onClick={() => setActiveTab(tab.id)}
               className={`px-4 md:px-6 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center gap-2 ${
                 activeTab === tab.id
-                  ? 'bg-blue-600 text-white shadow-lg scale-105'
+                  ? 'bg-green-600 text-white shadow-lg scale-105'
                   : 'bg-slate-800/50 text-slate-400 hover:text-white hover:bg-slate-700/50'
               }`}
             >
@@ -354,7 +354,7 @@ export default function Demo() {
                     onClick={() => setTestFilter(filter.id)}
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                       testFilter === filter.id
-                        ? 'bg-blue-600 text-white'
+                        ? 'bg-green-600 text-white'
                         : 'bg-slate-700/50 text-slate-300 hover:bg-slate-700'
                     }`}
                   >
@@ -374,7 +374,7 @@ export default function Demo() {
                     onClick={() => setSelectedTest(selectedTest?.name === test.name ? null : test)}
                     className={`bg-slate-900/50 rounded-lg p-4 border transition-all cursor-pointer ${
                       selectedTest?.name === test.name
-                        ? 'border-blue-500 ring-1 ring-blue-500'
+                        ? 'border-green-500 ring-1 ring-green-500'
                         : 'border-slate-700/50 hover:border-slate-600'
                     }`}
                   >
@@ -414,8 +414,8 @@ export default function Demo() {
                           <div className="text-red-400 text-sm font-mono">{test.error}</div>
                         </div>
                         {test.aiSuggestion && (
-                          <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/30 rounded-lg p-4">
-                            <div className="flex items-center gap-2 text-blue-400 text-sm font-semibold mb-2">
+                          <div className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/30 rounded-lg p-4">
+                            <div className="flex items-center gap-2 text-green-400 text-sm font-semibold mb-2">
                               {Icons.ai} AI Analysis
                             </div>
                             <div className="text-slate-300 text-sm leading-relaxed">{test.aiSuggestion}</div>
@@ -440,7 +440,7 @@ export default function Demo() {
                     onClick={() => setGalleryFilter(filter.id)}
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                       galleryFilter === filter.id
-                        ? 'bg-blue-600 text-white'
+                        ? 'bg-green-600 text-white'
                         : 'bg-slate-700/50 text-slate-300 hover:bg-slate-700'
                     }`}
                   >
@@ -675,9 +675,9 @@ export default function Demo() {
           {activeTab === 'ai' && (
             <div className="space-y-8">
               {/* AI Hero Banner */}
-              <div className="bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-blue-600/20 rounded-2xl p-8 border border-blue-500/30">
+              <div className="bg-gradient-to-r from-green-600/20 via-emerald-600/20 to-green-600/20 rounded-2xl p-8 border border-green-500/30">
                 <div className="flex items-center gap-3">
-                  <div className="p-3 bg-blue-500/20 rounded-xl text-blue-400">
+                  <div className="p-3 bg-green-500/20 rounded-xl text-green-400">
                     {Icons.ai}
                   </div>
                   <div>
@@ -690,7 +690,7 @@ export default function Demo() {
               {/* Failure Clusters */}
               <div>
                 <h4 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                  <span className="text-blue-400">{Icons.target}</span> Intelligent Failure Clustering
+                  <span className="text-green-400">{Icons.target}</span> Intelligent Failure Clustering
                 </h4>
                 <div className="bg-slate-900/50 rounded-lg p-6 border border-slate-700">
                   <div className="flex items-start gap-4">
@@ -705,8 +705,8 @@ export default function Demo() {
                       <div className="text-slate-400 text-sm mb-4">
                         AI detected a pattern: Multiple tests failing with timeout errors on payment-related selectors.
                       </div>
-                      <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/30 rounded-lg p-4">
-                        <div className="flex items-center gap-2 text-blue-400 font-semibold mb-3">
+                      <div className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/30 rounded-lg p-4">
+                        <div className="flex items-center gap-2 text-green-400 font-semibold mb-3">
                           {Icons.ai} Root Cause Analysis
                         </div>
                         <p className="text-slate-300 text-sm leading-relaxed mb-3">
@@ -772,7 +772,7 @@ export default function Demo() {
                             <p className="text-slate-400 text-sm">{rec.desc}</p>
                           </div>
                         </div>
-                        <div className="shrink-0 px-4 py-2 bg-blue-600/50 text-white/70 text-sm rounded-lg">
+                        <div className="shrink-0 px-4 py-2 bg-green-600/50 text-white/70 text-sm rounded-lg">
                           {rec.action}
                         </div>
                       </div>
@@ -791,7 +791,7 @@ export default function Demo() {
                     { step: '3', title: 'Generate Insights', desc: 'Produces actionable recommendations with specific code suggestions and links to relevant changes.' },
                   ].map((item) => (
                     <div key={item.step} className="text-center">
-                      <div className="w-10 h-10 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center mx-auto mb-3">
+                      <div className="w-10 h-10 rounded-full bg-green-600 text-white font-bold flex items-center justify-center mx-auto mb-3">
                         {item.step}
                       </div>
                       <h5 className="text-white font-medium mb-2">{item.title}</h5>

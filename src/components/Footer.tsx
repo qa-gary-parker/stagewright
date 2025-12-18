@@ -9,7 +9,7 @@ export default function Footer() {
             <img src="/logo.png" alt="StageWright Logo" className="w-14 h-14 rounded-xl" />
             <div>
               <h3 className="text-2xl font-bold text-white mb-1">
-                Stage<span className="text-blue-400">Wright</span>
+                Stage<span className="text-green-400">Wright</span>
               </h3>
               <p className="text-slate-400 text-sm">
                 Get your test stage right.

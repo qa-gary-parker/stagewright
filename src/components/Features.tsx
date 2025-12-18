@@ -129,7 +129,7 @@ export default function Features() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <p className="text-blue-400 text-sm font-semibold uppercase tracking-wider mb-4">Features</p>
+          <p className="text-green-400 text-sm font-semibold uppercase tracking-wider mb-4">Features</p>
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight">
             Enterprise-Grade Test Analytics
           </h2>
@@ -153,7 +153,7 @@ export default function Features() {
                   {feature.icon}
                 </div>
               </div>
-              <h3 className="text-xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors">{feature.title}</h3>
+              <h3 className="text-xl font-bold text-white mb-3 group-hover:text-green-400 transition-colors">{feature.title}</h3>
               <p className="text-slate-400 leading-relaxed text-sm">{feature.description}</p>
             </motion.div>
           ))}
@@ -228,13 +228,13 @@ export default function Features() {
                 title: 'Smart Test Selection',
                 description: 'AI-powered selection to run only tests affected by your changes',
                 status: 'Planned',
-                statusColor: 'bg-blue-500'
+                statusColor: 'bg-emerald-500'
               },
               {
                 title: 'Team Dashboard',
                 description: 'Multi-project views with team-wide test health metrics',
                 status: 'Planned',
-                statusColor: 'bg-blue-500'
+                statusColor: 'bg-emerald-500'
               },
             ].map((item, i) => (
               <motion.div
@@ -258,7 +258,7 @@ export default function Features() {
           <div className="text-center mt-8">
             <p className="text-slate-500 text-sm">
               Have a feature request?{' '}
-              <a href="#signup" className="text-blue-400 hover:text-blue-300 transition-colors">
+              <a href="#signup" className="text-green-400 hover:text-green-300 transition-colors">
                 Join the waitlist
               </a>
               {' '}and let us know!
