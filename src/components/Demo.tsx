@@ -1,0 +1,791 @@
+import { motion } from 'framer-motion';
+import { useState } from 'react';
+
+// Mock data for realistic demo
+const mockTests = [
+  { name: 'Login flow works correctly', file: 'auth.spec.ts', status: 'passed', duration: 2.34, grade: 'A', retries: 0 },
+  { name: 'User can add items to cart', file: 'cart.spec.ts', status: 'passed', duration: 4.12, grade: 'A', retries: 0 },
+  { name: 'Checkout process completes', file: 'checkout.spec.ts', status: 'failed', duration: 8.45, grade: 'C', retries: 2, error: 'TimeoutError: Waiting for selector ".payment-btn"', aiSuggestion: 'The payment button selector may have changed. Check if the class name was updated in a recent deployment. Similar failures occurred in PR #847 when the payment module was refactored.' },
+  { name: 'Search returns relevant results', file: 'search.spec.ts', status: 'passed', duration: 1.89, grade: 'B', retries: 1 },
+  { name: 'User profile updates correctly', file: 'profile.spec.ts', status: 'flaky', duration: 3.21, grade: 'D', retries: 3, error: 'Intermittent failure - element detached', aiSuggestion: 'This test has a 70% flakiness rate over the last 30 runs. The element detachment suggests a race condition. Consider using page.waitForSelector() with attached state before interaction.' },
+];
+
+const trendData = [
+  { day: 'Mon', passRate: 82, duration: 45, flaky: 3, slow: 2 },
+  { day: 'Tue', passRate: 85, duration: 42, flaky: 2, slow: 3 },
+  { day: 'Wed', passRate: 78, duration: 51, flaky: 4, slow: 2 },
+  { day: 'Thu', passRate: 91, duration: 38, flaky: 1, slow: 1 },
+  { day: 'Fri', passRate: 88, duration: 41, flaky: 2, slow: 2 },
+  { day: 'Sat', passRate: 94, duration: 36, flaky: 1, slow: 1 },
+  { day: 'Now', passRate: 92, duration: 39, flaky: 1, slow: 1 },
+];
+
+// SVG Icons
+const Icons = {
+  ai: (
+    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+    </svg>
+  ),
+  chart: (
+    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+    </svg>
+  ),
+  check: (
+    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+  ),
+  image: (
+    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+    </svg>
+  ),
+  folder: (
+    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+    </svg>
+  ),
+  clock: (
+    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+  ),
+  refresh: (
+    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+    </svg>
+  ),
+  play: (
+    <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M8 5v14l11-7z" />
+    </svg>
+  ),
+  download: (
+    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+    </svg>
+  ),
+  search: (
+    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+    </svg>
+  ),
+  alert: (
+    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+    </svg>
+  ),
+  target: (
+    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+    </svg>
+  ),
+  sparkles: (
+    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+    </svg>
+  ),
+};
+
+function ProgressRing({ value, color }: { value: number; color: string }) {
+  const radius = 45;
+  const circumference = 2 * Math.PI * radius;
+  const offset = circumference - (value / 100) * circumference;
+
+  return (
+    <div className="relative w-28 h-28">
+      <svg className="w-28 h-28 transform -rotate-90">
+        <circle
+          cx="56"
+          cy="56"
+          r={radius}
+          stroke="currentColor"
+          strokeWidth="8"
+          fill="none"
+          className="text-slate-700"
+        />
+        <motion.circle
+          cx="56"
+          cy="56"
+          r={radius}
+          stroke={color}
+          strokeWidth="8"
+          fill="none"
+          strokeLinecap="round"
+          initial={{ strokeDashoffset: circumference }}
+          animate={{ strokeDashoffset: offset }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
+          style={{ strokeDasharray: circumference }}
+        />
+      </svg>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <span className="text-2xl font-bold text-white">{value}%</span>
+      </div>
+    </div>
+  );
+}
+
+function MiniChart({ data, dataKey, color, label }: { data: typeof trendData; dataKey: keyof typeof trendData[0]; color: string; label: string }) {
+  const maxValue = Math.max(...data.map(d => Number(d[dataKey])));
+
+  return (
+    <div className="bg-slate-900/50 rounded-lg p-4">
+      <div className="text-sm text-slate-400 mb-3">{label}</div>
+      <div className="flex items-end gap-1 h-16">
+        {data.map((d, i) => {
+          const height = (Number(d[dataKey]) / maxValue) * 100;
+          const isLast = i === data.length - 1;
+          return (
+            <motion.div
+              key={i}
+              initial={{ height: 0 }}
+              animate={{ height: `${height}%` }}
+              transition={{ duration: 0.8, delay: i * 0.1 }}
+              className={`flex-1 rounded-t ${isLast ? 'ring-2 ring-white' : ''}`}
+              style={{ backgroundColor: color, opacity: isLast ? 1 : 0.7 }}
+              title={`${d.day}: ${d[dataKey]}`}
+            />
+          );
+        })}
+      </div>
+      <div className="flex justify-between mt-2 text-xs text-slate-500">
+        <span>Mon</span>
+        <span>Now</span>
+      </div>
+    </div>
+  );
+}
+
+function StatusBadge({ status }: { status: string }) {
+  const styles: Record<string, string> = {
+    passed: 'bg-green-500/20 text-green-400 border-green-500/30',
+    failed: 'bg-red-500/20 text-red-400 border-red-500/30',
+    flaky: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
+    skipped: 'bg-slate-500/20 text-slate-400 border-slate-500/30',
+  };
+  return (
+    <span className={`px-2 py-1 text-xs font-medium rounded border ${styles[status] || styles.skipped}`}>
+      {status.toUpperCase()}
+    </span>
+  );
+}
+
+function GradeBadge({ grade }: { grade: string }) {
+  const styles: Record<string, string> = {
+    A: 'bg-green-500 text-white',
+    B: 'bg-blue-500 text-white',
+    C: 'bg-yellow-500 text-black',
+    D: 'bg-orange-500 text-white',
+    F: 'bg-red-500 text-white',
+  };
+  return (
+    <span className={`w-7 h-7 flex items-center justify-center text-sm font-bold rounded ${styles[grade]}`}>
+      {grade}
+    </span>
+  );
+}
+
+export default function Demo() {
+  const [activeTab, setActiveTab] = useState('ai');
+  const [selectedTest, setSelectedTest] = useState<typeof mockTests[0] | null>(null);
+
+  const tabs = [
+    { id: 'ai', label: 'AI Analysis', icon: Icons.ai },
+    { id: 'tests', label: 'Test Results', icon: Icons.check },
+    { id: 'dashboard', label: 'Dashboard', icon: Icons.chart },
+    { id: 'gallery', label: 'Gallery', icon: Icons.image },
+  ];
+
+  const passed = mockTests.filter(t => t.status === 'passed').length;
+  const failed = mockTests.filter(t => t.status === 'failed').length;
+  const flaky = mockTests.filter(t => t.status === 'flaky').length;
+
+  return (
+    <div id="demo" className="relative py-24 px-6 scroll-mt-20">
+      <div className="max-w-7xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight">
+            See StageWright in Action
+          </h2>
+          <p className="text-lg text-slate-400 max-w-2xl mx-auto">
+            A beautiful, centralized dashboard for all your Playwright test results, artifacts, and analytics.
+          </p>
+        </motion.div>
+
+        {/* Tab Navigation */}
+        <div className="flex flex-wrap justify-center mb-8 gap-2 md:gap-4">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`px-4 md:px-6 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center gap-2 ${
+                activeTab === tab.id
+                  ? 'bg-blue-600 text-white shadow-lg scale-105'
+                  : 'bg-slate-800/50 text-slate-400 hover:text-white hover:bg-slate-700/50'
+              }`}
+            >
+              {tab.icon}
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Demo Content */}
+        <motion.div
+          key={activeTab}
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3 }}
+          className="bg-slate-800/30 backdrop-blur-sm rounded-3xl p-6 md:p-12 border border-slate-700 shadow-2xl"
+        >
+          {/* DASHBOARD TAB */}
+          {activeTab === 'dashboard' && (
+            <div className="space-y-8">
+              {/* Header with Stats */}
+              <div className="flex flex-col lg:flex-row gap-8 items-start">
+                {/* Progress Ring */}
+                <div className="flex flex-col items-center">
+                  <ProgressRing value={92} color="#22c55e" />
+                  <span className="text-slate-400 text-sm mt-2">Pass Rate</span>
+                </div>
+
+                {/* Stats Grid */}
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-4 flex-1">
+                  {[
+                    { label: 'Passed', value: passed, color: 'text-green-400', bg: 'bg-green-500/10' },
+                    { label: 'Failed', value: failed, color: 'text-red-400', bg: 'bg-red-500/10' },
+                    { label: 'Flaky', value: flaky, color: 'text-yellow-400', bg: 'bg-yellow-500/10' },
+                    { label: 'Slow', value: 1, color: 'text-orange-400', bg: 'bg-orange-500/10' },
+                    { label: 'Duration', value: '39s', color: 'text-purple-400', bg: 'bg-purple-500/10' },
+                  ].map((stat) => (
+                    <motion.div
+                      key={stat.label}
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ duration: 0.5 }}
+                      className={`${stat.bg} rounded-xl p-4 text-center border border-slate-700/50`}
+                    >
+                      <div className={`text-3xl font-bold ${stat.color}`}>{stat.value}</div>
+                      <div className="text-slate-400 text-sm">{stat.label}</div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Trend Charts Grid */}
+              <div>
+                <h4 className="text-lg font-semibold text-white mb-4">Test Run Trends</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <MiniChart data={trendData} dataKey="passRate" color="#22c55e" label="Pass Rate (%)" />
+                  <MiniChart data={trendData} dataKey="duration" color="#a855f7" label="Duration (s)" />
+                  <MiniChart data={trendData} dataKey="flaky" color="#eab308" label="Flaky Tests" />
+                  <MiniChart data={trendData} dataKey="slow" color="#f97316" label="Slow Tests" />
+                </div>
+              </div>
+
+              {/* Stability Distribution */}
+              <div className="bg-slate-900/50 rounded-xl p-6 border border-slate-700/50">
+                <h4 className="text-lg font-semibold text-white mb-6">Stability Score Distribution</h4>
+                <div className="flex gap-4 items-end h-32">
+                  {[
+                    { grade: 'A', count: 2, color: 'bg-green-500' },
+                    { grade: 'B', count: 1, color: 'bg-blue-500' },
+                    { grade: 'C', count: 1, color: 'bg-yellow-500' },
+                    { grade: 'D', count: 1, color: 'bg-orange-500' },
+                    { grade: 'F', count: 0, color: 'bg-red-500' },
+                  ].map((item, i) => (
+                    <div key={item.grade} className="flex-1 flex flex-col items-center">
+                      <motion.div
+                        initial={{ height: 0 }}
+                        animate={{ height: `${Math.max(item.count * 40, 8)}px` }}
+                        transition={{ duration: 0.6, delay: i * 0.1 }}
+                        className={`${item.color} rounded-t w-full max-w-[48px]`}
+                      />
+                      <div className="bg-slate-800 w-full max-w-[48px] py-2 text-center rounded-b border-t border-slate-700">
+                        <div className="text-white font-bold text-sm">{item.grade}</div>
+                      </div>
+                      <div className="text-slate-500 text-xs mt-1">{item.count}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TEST RESULTS TAB */}
+          {activeTab === 'tests' && (
+            <div className="space-y-6">
+              {/* Filter Buttons */}
+              <div className="flex flex-wrap gap-2">
+                {['All (5)', 'Passed (3)', 'Failed (1)', 'Flaky (1)'].map((filter, i) => (
+                  <button
+                    key={filter}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                      i === 0
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-slate-700/50 text-slate-300 hover:bg-slate-700'
+                    }`}
+                  >
+                    {filter}
+                  </button>
+                ))}
+              </div>
+
+              {/* File Group */}
+              <div className="space-y-4">
+                {mockTests.map((test, i) => (
+                  <motion.div
+                    key={test.name}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.1 }}
+                    onClick={() => setSelectedTest(selectedTest?.name === test.name ? null : test)}
+                    className={`bg-slate-900/50 rounded-lg p-4 border transition-all cursor-pointer ${
+                      selectedTest?.name === test.name
+                        ? 'border-blue-500 ring-1 ring-blue-500'
+                        : 'border-slate-700/50 hover:border-slate-600'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <GradeBadge grade={test.grade} />
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <h4 className="text-white font-medium">{test.name}</h4>
+                            <StatusBadge status={test.status} />
+                          </div>
+                          <div className="text-slate-500 text-sm flex items-center gap-4 mt-1">
+                            <span className="flex items-center gap-1">{Icons.folder} {test.file}</span>
+                            <span className="flex items-center gap-1">{Icons.clock} {test.duration}s</span>
+                            {test.retries > 0 && <span className="flex items-center gap-1">{Icons.refresh} {test.retries} retries</span>}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <button className="p-2 bg-slate-700 text-slate-300 rounded hover:bg-slate-600">
+                          {Icons.image}
+                        </button>
+                        <button className="p-2 bg-slate-700 text-slate-300 rounded hover:bg-slate-600">
+                          {Icons.search}
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Expanded Error/AI Details */}
+                    {selectedTest?.name === test.name && test.error && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        className="mt-4 space-y-3"
+                      >
+                        <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3">
+                          <div className="text-red-400 text-sm font-mono">{test.error}</div>
+                        </div>
+                        {test.aiSuggestion && (
+                          <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/30 rounded-lg p-4">
+                            <div className="flex items-center gap-2 text-blue-400 text-sm font-semibold mb-2">
+                              {Icons.ai} AI Analysis
+                            </div>
+                            <div className="text-slate-300 text-sm leading-relaxed">{test.aiSuggestion}</div>
+                          </div>
+                        )}
+                      </motion.div>
+                    )}
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* GALLERY TAB */}
+          {activeTab === 'gallery' && (
+            <div className="space-y-6">
+              {/* Gallery Filters */}
+              <div className="flex flex-wrap gap-2">
+                {['All (8)', 'Screenshots (4)', 'Videos (2)', 'Traces (2)'].map((filter, i) => (
+                  <button
+                    key={filter}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                      i === 0
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-slate-700/50 text-slate-300 hover:bg-slate-700'
+                    }`}
+                  >
+                    {filter}
+                  </button>
+                ))}
+              </div>
+
+              {/* Gallery Grid */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {/* Mock Screenshots - Login Page */}
+                <motion.div
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.1 }}
+                  className="bg-slate-900/50 rounded-lg overflow-hidden border border-slate-700 hover:border-blue-500 transition-all cursor-pointer group"
+                >
+                  <div className="aspect-video bg-slate-800 relative overflow-hidden">
+                    {/* Mock Login Page Screenshot */}
+                    <div className="absolute inset-0 p-2">
+                      <div className="bg-slate-700 h-3 w-full rounded-t flex items-center gap-1 px-2">
+                        <div className="w-1.5 h-1.5 rounded-full bg-red-400"></div>
+                        <div className="w-1.5 h-1.5 rounded-full bg-yellow-400"></div>
+                        <div className="w-1.5 h-1.5 rounded-full bg-green-400"></div>
+                      </div>
+                      <div className="bg-white h-full p-2">
+                        <div className="flex flex-col items-center justify-center h-full gap-1">
+                          <div className="w-8 h-8 bg-blue-500 rounded-lg"></div>
+                          <div className="w-12 h-1.5 bg-slate-300 rounded mt-1"></div>
+                          <div className="w-16 h-2 bg-slate-200 rounded mt-2"></div>
+                          <div className="w-16 h-2 bg-slate-200 rounded mt-1"></div>
+                          <div className="w-10 h-2 bg-blue-500 rounded mt-2"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="absolute inset-0 bg-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <span className="text-white font-semibold text-sm">View</span>
+                    </div>
+                  </div>
+                  <div className="p-3">
+                    <div className="text-white text-sm font-medium truncate">login-page.png</div>
+                    <div className="text-slate-500 text-xs">auth.spec.ts</div>
+                  </div>
+                </motion.div>
+
+                {/* Mock Screenshots - Dashboard */}
+                <motion.div
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.2 }}
+                  className="bg-slate-900/50 rounded-lg overflow-hidden border border-slate-700 hover:border-blue-500 transition-all cursor-pointer group"
+                >
+                  <div className="aspect-video bg-slate-800 relative overflow-hidden">
+                    {/* Mock Dashboard Screenshot */}
+                    <div className="absolute inset-0 p-2">
+                      <div className="bg-slate-700 h-3 w-full rounded-t flex items-center gap-1 px-2">
+                        <div className="w-1.5 h-1.5 rounded-full bg-red-400"></div>
+                        <div className="w-1.5 h-1.5 rounded-full bg-yellow-400"></div>
+                        <div className="w-1.5 h-1.5 rounded-full bg-green-400"></div>
+                      </div>
+                      <div className="bg-slate-100 h-full flex">
+                        <div className="w-4 bg-slate-800 h-full"></div>
+                        <div className="flex-1 p-1">
+                          <div className="flex gap-1 mb-1">
+                            <div className="flex-1 h-4 bg-white rounded shadow-sm p-0.5">
+                              <div className="w-2 h-1 bg-green-400 rounded"></div>
+                            </div>
+                            <div className="flex-1 h-4 bg-white rounded shadow-sm p-0.5">
+                              <div className="w-3 h-1 bg-blue-400 rounded"></div>
+                            </div>
+                          </div>
+                          <div className="bg-white rounded shadow-sm h-8 p-1">
+                            <div className="flex gap-0.5">
+                              <div className="w-1 h-3 bg-blue-400 rounded-t"></div>
+                              <div className="w-1 h-4 bg-blue-500 rounded-t"></div>
+                              <div className="w-1 h-2 bg-blue-400 rounded-t"></div>
+                              <div className="w-1 h-5 bg-blue-500 rounded-t"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="absolute inset-0 bg-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <span className="text-white font-semibold text-sm">View</span>
+                    </div>
+                  </div>
+                  <div className="p-3">
+                    <div className="text-white text-sm font-medium truncate">dashboard.png</div>
+                    <div className="text-slate-500 text-xs">dashboard.spec.ts</div>
+                  </div>
+                </motion.div>
+
+                {/* Mock Screenshots - Error State */}
+                <motion.div
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                  className="bg-slate-900/50 rounded-lg overflow-hidden border border-red-500/50 hover:border-red-500 transition-all cursor-pointer group"
+                >
+                  <div className="aspect-video bg-slate-800 relative overflow-hidden">
+                    {/* Mock Error Screenshot */}
+                    <div className="absolute inset-0 p-2">
+                      <div className="bg-slate-700 h-3 w-full rounded-t flex items-center gap-1 px-2">
+                        <div className="w-1.5 h-1.5 rounded-full bg-red-400"></div>
+                        <div className="w-1.5 h-1.5 rounded-full bg-yellow-400"></div>
+                        <div className="w-1.5 h-1.5 rounded-full bg-green-400"></div>
+                      </div>
+                      <div className="bg-white h-full flex items-center justify-center">
+                        <div className="text-center">
+                          <div className="w-6 h-6 mx-auto border-2 border-red-400 rounded-full flex items-center justify-center text-red-400 text-xs font-bold">!</div>
+                          <div className="w-10 h-1 bg-slate-300 rounded mt-1 mx-auto"></div>
+                          <div className="w-8 h-1 bg-slate-200 rounded mt-0.5 mx-auto"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="absolute top-3 right-3 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded font-medium">FAILED</div>
+                    <div className="absolute inset-0 bg-red-500/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <span className="text-white font-semibold text-sm">View</span>
+                    </div>
+                  </div>
+                  <div className="p-3">
+                    <div className="text-white text-sm font-medium truncate">checkout-error.png</div>
+                    <div className="text-slate-500 text-xs">checkout.spec.ts</div>
+                  </div>
+                </motion.div>
+
+                {/* Mock Screenshots - Cart Page */}
+                <motion.div
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.4 }}
+                  className="bg-slate-900/50 rounded-lg overflow-hidden border border-slate-700 hover:border-blue-500 transition-all cursor-pointer group"
+                >
+                  <div className="aspect-video bg-slate-800 relative overflow-hidden">
+                    {/* Mock Cart Screenshot */}
+                    <div className="absolute inset-0 p-2">
+                      <div className="bg-slate-700 h-3 w-full rounded-t flex items-center gap-1 px-2">
+                        <div className="w-1.5 h-1.5 rounded-full bg-red-400"></div>
+                        <div className="w-1.5 h-1.5 rounded-full bg-yellow-400"></div>
+                        <div className="w-1.5 h-1.5 rounded-full bg-green-400"></div>
+                      </div>
+                      <div className="bg-white h-full p-1">
+                        <div className="flex gap-1 mb-1">
+                          <div className="w-4 h-4 bg-slate-200 rounded"></div>
+                          <div className="flex-1">
+                            <div className="w-8 h-1 bg-slate-300 rounded"></div>
+                            <div className="w-6 h-1 bg-slate-200 rounded mt-0.5"></div>
+                          </div>
+                          <div className="w-4 h-2 bg-slate-800 rounded text-white text-center" style={{fontSize: '4px'}}>$99</div>
+                        </div>
+                        <div className="flex gap-1">
+                          <div className="w-4 h-4 bg-slate-200 rounded"></div>
+                          <div className="flex-1">
+                            <div className="w-10 h-1 bg-slate-300 rounded"></div>
+                            <div className="w-5 h-1 bg-slate-200 rounded mt-0.5"></div>
+                          </div>
+                          <div className="w-4 h-2 bg-slate-800 rounded"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="absolute inset-0 bg-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <span className="text-white font-semibold text-sm">View</span>
+                    </div>
+                  </div>
+                  <div className="p-3">
+                    <div className="text-white text-sm font-medium truncate">cart-items.png</div>
+                    <div className="text-slate-500 text-xs">cart.spec.ts</div>
+                  </div>
+                </motion.div>
+
+                {/* Mock Videos */}
+                {[
+                  { name: 'login-flow.webm', test: 'auth.spec.ts', duration: '0:23' },
+                  { name: 'checkout-test.webm', test: 'checkout.spec.ts', duration: '0:45' },
+                ].map((video, i) => (
+                  <motion.div
+                    key={video.name}
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ delay: 0.5 + i * 0.1 }}
+                    className="bg-slate-900/50 rounded-lg overflow-hidden border border-slate-700 hover:border-purple-500 transition-all cursor-pointer group"
+                  >
+                    <div className="aspect-video bg-gradient-to-br from-purple-900/30 to-slate-800 flex items-center justify-center relative">
+                      <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-sm">
+                        <div className="text-white">{Icons.play}</div>
+                      </div>
+                      <div className="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded font-mono">
+                        {video.duration}
+                      </div>
+                    </div>
+                    <div className="p-3">
+                      <div className="text-white text-sm font-medium truncate">{video.name}</div>
+                      <div className="text-slate-500 text-xs">{video.test}</div>
+                    </div>
+                  </motion.div>
+                ))}
+
+                {/* Mock Traces */}
+                {[
+                  { name: 'trace-auth.zip', test: 'auth.spec.ts', size: '1.8 MB' },
+                  { name: 'trace-checkout.zip', test: 'checkout.spec.ts', size: '3.2 MB' },
+                ].map((trace, i) => (
+                  <motion.div
+                    key={trace.name}
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ delay: 0.7 + i * 0.1 }}
+                    className="bg-slate-900/50 rounded-lg overflow-hidden border border-slate-700 hover:border-green-500 transition-all cursor-pointer group"
+                  >
+                    <div className="aspect-video bg-gradient-to-br from-green-900/20 to-slate-800 flex items-center justify-center relative">
+                      <div className="text-center">
+                        <svg className="w-8 h-8 text-green-400 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <div className="text-green-400 text-xs mt-1 font-medium">Playwright Trace</div>
+                      </div>
+                    </div>
+                    <div className="p-3 flex items-center justify-between">
+                      <div>
+                        <div className="text-white text-sm font-medium truncate">{trace.name}</div>
+                        <div className="text-slate-500 text-xs">{trace.size}</div>
+                      </div>
+                      <button className="flex items-center gap-1 px-3 py-1.5 bg-green-600 text-white text-xs rounded hover:bg-green-700 transition-colors">
+                        {Icons.download}
+                      </button>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Lightbox Preview Hint */}
+              <div className="text-center text-slate-500 text-sm mt-6">
+                Click any screenshot to open in full-screen lightbox with navigation
+              </div>
+            </div>
+          )}
+
+          {/* AI ANALYSIS TAB */}
+          {activeTab === 'ai' && (
+            <div className="space-y-8">
+              {/* AI Hero Banner */}
+              <div className="bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-blue-600/20 rounded-2xl p-8 border border-blue-500/30">
+                <div className="flex items-center gap-3">
+                  <div className="p-3 bg-blue-500/20 rounded-xl text-blue-400">
+                    {Icons.ai}
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-white">AI-Powered Test Intelligence</h3>
+                    <p className="text-slate-400">Automatic failure analysis, pattern detection, and actionable recommendations</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Failure Clusters */}
+              <div>
+                <h4 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                  <span className="text-blue-400">{Icons.target}</span> Intelligent Failure Clustering
+                </h4>
+                <div className="bg-slate-900/50 rounded-lg p-6 border border-slate-700">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-red-500/10 rounded-lg text-red-400">
+                      {Icons.alert}
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-2">
+                        <h5 className="text-white font-semibold">TimeoutError Cluster</h5>
+                        <span className="px-2 py-0.5 bg-red-500/20 text-red-400 text-xs rounded">2 tests affected</span>
+                      </div>
+                      <div className="text-slate-400 text-sm mb-4">
+                        AI detected a pattern: Multiple tests failing with timeout errors on payment-related selectors.
+                      </div>
+                      <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/30 rounded-lg p-4">
+                        <div className="flex items-center gap-2 text-blue-400 font-semibold mb-3">
+                          {Icons.ai} Root Cause Analysis
+                        </div>
+                        <p className="text-slate-300 text-sm leading-relaxed mb-3">
+                          These failures share a common pattern: all are waiting for elements with
+                          <code className="bg-slate-800 px-1.5 py-0.5 rounded mx-1">.payment-*</code> selectors.
+                          Cross-referencing with your git history, this correlates with commit <code className="bg-slate-800 px-1.5 py-0.5 rounded mx-1">a3f2b1c</code> from 2 days ago which refactored the payment module.
+                        </p>
+                        <div className="border-t border-slate-700 pt-3 mt-3">
+                          <div className="text-white text-sm font-medium mb-2">Suggested Fixes:</div>
+                          <ul className="text-slate-300 text-sm space-y-2">
+                            <li className="flex items-start gap-2">
+                              <span className="text-green-400 mt-0.5">1.</span>
+                              Update selector to <code className="bg-slate-800 px-1.5 py-0.5 rounded">.payment-submit-btn</code> (new class name)
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <span className="text-green-400 mt-0.5">2.</span>
+                              Add explicit wait for payment iframe: <code className="bg-slate-800 px-1.5 py-0.5 rounded">page.waitForSelector('iframe[name="payment"]')</code>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <span className="text-green-400 mt-0.5">3.</span>
+                              Consider using data-testid attributes for more stable selectors
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* AI Recommendations */}
+              <div>
+                <h4 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                  <span className="text-purple-400">{Icons.sparkles}</span> Proactive Recommendations
+                </h4>
+                <div className="space-y-4">
+                  {[
+                    { priority: 'High', color: 'red', title: 'Fix flaky test: User profile updates', desc: 'This test has a 70% flakiness rate over the last 30 runs. The element detachment pattern suggests a race condition between state updates and DOM rendering.', action: 'View suggested fix' },
+                    { priority: 'Medium', color: 'yellow', title: 'Performance regression detected', desc: 'Average test duration increased by 23% this week. AI traced this to the new image loading in the dashboard component.', action: 'See analysis' },
+                    { priority: 'Low', color: 'green', title: 'Optimization opportunity', desc: 'Tests in cart.spec.ts are independent and could run in parallel, reducing total suite time by ~40%.', action: 'Apply suggestion' },
+                  ].map((rec, i) => (
+                    <motion.div
+                      key={rec.title}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.15 }}
+                      className="bg-slate-900/50 rounded-lg p-5 border border-slate-700 hover:border-slate-600 transition-colors"
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex items-start gap-4">
+                          <div className={`w-3 h-3 rounded-full mt-1.5 ${
+                            rec.color === 'red' ? 'bg-red-500' :
+                            rec.color === 'yellow' ? 'bg-yellow-500' : 'bg-green-500'
+                          }`} />
+                          <div>
+                            <div className="flex items-center gap-2 mb-1">
+                              <h5 className="text-white font-medium">{rec.title}</h5>
+                              <span className={`text-xs px-2 py-0.5 rounded ${
+                                rec.color === 'red' ? 'bg-red-500/20 text-red-400' :
+                                rec.color === 'yellow' ? 'bg-yellow-500/20 text-yellow-400' : 'bg-green-500/20 text-green-400'
+                              }`}>{rec.priority}</span>
+                            </div>
+                            <p className="text-slate-400 text-sm">{rec.desc}</p>
+                          </div>
+                        </div>
+                        <button className="shrink-0 px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors">
+                          {rec.action}
+                        </button>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+
+              {/* How It Works */}
+              <div className="bg-slate-900/30 rounded-xl p-6 border border-slate-700">
+                <h4 className="text-lg font-semibold text-white mb-6">How StageWright AI Works</h4>
+                <div className="grid md:grid-cols-3 gap-6">
+                  {[
+                    { step: '1', title: 'Capture Context', desc: 'Collects test output, stack traces, screenshots, and DOM snapshots at the point of failure.' },
+                    { step: '2', title: 'Analyze Patterns', desc: 'AI correlates failures across runs, identifies common root causes, and cross-references with your codebase.' },
+                    { step: '3', title: 'Generate Insights', desc: 'Produces actionable recommendations with specific code suggestions and links to relevant changes.' },
+                  ].map((item) => (
+                    <div key={item.step} className="text-center">
+                      <div className="w-10 h-10 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center mx-auto mb-3">
+                        {item.step}
+                      </div>
+                      <h5 className="text-white font-medium mb-2">{item.title}</h5>
+                      <p className="text-slate-400 text-sm">{item.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </motion.div>
+      </div>
+    </div>
+  );
+}
