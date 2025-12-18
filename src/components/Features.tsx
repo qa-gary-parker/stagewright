@@ -200,51 +200,6 @@ export default function Features() {
           </div>
         </motion.div>
 
-        {/* Cloud Storage */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mt-16 bg-gradient-to-r from-blue-600/10 to-purple-600/10 border border-blue-500/20 rounded-2xl p-8 md:p-12"
-        >
-          <div className="flex flex-col md:flex-row items-center gap-8">
-            <div className="flex-1">
-              <h3 className="text-2xl font-bold text-white mb-3">
-                Cloud Storage for Test Artifacts
-              </h3>
-              <p className="text-slate-400 mb-4">
-                Screenshots, videos, and traces automatically uploaded to S3-compatible storage. Access from anywhere with secure presigned URLs.
-              </p>
-              <div className="flex flex-wrap gap-4 text-sm">
-                <span className="flex items-center gap-2 text-slate-300">
-                  <svg className="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>
-                  AWS S3
-                </span>
-                <span className="flex items-center gap-2 text-slate-300">
-                  <svg className="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>
-                  Cloudflare R2
-                </span>
-                <span className="flex items-center gap-2 text-slate-300">
-                  <svg className="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>
-                  MinIO
-                </span>
-                <span className="flex items-center gap-2 text-slate-300">
-                  <svg className="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>
-                  Any S3-compatible
-                </span>
-              </div>
-            </div>
-            <div className="flex-shrink-0">
-              <div className="w-32 h-32 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
-                <svg className="w-16 h-16 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
-                </svg>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-
         {/* Coming Soon / Roadmap */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -261,19 +216,13 @@ export default function Features() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               {
                 title: 'GitHub PR Comments',
                 description: 'Auto-post test summaries directly on your pull requests',
                 status: 'In Development',
                 statusColor: 'bg-yellow-500'
-              },
-              {
-                title: 'VS Code Extension',
-                description: 'View test results and traces directly in your IDE',
-                status: 'Planned',
-                statusColor: 'bg-blue-500'
               },
               {
                 title: 'Smart Test Selection',
