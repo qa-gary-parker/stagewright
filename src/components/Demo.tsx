@@ -190,6 +190,8 @@ function GradeBadge({ grade }: { grade: string }) {
 export default function Demo() {
   const [activeTab, setActiveTab] = useState('ai');
   const [selectedTest, setSelectedTest] = useState<typeof mockTests[0] | null>(null);
+  const [testFilter, setTestFilter] = useState<'all' | 'passed' | 'failed' | 'flaky'>('all');
+  const [galleryFilter, setGalleryFilter] = useState<'all' | 'screenshots' | 'videos' | 'traces'>('all');
 
   const tabs = [
     { id: 'ai', label: 'AI Analysis', icon: Icons.ai },
@@ -201,6 +203,27 @@ export default function Demo() {
   const passed = mockTests.filter(t => t.status === 'passed').length;
   const failed = mockTests.filter(t => t.status === 'failed').length;
   const flaky = mockTests.filter(t => t.status === 'flaky').length;
+
+  // Filter tests based on selected filter
+  const filteredTests = testFilter === 'all'
+    ? mockTests
+    : mockTests.filter(t => t.status === testFilter);
+
+  // Test filter options
+  const testFilters = [
+    { id: 'all' as const, label: 'All', count: mockTests.length },
+    { id: 'passed' as const, label: 'Passed', count: passed },
+    { id: 'failed' as const, label: 'Failed', count: failed },
+    { id: 'flaky' as const, label: 'Flaky', count: flaky },
+  ];
+
+  // Gallery filter options
+  const galleryFilters = [
+    { id: 'all' as const, label: 'All', count: 8 },
+    { id: 'screenshots' as const, label: 'Screenshots', count: 4 },
+    { id: 'videos' as const, label: 'Videos', count: 2 },
+    { id: 'traces' as const, label: 'Traces', count: 2 },
+  ];
 
   return (
     <div id="demo" className="relative py-24 px-6 scroll-mt-20">
@@ -325,23 +348,24 @@ export default function Demo() {
             <div className="space-y-6">
               {/* Filter Buttons */}
               <div className="flex flex-wrap gap-2">
-                {['All (5)', 'Passed (3)', 'Failed (1)', 'Flaky (1)'].map((filter, i) => (
+                {testFilters.map((filter) => (
                   <button
-                    key={filter}
+                    key={filter.id}
+                    onClick={() => setTestFilter(filter.id)}
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                      i === 0
+                      testFilter === filter.id
                         ? 'bg-blue-600 text-white'
                         : 'bg-slate-700/50 text-slate-300 hover:bg-slate-700'
                     }`}
                   >
-                    {filter}
+                    {filter.label} ({filter.count})
                   </button>
                 ))}
               </div>
 
               {/* File Group */}
               <div className="space-y-4">
-                {mockTests.map((test, i) => (
+                {filteredTests.map((test, i) => (
                   <motion.div
                     key={test.name}
                     initial={{ opacity: 0, x: -20 }}
@@ -410,228 +434,238 @@ export default function Demo() {
             <div className="space-y-6">
               {/* Gallery Filters */}
               <div className="flex flex-wrap gap-2">
-                {['All (8)', 'Screenshots (4)', 'Videos (2)', 'Traces (2)'].map((filter, i) => (
+                {galleryFilters.map((filter) => (
                   <button
-                    key={filter}
+                    key={filter.id}
+                    onClick={() => setGalleryFilter(filter.id)}
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                      i === 0
+                      galleryFilter === filter.id
                         ? 'bg-blue-600 text-white'
                         : 'bg-slate-700/50 text-slate-300 hover:bg-slate-700'
                     }`}
                   >
-                    {filter}
+                    {filter.label} ({filter.count})
                   </button>
                 ))}
               </div>
 
               {/* Gallery Grid */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {/* Mock Screenshots - Login Page */}
-                <motion.div
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ delay: 0.1 }}
-                  className="bg-slate-900/50 rounded-lg overflow-hidden border border-slate-700 group"
-                >
-                  <div className="aspect-video bg-slate-800 relative overflow-hidden">
-                    {/* Mock Login Page Screenshot */}
-                    <div className="absolute inset-0 p-2">
-                      <div className="bg-slate-700 h-3 w-full rounded-t flex items-center gap-1 px-2">
-                        <div className="w-1.5 h-1.5 rounded-full bg-red-400"></div>
-                        <div className="w-1.5 h-1.5 rounded-full bg-yellow-400"></div>
-                        <div className="w-1.5 h-1.5 rounded-full bg-green-400"></div>
-                      </div>
-                      <div className="bg-white h-full p-2">
-                        <div className="flex flex-col items-center justify-center h-full gap-1">
-                          <div className="w-8 h-8 bg-blue-500 rounded-lg"></div>
-                          <div className="w-12 h-1.5 bg-slate-300 rounded mt-1"></div>
-                          <div className="w-16 h-2 bg-slate-200 rounded mt-2"></div>
-                          <div className="w-16 h-2 bg-slate-200 rounded mt-1"></div>
-                          <div className="w-10 h-2 bg-blue-500 rounded mt-2"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="p-3">
-                    <div className="text-white text-sm font-medium truncate">login-page.png</div>
-                    <div className="text-slate-500 text-xs">auth.spec.ts</div>
-                  </div>
-                </motion.div>
-
-                {/* Mock Screenshots - Dashboard */}
-                <motion.div
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ delay: 0.2 }}
-                  className="bg-slate-900/50 rounded-lg overflow-hidden border border-slate-700 group"
-                >
-                  <div className="aspect-video bg-slate-800 relative overflow-hidden">
-                    {/* Mock Dashboard Screenshot */}
-                    <div className="absolute inset-0 p-2">
-                      <div className="bg-slate-700 h-3 w-full rounded-t flex items-center gap-1 px-2">
-                        <div className="w-1.5 h-1.5 rounded-full bg-red-400"></div>
-                        <div className="w-1.5 h-1.5 rounded-full bg-yellow-400"></div>
-                        <div className="w-1.5 h-1.5 rounded-full bg-green-400"></div>
-                      </div>
-                      <div className="bg-slate-100 h-full flex">
-                        <div className="w-4 bg-slate-800 h-full"></div>
-                        <div className="flex-1 p-1">
-                          <div className="flex gap-1 mb-1">
-                            <div className="flex-1 h-4 bg-white rounded shadow-sm p-0.5">
-                              <div className="w-2 h-1 bg-green-400 rounded"></div>
-                            </div>
-                            <div className="flex-1 h-4 bg-white rounded shadow-sm p-0.5">
-                              <div className="w-3 h-1 bg-blue-400 rounded"></div>
-                            </div>
+                {/* Screenshots */}
+                {(galleryFilter === 'all' || galleryFilter === 'screenshots') && (
+                  <>
+                    {/* Login Page */}
+                    <motion.div
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ delay: 0.1 }}
+                      className="bg-slate-900/50 rounded-lg overflow-hidden border border-slate-700"
+                    >
+                      <div className="aspect-video bg-slate-800 relative overflow-hidden">
+                        <div className="absolute inset-0 p-2">
+                          <div className="bg-slate-700 h-3 w-full rounded-t flex items-center gap-1 px-2">
+                            <div className="w-1.5 h-1.5 rounded-full bg-red-400"></div>
+                            <div className="w-1.5 h-1.5 rounded-full bg-yellow-400"></div>
+                            <div className="w-1.5 h-1.5 rounded-full bg-green-400"></div>
                           </div>
-                          <div className="bg-white rounded shadow-sm h-8 p-1">
-                            <div className="flex gap-0.5">
-                              <div className="w-1 h-3 bg-blue-400 rounded-t"></div>
-                              <div className="w-1 h-4 bg-blue-500 rounded-t"></div>
-                              <div className="w-1 h-2 bg-blue-400 rounded-t"></div>
-                              <div className="w-1 h-5 bg-blue-500 rounded-t"></div>
+                          <div className="bg-white h-full p-2">
+                            <div className="flex flex-col items-center justify-center h-full gap-1">
+                              <div className="w-8 h-8 bg-blue-500 rounded-lg"></div>
+                              <div className="w-12 h-1.5 bg-slate-300 rounded mt-1"></div>
+                              <div className="w-16 h-2 bg-slate-200 rounded mt-2"></div>
+                              <div className="w-16 h-2 bg-slate-200 rounded mt-1"></div>
+                              <div className="w-10 h-2 bg-blue-500 rounded mt-2"></div>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                  <div className="p-3">
-                    <div className="text-white text-sm font-medium truncate">dashboard.png</div>
-                    <div className="text-slate-500 text-xs">dashboard.spec.ts</div>
-                  </div>
-                </motion.div>
+                      <div className="p-3">
+                        <div className="text-white text-sm font-medium truncate">login-page.png</div>
+                        <div className="text-slate-500 text-xs">auth.spec.ts</div>
+                      </div>
+                    </motion.div>
 
-                {/* Mock Screenshots - Error State */}
-                <motion.div
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ delay: 0.3 }}
-                  className="bg-slate-900/50 rounded-lg overflow-hidden border border-red-500/50 group"
-                >
-                  <div className="aspect-video bg-slate-800 relative overflow-hidden">
-                    {/* Mock Error Screenshot */}
-                    <div className="absolute inset-0 p-2">
-                      <div className="bg-slate-700 h-3 w-full rounded-t flex items-center gap-1 px-2">
-                        <div className="w-1.5 h-1.5 rounded-full bg-red-400"></div>
-                        <div className="w-1.5 h-1.5 rounded-full bg-yellow-400"></div>
-                        <div className="w-1.5 h-1.5 rounded-full bg-green-400"></div>
-                      </div>
-                      <div className="bg-white h-full flex items-center justify-center">
-                        <div className="text-center">
-                          <div className="w-6 h-6 mx-auto border-2 border-red-400 rounded-full flex items-center justify-center text-red-400 text-xs font-bold">!</div>
-                          <div className="w-10 h-1 bg-slate-300 rounded mt-1 mx-auto"></div>
-                          <div className="w-8 h-1 bg-slate-200 rounded mt-0.5 mx-auto"></div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="absolute top-3 right-3 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded font-medium">FAILED</div>
-                  </div>
-                  <div className="p-3">
-                    <div className="text-white text-sm font-medium truncate">checkout-error.png</div>
-                    <div className="text-slate-500 text-xs">checkout.spec.ts</div>
-                  </div>
-                </motion.div>
-
-                {/* Mock Screenshots - Cart Page */}
-                <motion.div
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ delay: 0.4 }}
-                  className="bg-slate-900/50 rounded-lg overflow-hidden border border-slate-700 group"
-                >
-                  <div className="aspect-video bg-slate-800 relative overflow-hidden">
-                    {/* Mock Cart Screenshot */}
-                    <div className="absolute inset-0 p-2">
-                      <div className="bg-slate-700 h-3 w-full rounded-t flex items-center gap-1 px-2">
-                        <div className="w-1.5 h-1.5 rounded-full bg-red-400"></div>
-                        <div className="w-1.5 h-1.5 rounded-full bg-yellow-400"></div>
-                        <div className="w-1.5 h-1.5 rounded-full bg-green-400"></div>
-                      </div>
-                      <div className="bg-white h-full p-1">
-                        <div className="flex gap-1 mb-1">
-                          <div className="w-4 h-4 bg-slate-200 rounded"></div>
-                          <div className="flex-1">
-                            <div className="w-8 h-1 bg-slate-300 rounded"></div>
-                            <div className="w-6 h-1 bg-slate-200 rounded mt-0.5"></div>
+                    {/* Dashboard */}
+                    <motion.div
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ delay: 0.2 }}
+                      className="bg-slate-900/50 rounded-lg overflow-hidden border border-slate-700"
+                    >
+                      <div className="aspect-video bg-slate-800 relative overflow-hidden">
+                        <div className="absolute inset-0 p-2">
+                          <div className="bg-slate-700 h-3 w-full rounded-t flex items-center gap-1 px-2">
+                            <div className="w-1.5 h-1.5 rounded-full bg-red-400"></div>
+                            <div className="w-1.5 h-1.5 rounded-full bg-yellow-400"></div>
+                            <div className="w-1.5 h-1.5 rounded-full bg-green-400"></div>
                           </div>
-                          <div className="w-4 h-2 bg-slate-800 rounded text-white text-center" style={{fontSize: '4px'}}>$99</div>
-                        </div>
-                        <div className="flex gap-1">
-                          <div className="w-4 h-4 bg-slate-200 rounded"></div>
-                          <div className="flex-1">
-                            <div className="w-10 h-1 bg-slate-300 rounded"></div>
-                            <div className="w-5 h-1 bg-slate-200 rounded mt-0.5"></div>
+                          <div className="bg-slate-100 h-full flex">
+                            <div className="w-4 bg-slate-800 h-full"></div>
+                            <div className="flex-1 p-1">
+                              <div className="flex gap-1 mb-1">
+                                <div className="flex-1 h-4 bg-white rounded shadow-sm p-0.5">
+                                  <div className="w-2 h-1 bg-green-400 rounded"></div>
+                                </div>
+                                <div className="flex-1 h-4 bg-white rounded shadow-sm p-0.5">
+                                  <div className="w-3 h-1 bg-blue-400 rounded"></div>
+                                </div>
+                              </div>
+                              <div className="bg-white rounded shadow-sm h-8 p-1">
+                                <div className="flex gap-0.5">
+                                  <div className="w-1 h-3 bg-blue-400 rounded-t"></div>
+                                  <div className="w-1 h-4 bg-blue-500 rounded-t"></div>
+                                  <div className="w-1 h-2 bg-blue-400 rounded-t"></div>
+                                  <div className="w-1 h-5 bg-blue-500 rounded-t"></div>
+                                </div>
+                              </div>
+                            </div>
                           </div>
-                          <div className="w-4 h-2 bg-slate-800 rounded"></div>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                  <div className="p-3">
-                    <div className="text-white text-sm font-medium truncate">cart-items.png</div>
-                    <div className="text-slate-500 text-xs">cart.spec.ts</div>
-                  </div>
-                </motion.div>
+                      <div className="p-3">
+                        <div className="text-white text-sm font-medium truncate">dashboard.png</div>
+                        <div className="text-slate-500 text-xs">dashboard.spec.ts</div>
+                      </div>
+                    </motion.div>
 
-                {/* Mock Videos */}
-                {[
-                  { name: 'login-flow.webm', test: 'auth.spec.ts', duration: '0:23' },
-                  { name: 'checkout-test.webm', test: 'checkout.spec.ts', duration: '0:45' },
-                ].map((video, i) => (
-                  <motion.div
-                    key={video.name}
-                    initial={{ scale: 0.8, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ delay: 0.5 + i * 0.1 }}
-                    className="bg-slate-900/50 rounded-lg overflow-hidden border border-slate-700 group"
-                  >
-                    <div className="aspect-video bg-gradient-to-br from-purple-900/30 to-slate-800 flex items-center justify-center relative">
-                      <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-sm">
-                        <div className="text-white">{Icons.play}</div>
+                    {/* Error State */}
+                    <motion.div
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ delay: 0.3 }}
+                      className="bg-slate-900/50 rounded-lg overflow-hidden border border-red-500/50"
+                    >
+                      <div className="aspect-video bg-slate-800 relative overflow-hidden">
+                        <div className="absolute inset-0 p-2">
+                          <div className="bg-slate-700 h-3 w-full rounded-t flex items-center gap-1 px-2">
+                            <div className="w-1.5 h-1.5 rounded-full bg-red-400"></div>
+                            <div className="w-1.5 h-1.5 rounded-full bg-yellow-400"></div>
+                            <div className="w-1.5 h-1.5 rounded-full bg-green-400"></div>
+                          </div>
+                          <div className="bg-white h-full flex items-center justify-center">
+                            <div className="text-center">
+                              <div className="w-6 h-6 mx-auto border-2 border-red-400 rounded-full flex items-center justify-center text-red-400 text-xs font-bold">!</div>
+                              <div className="w-10 h-1 bg-slate-300 rounded mt-1 mx-auto"></div>
+                              <div className="w-8 h-1 bg-slate-200 rounded mt-0.5 mx-auto"></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="absolute top-3 right-3 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded font-medium">FAILED</div>
                       </div>
-                      <div className="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded font-mono">
-                        {video.duration}
+                      <div className="p-3">
+                        <div className="text-white text-sm font-medium truncate">checkout-error.png</div>
+                        <div className="text-slate-500 text-xs">checkout.spec.ts</div>
                       </div>
-                    </div>
-                    <div className="p-3">
-                      <div className="text-white text-sm font-medium truncate">{video.name}</div>
-                      <div className="text-slate-500 text-xs">{video.test}</div>
-                    </div>
-                  </motion.div>
-                ))}
+                    </motion.div>
 
-                {/* Mock Traces */}
-                {[
-                  { name: 'trace-auth.zip', test: 'auth.spec.ts', size: '1.8 MB' },
-                  { name: 'trace-checkout.zip', test: 'checkout.spec.ts', size: '3.2 MB' },
-                ].map((trace, i) => (
-                  <motion.div
-                    key={trace.name}
-                    initial={{ scale: 0.8, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ delay: 0.7 + i * 0.1 }}
-                    className="bg-slate-900/50 rounded-lg overflow-hidden border border-slate-700 group"
-                  >
-                    <div className="aspect-video bg-gradient-to-br from-green-900/20 to-slate-800 flex items-center justify-center relative">
-                      <div className="text-center">
-                        <svg className="w-8 h-8 text-green-400 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                        <div className="text-green-400 text-xs mt-1 font-medium">Playwright Trace</div>
+                    {/* Cart Page */}
+                    <motion.div
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ delay: 0.4 }}
+                      className="bg-slate-900/50 rounded-lg overflow-hidden border border-slate-700"
+                    >
+                      <div className="aspect-video bg-slate-800 relative overflow-hidden">
+                        <div className="absolute inset-0 p-2">
+                          <div className="bg-slate-700 h-3 w-full rounded-t flex items-center gap-1 px-2">
+                            <div className="w-1.5 h-1.5 rounded-full bg-red-400"></div>
+                            <div className="w-1.5 h-1.5 rounded-full bg-yellow-400"></div>
+                            <div className="w-1.5 h-1.5 rounded-full bg-green-400"></div>
+                          </div>
+                          <div className="bg-white h-full p-1">
+                            <div className="flex gap-1 mb-1">
+                              <div className="w-4 h-4 bg-slate-200 rounded"></div>
+                              <div className="flex-1">
+                                <div className="w-8 h-1 bg-slate-300 rounded"></div>
+                                <div className="w-6 h-1 bg-slate-200 rounded mt-0.5"></div>
+                              </div>
+                              <div className="w-4 h-2 bg-slate-800 rounded text-white text-center" style={{fontSize: '4px'}}>$99</div>
+                            </div>
+                            <div className="flex gap-1">
+                              <div className="w-4 h-4 bg-slate-200 rounded"></div>
+                              <div className="flex-1">
+                                <div className="w-10 h-1 bg-slate-300 rounded"></div>
+                                <div className="w-5 h-1 bg-slate-200 rounded mt-0.5"></div>
+                              </div>
+                              <div className="w-4 h-2 bg-slate-800 rounded"></div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                    <div className="p-3 flex items-center justify-between">
-                      <div>
-                        <div className="text-white text-sm font-medium truncate">{trace.name}</div>
-                        <div className="text-slate-500 text-xs">{trace.size}</div>
+                      <div className="p-3">
+                        <div className="text-white text-sm font-medium truncate">cart-items.png</div>
+                        <div className="text-slate-500 text-xs">cart.spec.ts</div>
                       </div>
-                      <div className="flex items-center gap-1 px-3 py-1.5 bg-green-600/50 text-white/70 text-xs rounded">
-                        {Icons.download}
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
+                    </motion.div>
+                  </>
+                )}
+
+                {/* Videos */}
+                {(galleryFilter === 'all' || galleryFilter === 'videos') && (
+                  <>
+                    {[
+                      { name: 'login-flow.webm', test: 'auth.spec.ts', duration: '0:23' },
+                      { name: 'checkout-test.webm', test: 'checkout.spec.ts', duration: '0:45' },
+                    ].map((video, i) => (
+                      <motion.div
+                        key={video.name}
+                        initial={{ scale: 0.8, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ delay: 0.1 + i * 0.1 }}
+                        className="bg-slate-900/50 rounded-lg overflow-hidden border border-slate-700"
+                      >
+                        <div className="aspect-video bg-gradient-to-br from-purple-900/30 to-slate-800 flex items-center justify-center relative">
+                          <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-sm">
+                            <div className="text-white">{Icons.play}</div>
+                          </div>
+                          <div className="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded font-mono">
+                            {video.duration}
+                          </div>
+                        </div>
+                        <div className="p-3">
+                          <div className="text-white text-sm font-medium truncate">{video.name}</div>
+                          <div className="text-slate-500 text-xs">{video.test}</div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </>
+                )}
+
+                {/* Traces */}
+                {(galleryFilter === 'all' || galleryFilter === 'traces') && (
+                  <>
+                    {[
+                      { name: 'trace-auth.zip', test: 'auth.spec.ts', size: '1.8 MB' },
+                      { name: 'trace-checkout.zip', test: 'checkout.spec.ts', size: '3.2 MB' },
+                    ].map((trace, i) => (
+                      <motion.div
+                        key={trace.name}
+                        initial={{ scale: 0.8, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ delay: 0.1 + i * 0.1 }}
+                        className="bg-slate-900/50 rounded-lg overflow-hidden border border-slate-700"
+                      >
+                        <div className="aspect-video bg-gradient-to-br from-green-900/20 to-slate-800 flex items-center justify-center relative">
+                          <div className="text-center">
+                            <svg className="w-8 h-8 text-green-400 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            <div className="text-green-400 text-xs mt-1 font-medium">Playwright Trace</div>
+                          </div>
+                        </div>
+                        <div className="p-3 flex items-center justify-between">
+                          <div>
+                            <div className="text-white text-sm font-medium truncate">{trace.name}</div>
+                            <div className="text-slate-500 text-xs">{trace.size}</div>
+                          </div>
+                          <div className="flex items-center gap-1 px-3 py-1.5 bg-green-600/50 text-white/70 text-xs rounded">
+                            {Icons.download}
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </>
+                )}
               </div>
 
             </div>
