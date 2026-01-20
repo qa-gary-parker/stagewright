@@ -17,9 +17,19 @@ export default function Footer() {
             </div>
           </div>
 
-          <p className="text-slate-500 text-sm">
-            © {currentYear} StageWright. All rights reserved.
-          </p>
+          <div className="flex items-center gap-6">
+            <a
+              href="/demo-report.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-green-400 hover:text-green-300 text-sm font-medium transition-colors"
+            >
+              StageWright Local Demo →
+            </a>
+            <p className="text-slate-500 text-sm">
+              © {currentYear} StageWright. All rights reserved.
+            </p>
+          </div>
         </div>
 
         <div className="mt-6 text-center">
