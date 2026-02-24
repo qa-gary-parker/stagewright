@@ -61,16 +61,16 @@ export default function Hero() {
           />
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-500/10 border border-green-500/20 rounded-full text-green-400 text-sm font-medium mb-8">
             <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-            Now accepting early access signups
+            Now available — Free + Pro
           </div>
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold text-white mb-6 tracking-tight">
             Stage<span className="gradient-text">Wright</span>
           </h1>
           <p className="text-lg sm:text-xl md:text-2xl text-slate-300 mb-4 font-medium tracking-tight">
-            Beautiful Test Reporting for Playwright
+            Professional Test Reporting for Playwright
           </p>
           <p className="text-base sm:text-lg md:text-xl text-slate-400 mb-8 sm:mb-12 max-w-2xl mx-auto leading-relaxed px-2">
-            Rich analytics, centralized artifact management, and AI-powered insights. The test dashboard your team has been waiting for.
+            Quality gates, PDF exports, pro themes, and AI-powered analysis. The test reporting suite your team deserves.
           </p>
         </motion.div>
 
@@ -86,10 +86,10 @@ export default function Hero() {
           className="flex flex-col sm:flex-row gap-4 justify-center items-center"
         >
           <a
-            href="#signup"
+            href="#get-started"
             className="btn-glow px-6 sm:px-8 py-3 sm:py-4 bg-green-600 hover:bg-green-500 text-white text-base sm:text-lg font-semibold rounded-xl shadow-lg shadow-green-500/25 hover:shadow-green-500/40 transform hover:scale-[1.02] transition-all duration-200"
           >
-            Join the Waitlist
+            Get Started Free
           </a>
           <a
             href="#demo"
@@ -121,9 +121,9 @@ export default function Hero() {
             </div>
             <div className="flex items-center gap-2">
               <svg className="w-5 h-5 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
-              <span className="font-medium">Cloud-First</span>
+              <span className="font-medium">Free + Pro</span>
             </div>
           </div>
         </motion.div>

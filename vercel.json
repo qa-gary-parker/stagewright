@@ -1,0 +1,1 @@
+{ "rewrites": [{ "source": "/((?!assets|logo|demo-report|traces).*)", "destination": "/index.html" }] }

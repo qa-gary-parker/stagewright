@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 // Mock data for realistic demo
 const mockTests = [
@@ -195,6 +196,7 @@ export default function Demo() {
 
   const tabs = [
     { id: 'ai', label: 'AI Analysis', icon: Icons.ai },
+    { id: 'pro', label: 'Pro Features', icon: Icons.sparkles },
     { id: 'tests', label: 'Test Results', icon: Icons.check },
     { id: 'dashboard', label: 'Dashboard', icon: Icons.chart },
     { id: 'gallery', label: 'Gallery', icon: Icons.image },
@@ -244,11 +246,13 @@ export default function Demo() {
         </motion.div>
 
         {/* Tab Navigation */}
-        <div className="flex flex-wrap justify-center mb-6 sm:mb-8 gap-2">
+        <div className="flex flex-wrap justify-center mb-6 sm:mb-8 gap-2" role="tablist">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
+              role="tab"
+              aria-selected={activeTab === tab.id}
               className={`px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-lg text-xs sm:text-sm md:text-base font-semibold transition-all duration-300 flex items-center gap-1.5 sm:gap-2 ${
                 activeTab === tab.id
                   ? 'bg-green-600 text-white shadow-lg scale-105'
@@ -257,7 +261,7 @@ export default function Demo() {
             >
               {tab.icon}
               <span className="hidden sm:inline">{tab.label}</span>
-              <span className="sm:hidden">{tab.id === 'ai' ? 'AI' : tab.id === 'tests' ? 'Tests' : tab.id === 'dashboard' ? 'Stats' : 'Gallery'}</span>
+              <span className="sm:hidden">{tab.id === 'ai' ? 'AI' : tab.id === 'pro' ? 'Pro' : tab.id === 'tests' ? 'Tests' : tab.id === 'dashboard' ? 'Stats' : 'Gallery'}</span>
             </button>
           ))}
         </div>
@@ -265,6 +269,7 @@ export default function Demo() {
         {/* Demo Content */}
         <motion.div
           key={activeTab}
+          role="tabpanel"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.3 }}
@@ -669,6 +674,219 @@ export default function Demo() {
                 )}
               </div>
 
+            </div>
+          )}
+
+          {/* PRO FEATURES TAB */}
+          {activeTab === 'pro' && (
+            <div className="space-y-8">
+              {/* Pro Banner */}
+              <div className="bg-gradient-to-r from-green-600/20 via-emerald-600/20 to-green-600/20 rounded-xl sm:rounded-2xl p-4 sm:p-8 border border-green-500/30">
+                <div className="flex items-start sm:items-center gap-3">
+                  <div className="p-2 sm:p-3 bg-green-500/20 rounded-lg sm:rounded-xl text-green-400 shrink-0">
+                    {Icons.sparkles}
+                  </div>
+                  <div>
+                    <h3 className="text-lg sm:text-2xl font-bold text-white">Pro Features Preview</h3>
+                    <p className="text-slate-400 text-xs sm:text-base">Premium themes, PDF exports, quality gates, and more</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* PDF Style Picker */}
+              <div>
+                <h4 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                  <span className="text-green-400">{Icons.download}</span> Executive PDF Export
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  {[
+                    { name: 'Corporate', colors: ['#1e293b', '#22c55e', '#f8fafc'], desc: 'Clean, professional layout' },
+                    { name: 'Dark', colors: ['#0f172a', '#a855f7', '#e2e8f0'], desc: 'Sleek dark-mode styling' },
+                    { name: 'Minimal', colors: ['#ffffff', '#3b82f6', '#1e293b'], desc: 'Light and minimal design' },
+                  ].map((style, i) => (
+                    <motion.div
+                      key={style.name}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.1 }}
+                      className="bg-slate-900/50 rounded-lg border border-slate-700 overflow-hidden hover:border-green-500/50 transition-colors cursor-default"
+                    >
+                      {/* Mock PDF preview */}
+                      <div className="p-4 space-y-2" style={{ backgroundColor: style.colors[0] }}>
+                        <div className="flex items-center gap-2 mb-3">
+                          <div className="w-6 h-6 rounded" style={{ backgroundColor: style.colors[1] }} />
+                          <div className="h-2 w-20 rounded" style={{ backgroundColor: style.colors[2], opacity: 0.5 }} />
+                        </div>
+                        <div className="h-1.5 w-full rounded" style={{ backgroundColor: style.colors[2], opacity: 0.15 }} />
+                        <div className="h-1.5 w-3/4 rounded" style={{ backgroundColor: style.colors[2], opacity: 0.15 }} />
+                        <div className="flex gap-2 mt-3">
+                          <div className="h-8 flex-1 rounded" style={{ backgroundColor: style.colors[1], opacity: 0.2 }} />
+                          <div className="h-8 flex-1 rounded" style={{ backgroundColor: style.colors[1], opacity: 0.15 }} />
+                        </div>
+                      </div>
+                      <div className="p-3 border-t border-slate-700">
+                        <div className="text-white text-sm font-medium">{style.name}</div>
+                        <div className="text-slate-500 text-xs">{style.desc}</div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Pro Themes */}
+              <div>
+                <h4 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                  <span className="text-purple-400">{Icons.image}</span> 6 Pro HTML Themes
+                </h4>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                  {[
+                    { name: 'ocean', primary: '#0ea5e9', accent: '#06b6d4', bg: '#0c4a6e' },
+                    { name: 'sunset', primary: '#f97316', accent: '#f59e0b', bg: '#7c2d12' },
+                    { name: 'dracula', primary: '#bd93f9', accent: '#ff79c6', bg: '#282a36' },
+                    { name: 'cyberpunk', primary: '#f0f000', accent: '#00f0f0', bg: '#1a0a2e' },
+                    { name: 'forest', primary: '#22c55e', accent: '#84cc16', bg: '#14532d' },
+                    { name: 'rose', primary: '#f43f5e', accent: '#ec4899', bg: '#4c0519' },
+                  ].map((theme, i) => (
+                    <motion.div
+                      key={theme.name}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: i * 0.08 }}
+                      className="bg-slate-900/50 rounded-lg border border-slate-700 p-3 hover:border-slate-600 transition-colors cursor-default"
+                    >
+                      <div className="flex gap-1.5 mb-2">
+                        <div className="w-5 h-5 rounded" style={{ backgroundColor: theme.bg }} />
+                        <div className="w-5 h-5 rounded" style={{ backgroundColor: theme.primary }} />
+                        <div className="w-5 h-5 rounded" style={{ backgroundColor: theme.accent }} />
+                      </div>
+                      <div className="text-white text-sm font-medium">{theme.name}</div>
+                      <div className="text-slate-500 text-xs">Pro theme</div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Quality Gates + Quarantine */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Quality Gates */}
+                <div>
+                  <h4 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                    <span className="text-green-400">{Icons.target}</span> Quality Gates
+                  </h4>
+                  <div className="bg-slate-900/50 rounded-lg border border-slate-700 p-5 space-y-4">
+                    <div className="text-slate-400 text-sm mb-3">Fail builds when thresholds aren't met</div>
+                    {[
+                      { label: 'Pass rate', threshold: '\u2265 95%', actual: '92%', passed: false },
+                      { label: 'Flaky rate', threshold: '\u2264 5%', actual: '2%', passed: true },
+                      { label: 'Max duration', threshold: '\u2264 120s', actual: '39s', passed: true },
+                      { label: 'No new failures', threshold: '0 new', actual: '1 new', passed: false },
+                    ].map((gate) => (
+                      <div key={gate.label} className="flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${
+                            gate.passed ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
+                          }`}>
+                            {gate.passed ? (
+                              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                              </svg>
+                            ) : (
+                              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
+                              </svg>
+                            )}
+                          </div>
+                          <span className="text-slate-300 text-sm">{gate.label}</span>
+                        </div>
+                        <div className="flex items-center gap-3 text-xs shrink-0">
+                          <span className="text-slate-500">{gate.threshold}</span>
+                          <span className={gate.passed ? 'text-green-400 font-medium' : 'text-red-400 font-medium'}>
+                            {gate.actual}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                    <div className="border-t border-slate-700 pt-3 mt-3">
+                      <div className="flex items-center gap-2">
+                        <span className="px-2 py-1 bg-red-500/20 text-red-400 text-xs font-medium rounded border border-red-500/30">
+                          GATE FAILED
+                        </span>
+                        <span className="text-slate-500 text-xs">Build will not pass</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Flaky Test Quarantine */}
+                <div>
+                  <h4 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                    <span className="text-yellow-400">{Icons.alert}</span> Flaky Test Quarantine
+                  </h4>
+                  <div className="bg-slate-900/50 rounded-lg border border-slate-700 p-5 space-y-4">
+                    <div className="text-slate-400 text-sm mb-3">Auto-quarantine tests that exceed flakiness thresholds</div>
+                    {[
+                      { name: 'User profile updates correctly', file: 'profile.spec.ts', flakyRate: '70%', runs: 30 },
+                      { name: 'Dashboard chart renders', file: 'dashboard.spec.ts', flakyRate: '45%', runs: 20 },
+                    ].map((test) => (
+                      <div key={test.name} className="bg-yellow-500/5 rounded-lg p-3 border border-yellow-500/20">
+                        <div className="flex items-start gap-3">
+                          <span className="px-1.5 py-0.5 bg-yellow-500/20 text-yellow-400 text-xs font-bold rounded shrink-0 mt-0.5">
+                            Q
+                          </span>
+                          <div className="min-w-0">
+                            <div className="text-white text-sm font-medium truncate">{test.name}</div>
+                            <div className="text-slate-500 text-xs mt-1 flex flex-wrap gap-x-3 gap-y-1">
+                              <span>{test.file}</span>
+                              <span className="text-yellow-400">{test.flakyRate} flaky</span>
+                              <span>over {test.runs} runs</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                    <div className="border-t border-slate-700 pt-3 mt-3">
+                      <div className="text-slate-500 text-xs">
+                        Quarantined tests are excluded from quality gate calculations and flagged in reports.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* JSON + JUnit Export */}
+              <div className="bg-slate-900/30 rounded-xl p-6 border border-slate-700">
+                <h4 className="text-lg font-semibold text-white mb-4">Additional Export Formats</h4>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  {[
+                    { format: 'PDF', icon: Icons.download, desc: '3 themed executive reports' },
+                    { format: 'JSON', icon: Icons.search, desc: 'Machine-readable test data' },
+                    { format: 'JUnit XML', icon: Icons.check, desc: 'CI/CD integration format' },
+                  ].map((exp, i) => (
+                    <motion.div
+                      key={exp.format}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.3 + i * 0.1 }}
+                      className="bg-slate-800/50 rounded-lg p-4 border border-slate-700 text-center"
+                    >
+                      <div className="inline-flex p-2 bg-green-500/10 rounded-lg text-green-400 mb-2">
+                        {exp.icon}
+                      </div>
+                      <div className="text-white font-medium text-sm">{exp.format}</div>
+                      <div className="text-slate-500 text-xs mt-1">{exp.desc}</div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="text-center pt-4">
+                <Link
+                  to="/docs/pro-themes"
+                  className="text-green-400 hover:text-green-300 text-sm font-medium transition-colors"
+                >
+                  View full documentation →
+                </Link>
+              </div>
             </div>
           )}
 
