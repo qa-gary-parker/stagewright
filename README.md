@@ -1,161 +1,82 @@
 # StageWright Landing Page
 
-Landing page for [stagewright.dev](https://stagewright.dev) - a test reporting dashboard for Playwright.
-
-## Project Status
-
-**Current State:** MVP Complete - Ready for deployment
-
-The landing page is feature-complete with email waitlist signup functionality. All content has been reviewed for accuracy and realism.
+Landing page and marketing site for [stagewright.dev](https://stagewright.dev) — the home of [playwright-smart-reporter](https://www.npmjs.com/package/playwright-smart-reporter).
 
 ## Tech Stack
 
-- **Framework:** React 18 + TypeScript
+- **Framework:** React 19 + TypeScript
 - **Build Tool:** Vite 7
-- **Styling:** Tailwind CSS v4 (with `@tailwindcss/postcss`)
+- **Styling:** Tailwind CSS v4
 - **Animations:** Framer Motion
-- **Icons:** Custom SVG icons (Heroicons-style)
+- **Routing:** React Router DOM v7
+- **Email:** Resend (license delivery)
+- **Payments:** LemonSqueezy (checkout + webhooks)
+- **Hosting:** Vercel
 
-## Components
+## Structure
 
-| Component | Description |
-|-----------|-------------|
-| `Hero.tsx` | Main hero section with animated background blobs, headline, and CTA buttons |
-| `Features.tsx` | 9-feature grid showcasing product capabilities, CI integrations, cloud storage, and roadmap |
-| `Demo.tsx` | Interactive tabbed demo with 4 views: AI Analysis, Test Results, Dashboard, Gallery |
-| `EmailSignup.tsx` | Waitlist signup form with email/company fields, sends to Google Sheets |
-| `Footer.tsx` | Minimal site footer with branding and copyright |
-
-## Features Showcased
-
-### Current/Planned Features
-- AI-Powered Analysis (failure clustering, root cause detection)
-- Stability Grades (A+ to F scoring)
-- Run Comparison
-- One-Click Trace Viewer
-- Performance Tracking
-- Retry Analysis
-- Artifact Gallery (screenshots, videos, traces)
-- Slack & Teams Alerts
-- Trend Analytics
-
-### CI Integrations
-- GitHub Actions
-- GitLab CI
-- CircleCI
-- Jenkins
-
-### Cloud Storage
-- AWS S3
-- Cloudflare R2
-- MinIO
-- Any S3-compatible storage
-
-### Roadmap (Coming Soon)
-- GitHub PR Comments (In Development)
-- VS Code Extension (Planned)
-- Smart Test Selection (Planned)
-- Team Dashboard (Planned)
-
-## Waitlist Setup (Google Sheets)
-
-The email signup form sends data to a Google Sheets webhook. To set up:
-
-### 1. Create a Google Sheet
-Create a new Google Sheet with columns: `Timestamp`, `Email`, `Company`
-
-### 2. Add Google Apps Script
-Go to **Extensions > Apps Script** and paste this code:
-
-```javascript
-function doPost(e) {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  const data = JSON.parse(e.postData.contents);
-
-  sheet.appendRow([
-    data.timestamp || new Date().toISOString(),
-    data.email,
-    data.company
-  ]);
-
-  return ContentService
-    .createTextOutput(JSON.stringify({ status: 'success' }))
-    .setMimeType(ContentService.MimeType.JSON);
-}
+```
+stagewright-landing/
+├── api/webhook/              # Vercel serverless functions
+│   ├── lemonsqueezy.ts       # LemonSqueezy webhook → license generation + email
+│   └── test-webhook.ts       # Local test script
+├── src/
+│   ├── components/
+│   │   ├── Navbar.tsx        # Sticky nav with mobile hamburger
+│   │   ├── Hero.tsx          # Main hero with CTAs
+│   │   ├── Features.tsx      # Feature grid with Pro badges
+│   │   ├── Demo.tsx          # Interactive tabbed demo
+│   │   ├── Pricing.tsx       # Free/Pro/Cloud tiers with monthly/yearly toggle
+│   │   ├── EmailSignup.tsx   # Get Started section with install guide
+│   │   ├── Footer.tsx        # Columnar footer with links
+│   │   └── ProBadge.tsx      # Reusable Pro badge component
+│   ├── docs/
+│   │   ├── content/          # 22 docs pages as typed data objects
+│   │   ├── DocsLayout.tsx    # Fixed sidebar + content area
+│   │   ├── DocsSidebar.tsx   # Collapsible nav with active states
+│   │   ├── DocsPage.tsx      # Generic page renderer
+│   │   ├── DocsIndex.tsx     # Docs landing page
+│   │   ├── routes.tsx        # React Router route mapping
+│   │   └── types.ts          # Content type definitions
+│   ├── App.tsx
+│   ├── main.tsx              # createBrowserRouter setup
+│   └── index.css
+├── vercel.json               # SPA rewrite rules
+└── package.json
 ```
 
-### 3. Deploy as Web App
-1. Click **Deploy > New deployment**
-2. Select **Web app** as the type
-3. Set **Execute as:** "Me"
-4. Set **Who has access:** "Anyone"
-5. Click **Deploy** and authorize
-6. Copy the Web app URL
+## Purchase Flow
 
-### 4. Configure Environment Variable
-Add the URL to Vercel:
-- Go to your Vercel project settings
-- Add environment variable: `VITE_GOOGLE_SHEETS_WEBHOOK` = your script URL
-- Redeploy
+1. Customer clicks "Get Pro" → LemonSqueezy checkout
+2. LemonSqueezy sends `order_created` webhook → `/api/webhook/lemonsqueezy`
+3. Webhook generates ES256 JWT license key
+4. Resend delivers license key + setup instructions via email
+5. Customer adds key to env var or Playwright config → Pro features unlock
+
+## Environment Variables (Vercel)
+
+| Variable | Purpose |
+|---|---|
+| `LICENSE_PRIVATE_KEY` | ES256 private key for signing license JWTs |
+| `LEMONSQUEEZY_WEBHOOK_SECRET` | HMAC-SHA256 webhook signature verification |
+| `RESEND_API_KEY` | Email delivery of license keys |
 
 ## Development
 
 ```bash
-# Install dependencies
 npm install
-
-# Start dev server
-npm run dev
-
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
+npm run dev       # http://localhost:5173
+npm run build     # TypeScript check + Vite production build
+npm run preview   # Preview production build
 ```
 
-## Design References
+## Docs
 
-The design draws inspiration from:
-- [ready.so](https://ready.so) - Clean typography, tight letter-spacing
-- [superlist.com](https://www.superlist.com) - Card hover effects, gradient backgrounds
+The `/docs` area covers 22 pages across 4 sections:
 
-## Open TODOs
+- **Getting Started** — Installation, configuration reference
+- **Core Features** — AI analysis, stability grades, trends, artifacts, trace viewer, etc.
+- **Integrations** — CI, annotations, multi-project, Cucumber, CLI tools, keyboard shortcuts
+- **Pro Features** — Themes, branding, exports, quality gates, quarantine, notifications, AI config
 
-### Landing Page
-- [x] Connect email signup to Google Sheets via Apps Script webhook
-- [x] Deploy to Vercel (stagewright.vercel.app)
-- [ ] Set up analytics tracking
-- [ ] Add meta tags and Open Graph images for social sharing
-- [ ] Custom domain (stagewright.dev)
-
-### Parent Project (playwright-smart-reporter)
-- [ ] Implement S3 attachment storage (paused during landing page work)
-
-## File Structure
-
-```
-stagewright-landing/
-├── src/
-│   ├── components/
-│   │   ├── Hero.tsx
-│   │   ├── Features.tsx
-│   │   ├── Demo.tsx
-│   │   ├── EmailSignup.tsx
-│   │   └── Footer.tsx
-│   ├── App.tsx
-│   ├── main.tsx
-│   └── index.css
-├── public/
-├── index.html
-├── package.json
-├── vite.config.ts
-├── tailwind.config.js
-└── tsconfig.json
-```
-
-## Notes
-
-- All inflated/unverified statistics have been removed to maintain credibility
-- The demo section shows mockups of the product interface, not actual screenshots
-- Email signups are sent to Google Sheets (falls back to localStorage if webhook not configured)
+All content is typed TypeScript data (no markdown library needed). Pro pages show inline badges in the sidebar.
