@@ -48,9 +48,6 @@ const Icons = {
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
     </svg>
   ),
-};
-
-const Icons2 = {
   grade: (
     <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
@@ -71,11 +68,6 @@ const Icons2 = {
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
     </svg>
   ),
-  retry: (
-    <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-    </svg>
-  ),
 };
 
 interface Feature {
@@ -94,13 +86,13 @@ const features: Feature[] = [
     color: 'from-blue-500 to-cyan-500'
   },
   {
-    icon: Icons2.grade,
+    icon: Icons.grade,
     title: 'Stability Grades',
     description: 'Every test gets a stability score from A+ to F. Instantly identify your most problematic tests with letter grades.',
     color: 'from-green-500 to-emerald-500'
   },
   {
-    icon: Icons2.compare,
+    icon: Icons.compare,
     title: 'Run Comparison',
     description: 'Compare any run against a baseline. See new failures, fixed tests, and performance changes at a glance.',
     color: 'from-purple-500 to-pink-500'
@@ -112,13 +104,13 @@ const features: Feature[] = [
     color: 'from-teal-500 to-cyan-500'
   },
   {
-    icon: Icons2.clock,
+    icon: Icons.clock,
     title: 'Performance Tracking',
     description: 'Detect performance regressions automatically. See which tests got slower and identify the slowest steps.',
     color: 'from-orange-500 to-red-500'
   },
   {
-    icon: Icons2.retry,
+    icon: Icons.refresh,
     title: 'Retry Analysis',
     description: 'Track retry patterns across runs. Know exactly which tests needed retries and how often they fail initially.',
     color: 'from-yellow-500 to-orange-500'
@@ -130,10 +122,11 @@ const features: Feature[] = [
     color: 'from-pink-500 to-rose-500'
   },
   {
-    icon: Icons2.bell,
+    icon: Icons.bell,
     title: 'Slack & Teams Alerts',
     description: 'Get notified instantly when tests fail. Rich notifications with failure summaries sent to your team channels.',
-    color: 'from-indigo-500 to-purple-500'
+    color: 'from-indigo-500 to-purple-500',
+    pro: true,
   },
   {
     icon: Icons.chart,

@@ -67,24 +67,26 @@ console.log('Signature:', signature.substring(0, 16) + '...');
 // Import and call the handler with mock req/res
 import handler from './lemonsqueezy';
 
+import type { VercelRequest, VercelResponse } from '@vercel/node';
+
 const mockReq = {
   method: 'POST',
   headers: { 'x-signature': signature },
   body: mockPayload,
-} as any;
+} as unknown as VercelRequest;
 
 let responseStatus = 0;
-let responseBody: any = null;
+let responseBody: Record<string, unknown> | null = null;
 const mockRes = {
   status(code: number) {
     responseStatus = code;
     return this;
   },
-  json(body: any) {
+  json(body: Record<string, unknown>) {
     responseBody = body;
     return this;
   },
-} as any;
+} as unknown as VercelResponse;
 
 (async () => {
   await handler(mockReq, mockRes);
@@ -122,10 +124,10 @@ const mockRes = {
   yearlyHmac.update(yearlyStr);
   const yearlySignature = yearlyHmac.digest('hex');
 
-  const mockReq2 = { method: 'POST', headers: { 'x-signature': yearlySignature }, body: yearlyPayload } as any;
+  const mockReq2 = { method: 'POST', headers: { 'x-signature': yearlySignature }, body: yearlyPayload } as unknown as VercelRequest;
   let status2 = 0;
-  let body2: any = null;
-  const mockRes2 = { status(c: number) { status2 = c; return this; }, json(b: any) { body2 = b; return this; } } as any;
+  let body2: Record<string, unknown> | null = null;
+  const mockRes2 = { status(c: number) { status2 = c; return this; }, json(b: Record<string, unknown>) { body2 = b; return this; } } as unknown as VercelResponse;
   await handler(mockReq2, mockRes2);
   console.log('Status:', status2);
   console.log('Body:', JSON.stringify(body2, null, 2));

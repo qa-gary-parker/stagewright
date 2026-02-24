@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ProBadge from '../components/ProBadge.tsx';
 import { docsNavigation } from './content/index.ts';
@@ -111,6 +111,12 @@ export default function DocsPage({ page }: { page?: DocPage }) {
       prev: idx > 0 ? allItems[idx - 1] : null,
       next: idx < allItems.length - 1 ? allItems[idx + 1] : null,
     };
+  }, [page]);
+
+  useEffect(() => {
+    document.title = page
+      ? `${page.title} | StageWright Docs`
+      : 'Page Not Found | StageWright Docs';
   }, [page]);
 
   if (!page) {

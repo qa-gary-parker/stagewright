@@ -2,6 +2,10 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import * as crypto from 'crypto';
 import { Resend } from 'resend';
 
+function escapeHtml(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
 // --- License generation (same logic as generate-license.ts) ---
 
 function base64UrlEncode(data: Buffer): string {
@@ -35,7 +39,10 @@ function verifyWebhookSignature(payload: string, signature: string, secret: stri
   const hmac = crypto.createHmac('sha256', secret);
   hmac.update(payload);
   const digest = hmac.digest('hex');
-  return crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(digest));
+  const sigBuf = Buffer.from(signature);
+  const digestBuf = Buffer.from(digest);
+  if (sigBuf.length !== digestBuf.length) return false;
+  return crypto.timingSafeEqual(sigBuf, digestBuf);
 }
 
 // --- Email delivery ---
@@ -52,7 +59,7 @@ async function sendLicenseEmail(params: LicenseEmailParams): Promise<boolean> {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
     console.error('RESEND_API_KEY not configured — license logged but not emailed');
-    console.log(JSON.stringify({ action: 'license_key_fallback', to: params.to, licenseKey: params.licenseKey }));
+    console.log(JSON.stringify({ action: 'license_key_fallback', to: params.to }));
     return false;
   }
 
@@ -69,7 +76,7 @@ async function sendLicenseEmail(params: LicenseEmailParams): Promise<boolean> {
 
   if (error) {
     console.error('Email send failed:', error);
-    console.log(JSON.stringify({ action: 'license_key_fallback', to: params.to, licenseKey: params.licenseKey }));
+    console.log(JSON.stringify({ action: 'license_key_fallback', to: params.to }));
     return false;
   }
 
@@ -92,15 +99,15 @@ function buildLicenseEmailHtml(firstName: string, licenseKey: string, billingCyc
 
     <!-- Main card -->
     <div style="background:#1e293b;border-radius:12px;padding:32px;border:1px solid #334155;">
-      <h2 style="color:#fff;font-size:20px;margin:0 0 8px;">Hey ${firstName},</h2>
+      <h2 style="color:#fff;font-size:20px;margin:0 0 8px;">Hey ${escapeHtml(firstName)},</h2>
       <p style="color:#94a3b8;font-size:15px;line-height:1.6;margin:0 0 24px;">
-        Thanks for purchasing StageWright Pro (${billingCycle}). Your license key is ready.
+        Thanks for purchasing StageWright Pro (${escapeHtml(billingCycle)}). Your license key is ready.
       </p>
 
       <!-- License key box -->
       <div style="background:#0f172a;border:1px solid #4ade80;border-radius:8px;padding:16px;margin-bottom:24px;">
         <p style="color:#4ade80;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin:0 0 8px;">Your License Key</p>
-        <code style="color:#e2e8f0;font-size:13px;word-break:break-all;line-height:1.5;display:block;">${licenseKey}</code>
+        <code style="color:#e2e8f0;font-size:13px;word-break:break-all;line-height:1.5;display:block;">${escapeHtml(licenseKey)}</code>
       </div>
 
       <!-- Setup instructions -->
@@ -108,7 +115,7 @@ function buildLicenseEmailHtml(firstName: string, licenseKey: string, billingCyc
 
       <p style="color:#94a3b8;font-size:14px;margin:0 0 8px;"><strong style="color:#e2e8f0;">Option 1:</strong> Environment variable</p>
       <div style="background:#0f172a;border-radius:6px;padding:12px;margin-bottom:16px;">
-        <code style="color:#e2e8f0;font-size:13px;">SMART_REPORTER_LICENSE_KEY=${licenseKey}</code>
+        <code style="color:#e2e8f0;font-size:13px;">SMART_REPORTER_LICENSE_KEY=${escapeHtml(licenseKey)}</code>
       </div>
 
       <p style="color:#94a3b8;font-size:14px;margin:0 0 8px;"><strong style="color:#e2e8f0;">Option 2:</strong> Playwright config</p>
@@ -116,7 +123,7 @@ function buildLicenseEmailHtml(firstName: string, licenseKey: string, billingCyc
         <pre style="color:#e2e8f0;font-size:13px;margin:0;white-space:pre-wrap;">reporter: [
   ['playwright-smart-reporter', {
     outputFile: 'smart-report.html',
-    licenseKey: '${licenseKey}'
+    licenseKey: '${escapeHtml(licenseKey)}'
   }]
 ]</pre>
       </div>
@@ -145,7 +152,20 @@ function buildLicenseEmailHtml(firstName: string, licenseKey: string, billingCyc
 </html>`;
 }
 
+// --- Vercel config: disable built-in body parsing so we get the raw body ---
+
+export const config = { api: { bodyParser: false } };
+
 // --- Handler ---
+
+function getRawBody(req: VercelRequest): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const chunks: Buffer[] = [];
+    req.on('data', (chunk: Buffer) => chunks.push(chunk));
+    req.on('end', () => resolve(Buffer.concat(chunks).toString('utf-8')));
+    req.on('error', reject);
+  });
+}
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
@@ -164,12 +184,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(401).json({ error: 'Missing signature' });
   }
 
-  const rawBody = typeof req.body === 'string' ? req.body : JSON.stringify(req.body);
+  const rawBody = await getRawBody(req);
   if (!verifyWebhookSignature(rawBody, signature, webhookSecret)) {
     return res.status(401).json({ error: 'Invalid signature' });
   }
 
-  const event = req.body;
+  const event = JSON.parse(rawBody);
   const eventName = event?.meta?.event_name;
 
   // Only process successful orders

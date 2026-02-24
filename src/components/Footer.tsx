@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer className="relative py-12 px-6 border-t border-slate-800">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8 md:gap-12">
           {/* Column 1: Branding */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-4 mb-3">
@@ -72,6 +72,31 @@ export default function Footer() {
                   className="text-slate-400 hover:text-white text-sm transition-colors"
                 >
                   GitHub
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 4: Support */}
+          <div>
+            <h4 className="text-white font-semibold text-sm uppercase tracking-wider mb-4">Support</h4>
+            <ul className="space-y-3">
+              <li>
+                <a
+                  href="https://github.com/gary-parker/playwright-smart-reporter/issues"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-slate-400 hover:text-white text-sm transition-colors"
+                >
+                  GitHub Issues
+                </a>
+              </li>
+              <li>
+                <a
+                  href="mailto:support@stagewright.dev"
+                  className="text-slate-400 hover:text-white text-sm transition-colors"
+                >
+                  support@stagewright.dev
                 </a>
               </li>
             </ul>
