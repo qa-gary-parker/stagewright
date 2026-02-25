@@ -28,7 +28,7 @@ npx playwright test`,
       },
       note: {
         type: 'info',
-        content: 'Each Pro organization gets 10,000 AI analyses per month. Analysis is powered by GPT-4o-mini via the StageWright managed proxy.',
+        content: 'Starter plans include 2,000 AI analyses per month. Pro plans include 5,000. Analysis is powered by GPT-4o-mini via the StageWright managed proxy.',
       },
     },
     {

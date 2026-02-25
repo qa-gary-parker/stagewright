@@ -50,7 +50,7 @@ function getRatelimit(): Ratelimit {
       url: process.env.UPSTASH_REDIS_REST_URL!,
       token: process.env.UPSTASH_REDIS_REST_TOKEN!,
     }),
-    limiter: Ratelimit.slidingWindow(10000, '30d'),
+    limiter: Ratelimit.slidingWindow(5000, '30d'),
     prefix: 'ai',
   });
 }
@@ -81,7 +81,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   if (!success) {
     return res.status(429).json({
-      error: 'Rate limit exceeded (10,000 analyses per 30 days)',
+      error: 'Rate limit exceeded',
       resetAt: new Date(reset).toISOString(),
     });
   }

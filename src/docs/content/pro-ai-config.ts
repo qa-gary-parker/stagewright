@@ -9,8 +9,8 @@ export const proAiConfig: DocPage = {
     {
       heading: 'Overview',
       body: [
-        'AI failure analysis is a managed service included with every Pro and Team license. There is no configuration required — analysis runs automatically when failures are detected in your test suite.',
-        'Each organisation gets 10,000 AI analyses per 30-day period. Analysis is powered by GPT-4o-mini via the StageWright proxy, so you never need to manage API keys or provider accounts.',
+        'AI failure analysis is a managed service included with every Starter and Pro license. There is no configuration required — analysis runs automatically when failures are detected in your test suite.',
+        'Starter plans include 2,000 AI analyses per month. Pro plans include 5,000. Analysis is powered by GPT-4o-mini via the StageWright proxy, so you never need to manage API keys or provider accounts.',
       ],
     },
     {
@@ -21,7 +21,7 @@ export const proAiConfig: DocPage = {
       list: {
         items: [
           'Automatic with any valid Pro or Team license',
-          '10,000 analyses per organisation per 30-day rolling window',
+          '2,000 analyses/month (Starter) or 5,000 analyses/month (Pro)',
           'Powered by GPT-4o-mini for fast, cost-effective analysis',
           'No API keys, provider setup, or token budgets to manage',
         ],
@@ -31,7 +31,7 @@ export const proAiConfig: DocPage = {
     {
       heading: 'Quota and Rate Limits',
       body: [
-        'Your organisation shares a pool of 10,000 AI analyses per 30-day sliding window. Each individual failure analysis counts as one request. Failure clustering batches related failures together, so a cluster of 10 similar failures may only use a single analysis request.',
+        'Your organisation shares a pool of AI analyses per month (2,000 for Starter, 5,000 for Pro). Each individual failure analysis counts as one request. Failure clustering batches related failures together, so a cluster of 10 similar failures may only use a single analysis request.',
       ],
       note: {
         type: 'info',

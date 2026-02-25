@@ -82,7 +82,7 @@ const features: Feature[] = [
   {
     icon: Icons.ai,
     title: 'AI-Powered Analysis',
-    description: 'Managed AI failure analysis with 10,000 analyses/month. Get actionable fix suggestions for every failure — no API keys needed.',
+    description: 'AI-powered failure analysis with actionable fix suggestions. Choose from 2,000 or 5,000 analyses/month — no API keys needed.',
     color: 'from-blue-500 to-cyan-500',
     pro: true,
   },
