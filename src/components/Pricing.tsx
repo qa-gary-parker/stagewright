@@ -33,6 +33,7 @@ const tiers = [
     name: 'Starter',
     badge: '',
     price: 5,
+    usdEquiv: '~$6',
     description: 'AI explains every failure so you fix bugs faster.',
     cta: 'Get Starter',
     ctaHref: CHECKOUT_URLS.starter,
@@ -55,6 +56,7 @@ const tiers = [
     name: 'Pro',
     badge: 'Best Value',
     price: 9,
+    usdEquiv: '~$12',
     description: 'Higher AI quota, full brand control, and priority support.',
     cta: 'Get Pro',
     ctaHref: CHECKOUT_URLS.pro,
@@ -134,6 +136,9 @@ export default function Pricing() {
                   <div className="flex items-baseline gap-1">
                     <span className="text-4xl font-bold text-white">£{tier.price}</span>
                     <span className="text-slate-400 text-sm">/mo</span>
+                    {'usdEquiv' in tier && tier.usdEquiv && (
+                      <span className="text-slate-500 text-xs ml-1">({tier.usdEquiv})</span>
+                    )}
                   </div>
                 )}
                 <div className="text-slate-500 text-xs mt-2">{tier.delivery}</div>
