@@ -1,16 +1,13 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import * as crypto from 'crypto';
 import { Resend } from 'resend';
+import { base64UrlEncode } from '../lib/jwt';
 
 function escapeHtml(s: string): string {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
 // --- License generation (same logic as generate-license.ts) ---
-
-function base64UrlEncode(data: Buffer): string {
-  return data.toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
-}
 
 function generateLicenseJwt(tier: 'pro' | 'team', org: string, durationDays: number): string {
   const privateKey = process.env.LICENSE_PRIVATE_KEY;

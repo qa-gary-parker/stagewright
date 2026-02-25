@@ -82,8 +82,9 @@ const features: Feature[] = [
   {
     icon: Icons.ai,
     title: 'AI-Powered Analysis',
-    description: 'Intelligent failure clustering and root cause analysis. Get actionable fix suggestions powered by GPT-4 and Claude.',
-    color: 'from-blue-500 to-cyan-500'
+    description: 'Managed AI failure analysis with 10,000 analyses/month. Get actionable fix suggestions for every failure — no API keys needed.',
+    color: 'from-blue-500 to-cyan-500',
+    pro: true,
   },
   {
     icon: Icons.grade,

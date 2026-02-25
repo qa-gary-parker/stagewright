@@ -79,7 +79,6 @@ export default defineConfig({
           ['exportFormats', 'string[]', '[]', 'Additional export formats — pdf, csv, json'],
           ['quarantine', 'object', 'undefined', 'Flaky test quarantine configuration'],
           ['notifications', 'object', 'undefined', 'Slack/Teams notification settings'],
-          ['aiProvider', 'object', 'undefined', 'Custom AI provider configuration'],
         ],
       },
       note: {
@@ -100,7 +99,6 @@ export default defineConfig({
           ['STAGEWRIGHT_OUTPUT', 'Overrides the outputFile option in config'],
           ['STAGEWRIGHT_CLOUD_API_KEY', 'API key for uploading reports to StageWright Cloud'],
           ['STAGEWRIGHT_CLOUD_URL', 'Custom cloud endpoint URL (default: cloud.stagewright.dev)'],
-          ['STAGEWRIGHT_AI_API_KEY', 'API key for the AI analysis provider'],
           ['CI', 'When set, the reporter enables CI-optimized defaults'],
         ],
       },

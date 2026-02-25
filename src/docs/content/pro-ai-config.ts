@@ -3,127 +3,58 @@ import type { DocPage } from '../types';
 export const proAiConfig: DocPage = {
   slug: 'pro-ai-config',
   title: 'AI Configuration',
-  description: 'Configure custom AI providers, tune prompts, manage token budgets, and control data privacy.',
+  description: 'AI failure analysis is fully managed with Pro — no configuration or API keys required.',
   isPro: true,
   sections: [
     {
       heading: 'Overview',
       body: [
-        'Pro users can configure the AI analysis engine to use different providers, customise prompts, set token limits, and control what data is sent for analysis. This gives you full control over cost, quality, and data privacy.',
+        'AI failure analysis is a managed service included with every Pro and Team license. There is no configuration required — analysis runs automatically when failures are detected in your test suite.',
+        'Each organisation gets 10,000 AI analyses per 30-day period. Analysis is powered by GPT-4o-mini via the StageWright proxy, so you never need to manage API keys or provider accounts.',
       ],
     },
     {
-      heading: 'Custom AI Providers',
+      heading: 'How It Works',
       body: [
-        'The reporter auto-detects your AI provider based on which API key is set (ANTHROPIC_API_KEY, OPENAI_API_KEY, or GEMINI_API_KEY). Pro users can customise the model, switch to Azure OpenAI, or use a local model via an OpenAI-compatible API.',
+        'When the reporter detects test failures, it sends a structured summary of the failure data to the StageWright AI endpoint. The proxy validates your Pro license, checks your rate limit, and forwards the request to OpenAI. The response is embedded directly in your HTML report.',
       ],
-      code: {
-        language: 'typescript',
-        content: `['playwright-smart-reporter', {
-  aiProvider: {
-    type: 'anthropic',
-    apiKey: process.env.ANTHROPIC_API_KEY,
-    model: 'claude-sonnet-4-6-20250514',
-  },
-}]`,
-      },
-      table: {
-        headers: ['Provider', 'Type Value', 'Default Model'],
-        rows: [
-          ['OpenAI', 'openai', 'gpt-3.5-turbo (free), custom with Pro'],
-          ['Anthropic', 'anthropic', 'claude-3-haiku-20240307 (free), custom with Pro'],
-          ['Google Gemini', 'gemini', 'gemini-2.5-flash (free), custom with Pro'],
-          ['Azure OpenAI', 'azure', 'Your deployed model name'],
-          ['Local / Custom', 'custom', 'Any OpenAI-compatible endpoint'],
+      list: {
+        items: [
+          'Automatic with any valid Pro or Team license',
+          '10,000 analyses per organisation per 30-day rolling window',
+          'Powered by GPT-4o-mini for fast, cost-effective analysis',
+          'No API keys, provider setup, or token budgets to manage',
         ],
+        icon: 'check',
       },
     },
     {
-      heading: 'Local Model Configuration',
+      heading: 'Quota and Rate Limits',
       body: [
-        'For teams that cannot send test data to external providers, configure a local model using an OpenAI-compatible API (e.g., Ollama, LM Studio, vLLM).',
+        'Your organisation shares a pool of 10,000 AI analyses per 30-day sliding window. Each individual failure analysis counts as one request. Failure clustering batches related failures together, so a cluster of 10 similar failures may only use a single analysis request.',
       ],
-      code: {
-        language: 'typescript',
-        content: `['playwright-smart-reporter', {
-  aiProvider: {
-    type: 'custom',
-    baseUrl: 'http://localhost:11434/v1',
-    model: 'llama3.1',
-    apiKey: 'not-needed',  // required field but ignored by local servers
-  },
-}]`,
-      },
       note: {
         type: 'info',
-        content: 'Local models provide complete data privacy but may produce less accurate analysis than larger cloud models.',
-      },
-    },
-    {
-      heading: 'Prompt Customisation',
-      body: [
-        'Customise the system prompt and analysis instructions to focus the AI on your specific codebase and failure patterns.',
-      ],
-      code: {
-        language: 'typescript',
-        content: `['playwright-smart-reporter', {
-  aiProvider: {
-    type: 'openai',
-    apiKey: process.env.OPENAI_API_KEY,
-    model: 'gpt-4o',
-    systemPrompt: \`You are a QA engineer analysing Playwright test failures
-for an e-commerce application built with React and Node.js.
-Focus on selector stability, API response timing, and
-authentication token expiry as common root causes.\`,
-  },
-}]`,
-      },
-    },
-    {
-      heading: 'Token Limits and Cost Management',
-      body: [
-        'Control API costs by setting token limits per run. The reporter batches failures efficiently and stops when the budget is exhausted.',
-      ],
-      table: {
-        headers: ['Option', 'Type', 'Default', 'Description'],
-        rows: [
-          ['maxTokensPerRun', 'number', '50000', 'Maximum total tokens per test run'],
-          ['maxTokensPerTest', 'number', '2000', 'Maximum tokens per individual test analysis'],
-          ['maxFailuresAnalysed', 'number', '50', 'Stop analysing after this many failures'],
-          ['batchSize', 'number', '10', 'Number of failures sent per API call'],
-        ],
-      },
-      code: {
-        language: 'typescript',
-        content: `['playwright-smart-reporter', {
-  aiProvider: {
-    type: 'openai',
-    apiKey: process.env.OPENAI_API_KEY,
-    model: 'gpt-4o-mini',  // cheaper model for budget-conscious teams
-    maxTokensPerRun: 20000,
-    maxFailuresAnalysed: 20,
-  },
-}]`,
+        content: 'When your quota is exhausted, the reporter continues to generate reports normally — only the AI analysis section is omitted until the window resets.',
       },
     },
     {
       heading: 'Privacy and Data Handling',
       body: [
-        'By default, the reporter sends error messages, stack traces, and test steps to the AI provider. Configure data filters to control what is included.',
+        'The StageWright proxy forwards failure data (error messages, stack traces, and test steps) to OpenAI for analysis. No data is stored by the proxy — it acts as a pass-through that validates your license and enforces rate limits.',
       ],
       list: {
         items: [
-          'Exclude file paths from stack traces with stripPaths: true',
-          'Redact environment variable values with redactEnv: true',
-          'Exclude screenshot data with aiIncludeScreenshots: false',
-          'Strip custom annotation values with redactAnnotations: true',
-          'Use a local model for complete air-gapped analysis',
+          'Only failure-related data is sent (no screenshots, videos, or passing test data)',
+          'The proxy does not log or persist your test data',
+          'Data is processed by OpenAI under their API data usage policy',
+          'No test data is used for model training',
         ],
         icon: 'check',
       },
       note: {
         type: 'warning',
-        content: 'Review your AI provider\'s data retention and privacy policies. Test data may contain sensitive information like URLs, credentials in error messages, or internal API paths.',
+        content: 'Test failure data may contain sensitive information like internal URLs, API paths, or credentials in error messages. Review your test output if this is a concern for your organisation.',
       },
     },
   ],

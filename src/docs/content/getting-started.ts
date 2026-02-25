@@ -89,10 +89,9 @@ open smart-report.html`,
       ],
       list: {
         items: [
-          'Configure AI failure analysis for automated root cause detection',
+          'Upgrade to Pro for AI failure analysis, themes, and quality gates',
           'Enable run comparison to track regressions between builds',
           'Set up CI integration to publish reports automatically',
-          'Upgrade to Pro for themes, quality gates, and advanced notifications',
         ],
         icon: 'arrow',
       },

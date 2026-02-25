@@ -3,28 +3,32 @@ import type { DocPage } from '../types';
 export const aiAnalysis: DocPage = {
   slug: 'ai-analysis',
   title: 'AI Failure Analysis',
-  description: 'Automatically detect root causes, cluster related failures, and receive actionable fix suggestions powered by AI.',
+  description: 'Automatically detect root causes, cluster related failures, and receive actionable fix suggestions — included with Pro.',
+  isPro: true,
   sections: [
     {
       heading: 'How AI Analysis Works',
       body: [
-        'When your test run completes, the reporter collects all failure data — error messages, stack traces, test steps, and screenshots — and sends a structured summary to the configured AI provider. The model analyses the failures and returns root cause explanations, pattern clusters, and suggested fixes.',
+        'When your test run completes, the reporter collects all failure data — error messages, stack traces, test steps, and screenshots — and sends a structured summary to the StageWright AI proxy. The model analyses the failures and returns root cause explanations, pattern clusters, and suggested fixes.',
         'Analysis runs asynchronously after the test suite finishes, so it adds minimal overhead to your pipeline. Results are embedded directly into the HTML report.',
       ],
     },
     {
       heading: 'Enabling AI Analysis',
       body: [
-        'Set the AI provider API key as an environment variable and the reporter will automatically enable analysis for failing tests.',
+        'AI analysis is automatic with a Pro license. No API keys or provider configuration needed — just install the reporter, activate your Pro license, and run your tests.',
       ],
       code: {
         language: 'bash',
-        content: `export STAGEWRIGHT_AI_API_KEY="sk-your-api-key"
+        content: `# Set your Pro license key
+export STAGEWRIGHT_LICENSE="your-pro-license-key"
+
+# Run tests — AI analysis happens automatically for failures
 npx playwright test`,
       },
       note: {
         type: 'info',
-        content: 'The default provider is OpenAI (gpt-4o). Pro users can configure alternative providers including Anthropic Claude and local models.',
+        content: 'Each Pro organization gets 10,000 AI analyses per month. Analysis is powered by GPT-4o-mini via the StageWright managed proxy.',
       },
     },
     {
@@ -76,18 +80,13 @@ Confidence:  87%`,
       },
     },
     {
-      heading: 'Configuration Options',
+      heading: 'Privacy',
       body: [
-        'Fine-tune how the AI analysis behaves with these options in your reporter config.',
+        'AI analysis sends failure data (error messages, stack traces, and test steps) to OpenAI via the StageWright proxy. No screenshots or video attachments are sent. The proxy does not store your test data — it is forwarded to the AI provider and discarded.',
       ],
-      table: {
-        headers: ['Option', 'Type', 'Default', 'Description'],
-        rows: [
-          ['aiAnalysis', 'boolean', 'true', 'Enable or disable AI analysis globally'],
-          ['aiMaxFailures', 'number', '50', 'Maximum failures to analyse per run'],
-          ['aiIncludeScreenshots', 'boolean', 'true', 'Send screenshots to the AI for visual context'],
-          ['aiTimeout', 'number', '30000', 'Timeout in ms for the AI provider response'],
-        ],
+      note: {
+        type: 'warning',
+        content: 'Test failure data may contain sensitive information like internal URLs, API paths, or credentials in error messages. Review your test output if this is a concern for your organisation.',
       },
     },
   ],

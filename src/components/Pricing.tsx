@@ -21,7 +21,6 @@ const tiers = [
     comingSoon: false,
     features: [
       'HTML report with System/Light/Dark themes',
-      'AI failure analysis + clustering',
       'Stability grades (A\u2013F)',
       'Run comparison',
       'Retry analysis',
@@ -45,6 +44,7 @@ const tiers = [
     comingSoon: false,
     features: [
       'Everything in Local, plus:',
+      'AI failure analysis (managed, 10,000/month)',
       '6 additional Pro themes (ocean, sunset, dracula, cyberpunk, forest, rose)',
       'Executive PDF export (3 themed variants)',
       'PDF style picker modal',
