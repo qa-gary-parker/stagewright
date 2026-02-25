@@ -16,12 +16,12 @@ export const aiAnalysis: DocPage = {
     {
       heading: 'Enabling AI Analysis',
       body: [
-        'AI analysis is automatic with a Pro license. No API keys or provider configuration needed — just install the reporter, activate your Pro license, and run your tests.',
+        'AI analysis is automatic with a Starter or Pro license. No API keys or provider configuration needed — just install the reporter, activate your license, and run your tests.',
       ],
       code: {
         language: 'bash',
-        content: `# Set your Pro license key
-export STAGEWRIGHT_LICENSE="your-pro-license-key"
+        content: `# Set your license key (Starter or Pro)
+export STAGEWRIGHT_LICENSE="your-license-key"
 
 # Run tests — AI analysis happens automatically for failures
 npx playwright test`,

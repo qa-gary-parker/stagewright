@@ -60,7 +60,7 @@ open smart-report.html`,
       list: {
         items: [
           'Summary dashboard with pass/fail/skip counts and overall duration',
-          'AI failure analysis highlighting root causes and patterns',
+          'AI failure analysis highlighting root causes and patterns (Starter/Pro)',
           'Stability grades ranking every test from A+ to F',
           'Artifact gallery for screenshots, videos, and trace files',
           'Step timeline showing duration breakdowns per test',
@@ -85,11 +85,11 @@ open smart-report.html`,
     {
       heading: 'Next Steps',
       body: [
-        'Now that you have a basic report, explore the Configuration Reference to unlock the full feature set — including AI analysis, run comparison, and CI integration.',
+        'Now that you have a basic report, explore the Configuration Reference to unlock the full feature set — including run comparison, CI integration, and AI-powered analysis.',
       ],
       list: {
         items: [
-          'Upgrade to Pro for AI failure analysis, themes, and quality gates',
+          'Add a Starter or Pro license for AI failure analysis, themes, and quality gates',
           'Enable run comparison to track regressions between builds',
           'Set up CI integration to publish reports automatically',
         ],

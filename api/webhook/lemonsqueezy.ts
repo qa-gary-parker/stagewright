@@ -51,8 +51,7 @@ interface LicenseEmailParams {
   to: string;
   customerName: string;
   licenseKey: string;
-  productName: string;
-  isYearly: boolean;
+  planName: string;
 }
 
 async function sendLicenseEmail(params: LicenseEmailParams): Promise<boolean> {
@@ -64,14 +63,13 @@ async function sendLicenseEmail(params: LicenseEmailParams): Promise<boolean> {
   }
 
   const resend = new Resend(apiKey);
-  const billingCycle = params.isYearly ? 'yearly' : 'monthly';
   const firstName = params.customerName.split(' ')[0] || 'there';
 
   const { error } = await resend.emails.send({
     from: 'StageWright <licenses@stagewright.dev>',
     to: params.to,
-    subject: 'Your StageWright Pro License Key',
-    html: buildLicenseEmailHtml(firstName, params.licenseKey, billingCycle),
+    subject: `Your StageWright ${params.planName} License Key`,
+    html: buildLicenseEmailHtml(firstName, params.licenseKey, params.planName),
   });
 
   if (error) {
@@ -84,7 +82,7 @@ async function sendLicenseEmail(params: LicenseEmailParams): Promise<boolean> {
   return true;
 }
 
-function buildLicenseEmailHtml(firstName: string, licenseKey: string, billingCycle: string): string {
+function buildLicenseEmailHtml(firstName: string, licenseKey: string, planName: string): string {
   return `<!DOCTYPE html>
 <html>
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
@@ -93,7 +91,7 @@ function buildLicenseEmailHtml(firstName: string, licenseKey: string, billingCyc
     <!-- Header -->
     <div style="text-align:center;margin-bottom:32px;">
       <h1 style="color:#fff;font-size:24px;margin:0;">
-        Stage<span style="color:#4ade80;">Wright</span> Pro
+        Stage<span style="color:#4ade80;">Wright</span> ${escapeHtml(planName)}
       </h1>
     </div>
 
@@ -101,7 +99,7 @@ function buildLicenseEmailHtml(firstName: string, licenseKey: string, billingCyc
     <div style="background:#1e293b;border-radius:12px;padding:32px;border:1px solid #334155;">
       <h2 style="color:#fff;font-size:20px;margin:0 0 8px;">Hey ${escapeHtml(firstName)},</h2>
       <p style="color:#94a3b8;font-size:15px;line-height:1.6;margin:0 0 24px;">
-        Thanks for purchasing StageWright Pro (${escapeHtml(billingCycle)}). Your license key is ready.
+        Thanks for purchasing StageWright ${escapeHtml(planName)}. Your license key is ready.
       </p>
 
       <!-- License key box -->
@@ -208,12 +206,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(200).json({ received: true, error: 'no email' });
     }
 
-    // Determine duration based on product (yearly = 365 days, monthly = 35 days with buffer)
-    const isYearly = productName.toLowerCase().includes('year');
-    const durationDays = isYearly ? 365 : 35;
+    // Determine tier from product name (Starter = starter tier, everything else = pro)
+    const isStarter = productName.toLowerCase().includes('starter');
+    const tier: 'pro' | 'team' = 'pro';
+    const planName = isStarter ? 'Starter' : 'Pro';
+    const durationDays = 35; // Monthly with buffer
 
     // Generate license key
-    const licenseKey = generateLicenseJwt('pro', customerEmail, durationDays);
+    const licenseKey = generateLicenseJwt(tier, customerEmail, durationDays);
 
     // Log for audit trail
     console.log(JSON.stringify({
@@ -222,6 +222,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       customer: customerEmail,
       name: customerName,
       product: productName,
+      plan: planName,
       duration: `${durationDays} days`,
     }));
 
@@ -230,8 +231,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       to: customerEmail,
       customerName,
       licenseKey,
-      productName,
-      isYearly,
+      planName,
     });
 
     return res.status(200).json({

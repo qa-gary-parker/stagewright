@@ -16,7 +16,7 @@ export const proAiConfig: DocPage = {
     {
       heading: 'How It Works',
       body: [
-        'When the reporter detects test failures, it sends a structured summary of the failure data to the StageWright AI endpoint. The proxy validates your Pro license, checks your rate limit, and forwards the request to OpenAI. The response is embedded directly in your HTML report.',
+        'When the reporter detects test failures, it sends a structured summary of the failure data to the StageWright AI endpoint. The proxy validates your license, checks your rate limit, and forwards the request to OpenAI. The response is embedded directly in your HTML report.',
       ],
       list: {
         items: [

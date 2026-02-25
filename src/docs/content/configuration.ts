@@ -67,7 +67,7 @@ export default defineConfig({
     {
       heading: 'Pro Options',
       body: [
-        'Pro options unlock advanced features like theming, quality gates, and export formats. They require a valid Pro license key set via the STAGEWRIGHT_LICENSE environment variable.',
+        'These options unlock advanced features like AI analysis, theming, quality gates, and export formats. They require a valid Starter or Pro license key set via the STAGEWRIGHT_LICENSE environment variable.',
       ],
       table: {
         headers: ['Option', 'Type', 'Default', 'Description'],
