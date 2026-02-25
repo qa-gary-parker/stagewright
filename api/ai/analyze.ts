@@ -44,16 +44,14 @@ function validateLicenseToken(token: string): { valid: boolean; tier?: string; o
   }
 }
 
-function getRatelimit(): Ratelimit {
-  return new Ratelimit({
-    redis: new Redis({
-      url: process.env.UPSTASH_REDIS_REST_URL!,
-      token: process.env.UPSTASH_REDIS_REST_TOKEN!,
-    }),
-    limiter: Ratelimit.slidingWindow(5000, '30d'),
-    prefix: 'ai',
-  });
-}
+const ratelimit = new Ratelimit({
+  redis: new Redis({
+    url: process.env.UPSTASH_REDIS_REST_URL!,
+    token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+  }),
+  limiter: Ratelimit.slidingWindow(5000, '30d'),
+  prefix: 'ai',
+});
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
@@ -72,23 +70,29 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(401).json({ error: validation.error || 'Invalid token' });
   }
 
-  if (validation.tier === 'community') {
-    return res.status(403).json({ error: 'AI analysis requires a Pro or Team license' });
+  const ALLOWED_TIERS = ['starter', 'pro', 'team'];
+  if (!ALLOWED_TIERS.includes(validation.tier ?? '')) {
+    return res.status(403).json({ error: 'AI analysis requires a Starter or Pro license' });
   }
 
-  const ratelimit = getRatelimit();
-  const { success, remaining, reset } = await ratelimit.limit(`ai:${validation.org}`);
+  const orgKey = (validation.org || 'unknown').toLowerCase().trim();
+  const { success, remaining, reset } = await ratelimit.limit(`ai:${orgKey}`);
 
   if (!success) {
     return res.status(429).json({
       error: 'Rate limit exceeded',
-      resetAt: new Date(reset).toISOString(),
+      resetAt: reset,
     });
   }
 
   const { prompt, type } = req.body || {};
   if (!prompt || typeof prompt !== 'string') {
     return res.status(400).json({ error: 'Missing or invalid prompt field' });
+  }
+
+  const MAX_PROMPT_LENGTH = 20_000;
+  if (prompt.length > MAX_PROMPT_LENGTH) {
+    return res.status(400).json({ error: `Prompt exceeds maximum length of ${MAX_PROMPT_LENGTH} characters` });
   }
 
   if (type && !['failure', 'cluster'].includes(type)) {
@@ -130,7 +134,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(200).json({
       suggestion,
       remaining,
-      resetAt: new Date(reset).toISOString(),
+      resetAt: reset,
     });
   } catch (err) {
     console.error('AI analysis failed:', (err as Error).message);

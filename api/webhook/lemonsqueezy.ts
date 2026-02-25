@@ -39,10 +39,14 @@ function verifyWebhookSignature(payload: string, signature: string, secret: stri
   const hmac = crypto.createHmac('sha256', secret);
   hmac.update(payload);
   const digest = hmac.digest('hex');
-  const sigBuf = Buffer.from(signature);
-  const digestBuf = Buffer.from(digest);
-  if (sigBuf.length !== digestBuf.length) return false;
-  return crypto.timingSafeEqual(sigBuf, digestBuf);
+  try {
+    const sigBuf = Buffer.from(signature, 'hex');
+    const digestBuf = Buffer.from(digest, 'hex');
+    if (sigBuf.length !== digestBuf.length) return false;
+    return crypto.timingSafeEqual(sigBuf, digestBuf);
+  } catch {
+    return false;
+  }
 }
 
 // --- Email delivery ---
@@ -187,7 +191,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(401).json({ error: 'Invalid signature' });
   }
 
-  const event = JSON.parse(rawBody);
+  let event;
+  try {
+    event = JSON.parse(rawBody);
+  } catch {
+    return res.status(400).json({ error: 'Invalid JSON payload' });
+  }
   const eventName = event?.meta?.event_name;
 
   // Only process successful orders
@@ -197,6 +206,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     const order = event.data;
+
+    const orderStatus = order?.attributes?.status;
+    if (orderStatus !== 'paid') {
+      return res.status(200).json({ received: true, skipped: `order status: ${orderStatus}` });
+    }
+
     const customerEmail = order?.attributes?.user_email;
     const customerName = order?.attributes?.user_name || customerEmail;
     const productName = order?.attributes?.first_order_item?.product_name || '';
@@ -206,10 +221,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(200).json({ received: true, error: 'no email' });
     }
 
-    // Determine tier from product name (Starter = starter tier, everything else = pro)
-    const isStarter = productName.toLowerCase().includes('starter');
+    // Both Starter and Pro plans issue 'pro' tier JWTs — tier-based rate limiting
+    // will be added when usage patterns justify differentiation.
     const tier: 'pro' | 'team' = 'pro';
-    const planName = isStarter ? 'Starter' : 'Pro';
+    const planName = productName.toLowerCase().includes('starter') ? 'Starter' : 'Pro';
     const durationDays = 35; // Monthly with buffer
 
     // Generate license key
