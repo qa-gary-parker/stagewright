@@ -18,22 +18,22 @@ const tiers = [
     highlighted: false,
     comingSoon: false,
     features: [
-      'HTML report with System/Light/Dark themes',
-      'Stability grades (A\u2013F)',
-      'Run comparison',
-      'Retry analysis',
-      'Trend analytics',
-      'Artifact gallery (screenshots, videos, traces)',
-      'Trace viewer integration',
-      'Network logs',
-      'Test history tracking',
+      'Self-contained HTML report',
+      '3 built-in themes (System, Light, Dark)',
+      'Stability grades for every test (A\u2013F)',
+      'Compare runs to spot regressions',
+      'Retry and flakiness detection',
+      'Trend charts across test history',
+      'Screenshot, video, and trace gallery',
+      'One-click Playwright trace viewer',
+      'Network request logs',
     ],
   },
   {
     name: 'Starter',
     badge: '',
     price: 5,
-    description: 'AI-powered failure analysis for small teams.',
+    description: 'AI explains every failure so you fix bugs faster.',
     cta: 'Get Starter',
     ctaHref: CHECKOUT_URLS.starter,
     delivery: 'License key (same npm package)',
@@ -42,20 +42,20 @@ const tiers = [
     aiQuota: '2,000',
     features: [
       'Everything in Local, plus:',
-      '2,000 AI analyses / month',
-      '6 additional Pro themes',
-      'Executive PDF export (3 variants)',
-      'JSON + JUnit export',
-      'Quality gates',
-      'Flaky test quarantine',
-      'Custom report branding',
+      '2,000 AI failure analyses / month',
+      '6 extra themes (Ocean, Sunset, Dracula, and more)',
+      'PDF executive summary export',
+      'JSON and JUnit XML export',
+      'Quality gates \u2014 fail CI when thresholds are breached',
+      'Auto-quarantine flaky tests',
+      'Custom logo and report title',
     ],
   },
   {
     name: 'Pro',
     badge: 'Best Value',
     price: 9,
-    description: 'More AI power, full customisation, priority support.',
+    description: 'Higher AI quota, full brand control, and priority support.',
     cta: 'Get Pro',
     ctaHref: CHECKOUT_URLS.pro,
     delivery: 'License key (same npm package)',
@@ -64,10 +64,10 @@ const tiers = [
     aiQuota: '5,000',
     features: [
       'Everything in Starter, plus:',
-      '5,000 AI analyses / month',
-      'Custom theme colors (primary, accent, success, error, warning)',
-      'PDF style picker modal',
-      'Priority support',
+      '5,000 AI failure analyses / month',
+      'Fully custom theme colours',
+      'Choose from 3 PDF styles before export',
+      'Priority email support',
     ],
   },
 ];
@@ -165,14 +165,14 @@ export default function Pricing() {
                 )}
               </a>
 
-              {/* Pro features link */}
+              {/* Docs link */}
               {tier.price > 0 && (
                 <div className="mb-6 text-center">
                   <Link
-                    to="/docs/pro-themes"
+                    to="/docs/getting-started"
                     className="text-green-400 hover:text-green-300 text-sm font-medium transition-colors"
                   >
-                    View all Pro features →
+                    View documentation →
                   </Link>
                 </div>
               )}
