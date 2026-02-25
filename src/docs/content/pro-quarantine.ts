@@ -36,20 +36,16 @@ export const proQuarantine: DocPage = {
         content: `['playwright-smart-reporter', {
   quarantine: {
     enabled: true,
-    autoDetect: true,
-    threshold: {
-      minRuns: 10,         // minimum history before quarantine eligible
-      flakyRate: 20,       // quarantine if flaky in ≥ 20% of runs
-      lookbackRuns: 20,    // analyse the last 20 runs
-    },
-    maxQuarantined: 50,    // cap on quarantined tests
+    threshold: 0.3,          // flakiness score threshold (0-1)
+    maxQuarantined: 50,      // cap on quarantined tests
+    outputFile: '.smart-quarantine.json',
   },
-  historyPath: 'reports/history.json',
+  historyFile: 'reports/history.json',
 }]`,
       },
       note: {
         type: 'warning',
-        content: 'Quarantine requires historical data. Enable historyPath and accumulate at least minRuns before auto-detection activates.',
+        content: 'Quarantine requires historical data. Enable historyFile and accumulate enough runs before auto-detection activates.',
       },
     },
     {

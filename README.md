@@ -18,20 +18,19 @@ Landing page and marketing site for [stagewright.dev](https://stagewright.dev) �
 ```
 stagewright-landing/
 ├── api/webhook/              # Vercel serverless functions
-│   ├── lemonsqueezy.ts       # LemonSqueezy webhook → license generation + email
-│   └── test-webhook.ts       # Local test script
+│   └── lemonsqueezy.ts       # LemonSqueezy webhook → license generation + email
 ├── src/
 │   ├── components/
 │   │   ├── Navbar.tsx        # Sticky nav with mobile hamburger
 │   │   ├── Hero.tsx          # Main hero with CTAs
 │   │   ├── Features.tsx      # Feature grid with Pro badges
 │   │   ├── Demo.tsx          # Interactive tabbed demo
-│   │   ├── Pricing.tsx       # Free/Pro/Cloud tiers with monthly/yearly toggle
+│   │   ├── Pricing.tsx       # Local/Starter/Pro tiers with Cloud coming soon
 │   │   ├── EmailSignup.tsx   # Get Started section with install guide
 │   │   ├── Footer.tsx        # Columnar footer with links
 │   │   └── ProBadge.tsx      # Reusable Pro badge component
 │   ├── docs/
-│   │   ├── content/          # 22 docs pages as typed data objects
+│   │   ├── content/          # 25 docs pages as typed data objects
 │   │   ├── DocsLayout.tsx    # Fixed sidebar + content area
 │   │   ├── DocsSidebar.tsx   # Collapsible nav with active states
 │   │   ├── DocsPage.tsx      # Generic page renderer
@@ -47,11 +46,11 @@ stagewright-landing/
 
 ## Purchase Flow
 
-1. Customer clicks "Get Pro" → LemonSqueezy checkout
+1. Customer clicks "Get Starter" or "Get Pro" → LemonSqueezy checkout
 2. LemonSqueezy sends `order_created` webhook → `/api/webhook/lemonsqueezy`
 3. Webhook generates ES256 JWT license key
 4. Resend delivers license key + setup instructions via email
-5. Customer adds key to env var or Playwright config → Pro features unlock
+5. Customer adds key to env var or Playwright config → paid features unlock
 
 ## Environment Variables (Vercel)
 
@@ -60,6 +59,9 @@ stagewright-landing/
 | `LICENSE_PRIVATE_KEY` | ES256 private key for signing license JWTs |
 | `LEMONSQUEEZY_WEBHOOK_SECRET` | HMAC-SHA256 webhook signature verification |
 | `RESEND_API_KEY` | Email delivery of license keys |
+| `OPENAI_API_KEY` | OpenAI API key for AI failure analysis |
+| `UPSTASH_REDIS_REST_URL` | Upstash Redis REST URL for rate limiting |
+| `UPSTASH_REDIS_REST_TOKEN` | Upstash Redis REST token for rate limiting |
 
 ## Development
 
@@ -72,7 +74,7 @@ npm run preview   # Preview production build
 
 ## Docs
 
-The `/docs` area covers 22 pages across 4 sections:
+The `/docs` area covers 25 pages across 4 sections:
 
 - **Getting Started** — Installation, configuration reference
 - **Core Features** — AI analysis, stability grades, trends, artifacts, trace viewer, etc.

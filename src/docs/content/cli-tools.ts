@@ -3,110 +3,124 @@ import type { DocPage } from '../types';
 export const cliTools: DocPage = {
   slug: 'cli-tools',
   title: 'CLI Tools',
-  description: 'Generate, merge, and manage reports from the command line with the built-in CLI.',
+  description: 'Evaluate quality gates, generate health digests, merge history files, and serve reports from the command line.',
   sections: [
     {
       heading: 'Overview',
       body: [
-        'The reporter includes a CLI tool for common operations like generating reports from raw data, merging multiple report files, and managing history. The CLI is available via npx after installing the package.',
+        'The reporter ships with several CLI binaries for common operations. The main binary provides subcommands for quality gate evaluation and health digest generation. Separate binaries handle history merging and local report serving.',
       ],
       code: {
         language: 'bash',
-        content: 'npx smart-reporter --help',
+        content: 'npx playwright-smart-reporter --help',
       },
     },
     {
-      heading: 'Available Commands',
+      heading: 'Available Binaries',
       table: {
-        headers: ['Command', 'Description'],
+        headers: ['Binary', 'Description'],
         rows: [
-          ['generate', 'Generate an HTML report from a JSON results file'],
-          ['merge', 'Merge multiple JSON result files into a single report'],
-          ['history', 'Manage the test history file (list, prune, export)'],
-          ['compare', 'Compare two result files and output a diff report'],
-          ['validate', 'Validate a reporter config file for errors'],
-          ['version', 'Print the installed version'],
+          ['playwright-smart-reporter gate', 'Evaluate quality gates against a JSON export'],
+          ['playwright-smart-reporter digest', 'Generate a test health digest from history'],
+          ['playwright-smart-reporter-merge-history', 'Merge multiple test-history.json files from parallel CI runs'],
+          ['playwright-smart-reporter-serve', 'Serve the report locally so the trace viewer can load trace files'],
         ],
       },
     },
     {
-      heading: 'Report Generation',
+      heading: 'Quality Gate Evaluation',
       body: [
-        'Generate an HTML report from a JSON results file. This is useful when you want to create a report separately from the test run — for example, after merging sharded results.',
+        'The gate command evaluates quality gates against a smart-report-data.json file (generated with exportJson: true). Use it in CI to enforce thresholds independently of the reporter run.',
       ],
       code: {
         language: 'bash',
-        content: `# Generate report from JSON results
-npx smart-reporter generate --input results.json --output report.html
+        content: `# Evaluate gates from a config file
+npx playwright-smart-reporter gate --config gates.json
 
-# With custom title and history
-npx smart-reporter generate \\
-  --input results.json \\
-  --output report.html \\
-  --title "Nightly Regression" \\
-  --history reports/history.json`,
-      },
-    },
-    {
-      heading: 'Merging Reports',
-      body: [
-        'When using Playwright sharding, each shard produces a separate results file. The merge command combines them into a single file before generating the report.',
-      ],
-      code: {
-        language: 'bash',
-        content: `# Merge sharded results
-npx smart-reporter merge \\
-  --input "shard-results/*.json" \\
-  --output merged-results.json
+# Inline flags override or supplement a config file
+npx playwright-smart-reporter gate --max-failures 5 --min-pass-rate 90
 
-# Then generate the combined report
-npx smart-reporter generate \\
-  --input merged-results.json \\
-  --output report.html`,
+# Point to a specific data file
+npx playwright-smart-reporter gate --config gates.json --input ./report/smart-report-data.json`,
       },
       note: {
         type: 'info',
-        content: 'The merge command handles duplicate tests across shards by keeping the most recent result for each test ID.',
+        content: 'The gate command exits with code 1 when any gate fails, which causes CI builds to fail.',
       },
     },
     {
-      heading: 'History Management',
+      heading: 'Health Digest',
       body: [
-        'Manage the test history file used for trend analytics and run comparison.',
+        'The digest command generates a test health summary from your history file. It analyses trends over a configurable period and outputs a markdown or text report.',
       ],
       code: {
         language: 'bash',
-        content: `# List runs in the history file
-npx smart-reporter history list --file reports/history.json
+        content: `# Weekly digest (default)
+npx playwright-smart-reporter digest --history test-history.json
 
-# Prune old entries (keep last N runs)
-npx smart-reporter history prune --file reports/history.json --keep 50
+# Daily digest written to a file
+npx playwright-smart-reporter digest --period daily --history test-history.json --output digest.md
 
-# Export history as CSV
-npx smart-reporter history export --file reports/history.json --format csv`,
+# Monthly digest in plain text
+npx playwright-smart-reporter digest --period monthly --history test-history.json --format text`,
       },
     },
     {
-      heading: 'Automation Scripts',
+      heading: 'Merging History Files',
       body: [
-        'Combine CLI commands in shell scripts for common automation patterns.',
+        'When using Playwright sharding, each shard produces a separate history file. The merge-history binary combines them into a single file.',
+      ],
+      code: {
+        language: 'bash',
+        content: `# Merge two history files
+npx playwright-smart-reporter-merge-history history1.json history2.json -o merged.json
+
+# Merge with glob pattern and limit to 10 runs
+npx playwright-smart-reporter-merge-history 'blob-reports/**/test-history.json' -o test-history.json --max-runs 10`,
+      },
+      note: {
+        type: 'info',
+        content: 'The merge command deduplicates runs by runId and sorts entries by timestamp.',
+      },
+    },
+    {
+      heading: 'Serving Reports Locally',
+      body: [
+        'The serve command starts a local HTTP server so the embedded trace viewer can load trace files. This is needed because trace files cannot be loaded from file:// URLs.',
+      ],
+      code: {
+        language: 'bash',
+        content: `# Auto-detect and serve smart-report.html
+npx playwright-smart-reporter-serve
+
+# Serve a specific report on a fixed port
+npx playwright-smart-reporter-serve ./example/smart-report.html --port 3000
+
+# Serve without opening the browser
+npx playwright-smart-reporter-serve --no-open`,
+      },
+    },
+    {
+      heading: 'CI Automation Example',
+      body: [
+        'Combine CLI commands in CI scripts for quality enforcement and reporting.',
       ],
       code: {
         language: 'bash',
         content: `#!/bin/bash
-# post-test.sh — run after Playwright tests complete
-
 set -euo pipefail
 
-REPORTS_DIR="reports"
-HISTORY_FILE="$REPORTS_DIR/history.json"
+# Run tests with JSON export enabled
+npx playwright test
 
-# Prune history to last 100 runs
-npx smart-reporter history prune --file "$HISTORY_FILE" --keep 100
+# Merge sharded history (if using sharding)
+npx playwright-smart-reporter-merge-history blob-reports/*/test-history.json -o test-history.json
 
-# Validate the output
-echo "Report generated: $REPORTS_DIR/smart-report.html"
-echo "History entries: $(npx smart-reporter history list --file "$HISTORY_FILE" --count)"`,
+# Evaluate quality gates
+npx playwright-smart-reporter gate --config gates.json
+
+# Generate a weekly digest
+npx playwright-smart-reporter digest --history test-history.json --output digest.md`,
       },
     },
   ],

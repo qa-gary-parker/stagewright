@@ -44,14 +44,9 @@ function validateLicenseToken(token: string): { valid: boolean; tier?: string; o
   }
 }
 
-const ratelimit = new Ratelimit({
-  redis: new Redis({
-    url: process.env.UPSTASH_REDIS_REST_URL!,
-    token: process.env.UPSTASH_REDIS_REST_TOKEN!,
-  }),
-  limiter: Ratelimit.slidingWindow(5000, '30d'),
-  prefix: 'ai',
-});
+const redis = new Redis({ url: process.env.UPSTASH_REDIS_REST_URL!, token: process.env.UPSTASH_REDIS_REST_TOKEN! });
+const starterLimiter = new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(2000, '30d'), prefix: 'ai-starter' });
+const proLimiter = new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(5000, '30d'), prefix: 'ai-pro' });
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
@@ -75,8 +70,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(403).json({ error: 'AI analysis requires a Starter or Pro license' });
   }
 
+  const limiter = validation.tier === 'starter' ? starterLimiter : proLimiter;
   const orgKey = (validation.org || 'unknown').toLowerCase().trim();
-  const { success, remaining, reset } = await ratelimit.limit(`ai:${orgKey}`);
+  const { success, remaining, reset } = await limiter.limit(`ai:${orgKey}`);
 
   if (!success) {
     return res.status(429).json({

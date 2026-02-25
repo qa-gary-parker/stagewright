@@ -9,12 +9,12 @@ export const trendAnalytics: DocPage = {
       heading: 'Overview',
       body: [
         'Trend analytics give you a historical view of your test suite health. By tracking metrics across multiple runs, you can identify degradation patterns early and measure the impact of improvements.',
-        'Trends require historical data — enable the historyPath option and the reporter will accumulate run data automatically.',
+        'Trends require historical data — enable the historyFile option and the reporter will accumulate run data automatically.',
       ],
       code: {
         language: 'typescript',
         content: `['playwright-smart-reporter', {
-  historyPath: 'reports/history.json',
+  historyFile: 'reports/history.json',
 }]`,
       },
     },
@@ -83,8 +83,8 @@ export const trendAnalytics: DocPage = {
       code: {
         language: 'typescript',
         content: `['playwright-smart-reporter', {
-  historyPath: 'reports/history.json',
-  historyRetention: 50,  // keep last 50 runs
+  historyFile: 'reports/history.json',
+  maxHistoryRuns: 50,  // keep last 50 runs
 }]`,
       },
       note: {

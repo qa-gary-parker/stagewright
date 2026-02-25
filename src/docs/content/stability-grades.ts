@@ -3,27 +3,25 @@ import type { DocPage } from '../types';
 export const stabilityGrades: DocPage = {
   slug: 'stability-grades',
   title: 'Stability Grades',
-  description: 'Understand how every test is graded from A+ to F based on pass rate, flakiness, and duration consistency.',
+  description: 'Understand how every test is graded from A to F based on pass rate, flakiness, and duration consistency.',
   sections: [
     {
       heading: 'What Are Stability Grades?',
       body: [
-        'Every test in your suite receives a stability grade based on its historical behaviour. Grades range from A+ (rock solid) to F (consistently failing) and give you an at-a-glance understanding of test health without reading individual results.',
+        'Every test in your suite receives a stability grade based on its historical behaviour. Grades range from A (rock solid) to F (consistently failing) and give you an at-a-glance understanding of test health without reading individual results.',
         'Grades are calculated using a weighted formula that considers pass rate, retry frequency, and duration variance over the available history window.',
       ],
     },
     {
       heading: 'Grade Scale',
       table: {
-        headers: ['Grade', 'Pass Rate', 'Retry Rate', 'Duration Variance', 'Meaning'],
+        headers: ['Grade', 'Score Threshold', 'Meaning'],
         rows: [
-          ['A+', '100%', '0%', '< 5%', 'Perfect — never fails, never retries, consistent timing'],
-          ['A', '≥ 98%', '< 2%', '< 10%', 'Excellent — extremely reliable with minimal variance'],
-          ['B+', '≥ 95%', '< 5%', '< 15%', 'Good — reliable with occasional minor issues'],
-          ['B', '≥ 90%', '< 10%', '< 20%', 'Above average — generally stable but shows some variance'],
-          ['C', '≥ 80%', '< 20%', '< 30%', 'Average — noticeable flakiness or timing issues'],
-          ['D', '≥ 60%', '< 40%', '< 50%', 'Below average — frequent failures or retries'],
-          ['F', '< 60%', '≥ 40%', '≥ 50%', 'Failing — unreliable and needs immediate attention'],
+          ['A', '≥ 90', 'Excellent — highly reliable with minimal variance'],
+          ['B', '≥ 80', 'Good — generally stable with occasional issues'],
+          ['C', '≥ 70', 'Average — noticeable flakiness or timing issues'],
+          ['D', '≥ 60', 'Below average — frequent failures or retries'],
+          ['F', '< 60', 'Failing — unreliable and needs immediate attention'],
         ],
       },
     },
@@ -65,18 +63,15 @@ Where:
     {
       heading: 'Using Grades for Quality Decisions',
       body: [
-        'Stability grades integrate with quality gates to enforce minimum standards. You can block deployments when too many tests drop below a threshold or require that critical tests maintain a B+ or higher.',
+        'Stability grades integrate with quality gates to enforce minimum standards. You can block deployments when the average grade drops below a threshold.',
       ],
       code: {
         language: 'typescript',
         content: `['playwright-smart-reporter', {
   qualityGates: {
-    minAverageGrade: 'B',
-    maxFGradeTests: 0,
-    criticalTests: {
-      pattern: /login|checkout|payment/,
-      minGrade: 'B+',
-    },
+    minStabilityGrade: 'B',
+    minPassRate: 90,
+    noNewFailures: true,
   },
 }]`,
       },

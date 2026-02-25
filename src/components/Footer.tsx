@@ -66,7 +66,7 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="https://github.com/gary-parker/playwright-smart-reporter"
+                  href="https://github.com/qa-gary-parker/playwright-smart-reporter"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-slate-400 hover:text-white text-sm transition-colors"
@@ -83,7 +83,7 @@ export default function Footer() {
             <ul className="space-y-3">
               <li>
                 <a
-                  href="https://github.com/gary-parker/playwright-smart-reporter/issues"
+                  href="https://github.com/qa-gary-parker/playwright-smart-reporter/issues"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-slate-400 hover:text-white text-sm transition-colors"

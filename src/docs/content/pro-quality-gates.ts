@@ -24,8 +24,8 @@ export const proQualityGates: DocPage = {
     minPassRate: 95,
     maxFailures: 5,
     maxFlakyRate: 10,
-    maxDuration: 600000,  // 10 minutes total suite duration
-    minAverageGrade: 'B',
+    minStabilityGrade: 'B',
+    noNewFailures: true,
   },
 }]`,
       },
@@ -38,10 +38,8 @@ export const proQualityGates: DocPage = {
           ['minPassRate', 'number (0-100)', 'Minimum pass rate percentage'],
           ['maxFailures', 'number', 'Maximum number of failing tests allowed'],
           ['maxFlakyRate', 'number (0-100)', 'Maximum percentage of flaky tests'],
-          ['maxDuration', 'number (ms)', 'Maximum total suite duration'],
-          ['minAverageGrade', 'string (A+ to F)', 'Minimum average stability grade'],
-          ['maxFGradeTests', 'number', 'Maximum number of F-grade tests allowed'],
-          ['criticalTests', 'object', 'Per-test pattern matching with stricter thresholds'],
+          ['minStabilityGrade', "'A' | 'B' | 'C' | 'D'", 'Minimum average stability grade'],
+          ['noNewFailures', 'boolean', 'Fail if new failures are detected vs. baseline (requires comparison data)'],
         ],
       },
     },
@@ -56,8 +54,8 @@ export const proQualityGates: DocPage = {
   ✓ Pass rate: 97.2% (threshold: ≥ 95%)
   ✓ Failures: 3 (threshold: ≤ 5)
   ✗ Flaky rate: 12.1% (threshold: ≤ 10%)  ← GATE FAILED
-  ✓ Duration: 482s (threshold: ≤ 600s)
-  ✓ Average grade: B+ (threshold: ≥ B)
+  ✓ Stability grade: B (threshold: ≥ B)
+  ✓ No new failures
 
 Result: FAILED (1 gate failed)
 Exit code: 1`,
@@ -65,26 +63,6 @@ Exit code: 1`,
       note: {
         type: 'warning',
         content: 'When any gate fails, the reporter exits with code 1. This causes CI builds to fail, which is the intended behaviour.',
-      },
-    },
-    {
-      heading: 'Critical Tests',
-      body: [
-        'Define stricter thresholds for critical tests using pattern matching. This ensures your most important flows maintain a higher bar.',
-      ],
-      code: {
-        language: 'typescript',
-        content: `['playwright-smart-reporter', {
-  qualityGates: {
-    minPassRate: 90,  // global threshold
-    criticalTests: {
-      pattern: /login|checkout|payment|signup/,
-      minPassRate: 100,   // critical tests must always pass
-      minGrade: 'A',      // and maintain an A grade
-      maxDuration: 30000, // within 30 seconds
-    },
-  },
-}]`,
       },
     },
     {

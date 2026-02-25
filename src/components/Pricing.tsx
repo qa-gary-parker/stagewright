@@ -19,7 +19,7 @@ const tiers = [
     comingSoon: false,
     features: [
       'Self-contained HTML report',
-      '3 built-in themes (System, Light, Dark)',
+      '4 built-in themes (System, Light, Dark, High Contrast)',
       'Stability grades for every test (A\u2013F)',
       'Compare runs to spot regressions',
       'Retry and flakiness detection',

@@ -14,12 +14,12 @@ export const runComparison: DocPage = {
     {
       heading: 'Enabling Comparison',
       body: [
-        'Comparison requires a baseline file from a previous run. Use the historyPath option to store and load run data.',
+        'Comparison requires a baseline file from a previous run. Use the historyFile option to store and load run data.',
       ],
       code: {
         language: 'typescript',
         content: `['playwright-smart-reporter', {
-  historyPath: 'reports/history.json',
+  historyFile: 'reports/history.json',
   outputFile: 'reports/smart-report.html',
 }]`,
       },

@@ -8,7 +8,7 @@ export const gettingStarted: DocPage = {
     {
       heading: 'Installation',
       body: [
-        'Add the reporter to your Playwright project as a dev dependency. It works with Playwright Test v1.30 and above on Node 18+.',
+        'Add the reporter to your Playwright project as a dev dependency. It works with Playwright Test v1.40 and above on Node 18+.',
       ],
       code: {
         language: 'bash',
@@ -61,7 +61,7 @@ open smart-report.html`,
         items: [
           'Summary dashboard with pass/fail/skip counts and overall duration',
           'AI failure analysis highlighting root causes and patterns (Starter/Pro)',
-          'Stability grades ranking every test from A+ to F',
+          'Stability grades ranking every test from A to F',
           'Artifact gallery for screenshots, videos, and trace files',
           'Step timeline showing duration breakdowns per test',
           'Trend analytics when historical data is available',
@@ -72,7 +72,7 @@ open smart-report.html`,
     {
       heading: 'Configuring Output Location',
       body: [
-        'By default the report is written to smart-report.html in your project root. Use the outputFile option to change the filename or the outputDir option to write it to a subdirectory.',
+        'By default the report is written to smart-report.html in your project root. Use the outputFile option to change the filename or path.',
       ],
       code: {
         language: 'typescript',

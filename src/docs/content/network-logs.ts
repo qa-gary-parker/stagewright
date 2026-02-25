@@ -14,12 +14,12 @@ export const networkLogs: DocPage = {
     {
       heading: 'Enabling Network Capture',
       body: [
-        'Network logging is disabled by default to keep report size small. Enable it with the showNetwork option.',
+        'Network logging is disabled by default to keep report size small. Enable it with the enableNetworkLogs option.',
       ],
       code: {
         language: 'typescript',
         content: `['playwright-smart-reporter', {
-  showNetwork: true,
+  enableNetworkLogs: true,
 }]`,
       },
       note: {

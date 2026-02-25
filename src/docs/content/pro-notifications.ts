@@ -3,31 +3,87 @@ import type { DocPage } from '../types';
 export const proNotifications: DocPage = {
   slug: 'pro-notifications',
   title: 'Advanced Notifications',
-  description: 'Send test results to Slack, Microsoft Teams, and custom webhooks with configurable rules.',
+  description: 'Send test results to Slack, Microsoft Teams, PagerDuty, email, and custom webhooks with configurable conditions.',
   isPro: true,
   sections: [
     {
       heading: 'Overview',
       body: [
-        'Advanced notifications push test results to your team communication channels automatically. Configure rules to control when notifications fire — for example, only on failure, only when quality gates fail, or only for specific projects.',
+        'Advanced notifications push test results to your team communication channels automatically. Configure conditions to control when notifications fire — for example, only when a minimum number of failures occur, when the pass rate drops below a threshold, or when stability grades degrade.',
       ],
     },
     {
-      heading: 'Slack Integration',
+      heading: 'Configuration',
       body: [
-        'Connect to Slack using an incoming webhook URL. The notification includes a summary card with pass/fail counts, duration, and a link to the full report.',
+        'Notifications are configured as an array of NotificationConfig objects. Each entry specifies a channel, its connection config, and optional conditions.',
       ],
       code: {
         language: 'typescript',
         content: `['playwright-smart-reporter', {
-  notifications: {
-    slack: {
-      webhookUrl: process.env.SLACK_WEBHOOK_URL,
-      channel: '#qa-results',
-      mentionOnFailure: ['@qa-team'],
+  notifications: [
+    {
+      channel: 'slack',
+      config: { webhookUrl: process.env.SLACK_WEBHOOK_URL },
+      conditions: { minFailures: 1 },
+    },
+    {
+      channel: 'teams',
+      config: { webhookUrl: process.env.TEAMS_WEBHOOK_URL },
+      conditions: { maxPassRate: 90 },
+    },
+  ],
+}]`,
+      },
+      note: {
+        type: 'info',
+        content: 'For simple setups, you can also use the top-level slackWebhook and teamsWebhook shortcuts which send on every run.',
+      },
+    },
+    {
+      heading: 'Supported Channels',
+      table: {
+        headers: ['Channel', 'Config Keys', 'Description'],
+        rows: [
+          ['slack', 'webhookUrl', 'Slack incoming webhook'],
+          ['teams', 'webhookUrl', 'Microsoft Teams incoming webhook'],
+          ['pagerduty', 'routingKey', 'PagerDuty Events API v2'],
+          ['email', 'to, from, smtpUrl', 'Email delivery via SMTP'],
+          ['webhook', 'url, method, headers', 'Generic HTTP webhook with JSON payload'],
+        ],
+      },
+    },
+    {
+      heading: 'Notification Conditions',
+      body: [
+        'Use conditions to control when a notification fires. If no conditions are set, the notification sends on every run.',
+      ],
+      table: {
+        headers: ['Condition', 'Type', 'Description'],
+        rows: [
+          ['minFailures', 'number', 'Send only when failure count meets or exceeds this threshold'],
+          ['maxPassRate', 'number (0-100)', 'Send only when pass rate drops to or below this percentage'],
+          ['tags', 'string[]', 'Send only when failing tests include any of these tags'],
+          ['stabilityGradeDrop', 'boolean', 'Send when the average stability grade drops from the previous run'],
+        ],
+      },
+    },
+    {
+      heading: 'Slack Example',
+      body: [
+        'Connect to Slack using an incoming webhook URL. The notification includes a summary card with pass/fail counts, duration, and quality gate status.',
+      ],
+      code: {
+        language: 'typescript',
+        content: `notifications: [
+  {
+    channel: 'slack',
+    config: { webhookUrl: process.env.SLACK_WEBHOOK_URL },
+    conditions: {
+      minFailures: 3,
+      stabilityGradeDrop: true,
     },
   },
-}]`,
+]`,
       },
       note: {
         type: 'info',
@@ -35,73 +91,25 @@ export const proNotifications: DocPage = {
       },
     },
     {
-      heading: 'Microsoft Teams',
-      body: [
-        'Send notifications to Microsoft Teams via an incoming webhook connector.',
-      ],
-      code: {
-        language: 'typescript',
-        content: `['playwright-smart-reporter', {
-  notifications: {
-    teams: {
-      webhookUrl: process.env.TEAMS_WEBHOOK_URL,
-      mentionOnFailure: ['qa-team@example.com'],
-    },
-  },
-}]`,
-      },
-    },
-    {
-      heading: 'Notification Rules',
-      body: [
-        'Control when notifications are sent using rules. By default, notifications fire on every run. Use rules to reduce noise.',
-      ],
-      table: {
-        headers: ['Rule', 'Type', 'Description'],
-        rows: [
-          ['always', 'boolean', 'Send on every run regardless of status'],
-          ['onFailure', 'boolean', 'Send only when at least one test fails'],
-          ['onGateFailure', 'boolean', 'Send only when a quality gate fails'],
-          ['onRegression', 'boolean', 'Send only when new failures are detected vs. baseline'],
-          ['minFailures', 'number', 'Send only when failure count exceeds threshold'],
-          ['branches', 'string[]', 'Send only for specific branch names'],
-        ],
-      },
-      code: {
-        language: 'typescript',
-        content: `notifications: {
-  slack: {
-    webhookUrl: process.env.SLACK_WEBHOOK_URL,
-    rules: {
-      onFailure: true,
-      onGateFailure: true,
-      onRegression: true,
-      branches: ['main', 'release/*'],
-    },
-  },
-}`,
-      },
-    },
-    {
       heading: 'Custom Webhooks',
       body: [
-        'Send notifications to any HTTP endpoint using the generic webhook configuration. The payload is a JSON object with the full report summary.',
+        'Send notifications to any HTTP endpoint using the generic webhook channel. The payload is a JSON object with the full report summary.',
       ],
       code: {
         language: 'typescript',
-        content: `notifications: {
-  webhook: {
-    url: 'https://api.example.com/test-results',
-    method: 'POST',
-    headers: {
-      'Authorization': 'Bearer ' + process.env.WEBHOOK_TOKEN,
-      'Content-Type': 'application/json',
+        content: `notifications: [
+  {
+    channel: 'webhook',
+    config: {
+      url: 'https://api.example.com/test-results',
+      method: 'POST',
+      headers: JSON.stringify({
+        'Authorization': 'Bearer ' + process.env.WEBHOOK_TOKEN,
+      }),
     },
-    rules: {
-      onFailure: true,
-    },
+    conditions: { minFailures: 1 },
   },
-}`,
+]`,
       },
     },
     {

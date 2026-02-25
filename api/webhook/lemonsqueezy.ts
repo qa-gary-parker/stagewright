@@ -12,7 +12,7 @@ function escapeHtml(s: string): string {
 
 // --- License generation (same logic as generate-license.ts) ---
 
-function generateLicenseJwt(tier: 'pro' | 'team', org: string, durationDays: number): string {
+function generateLicenseJwt(tier: 'starter' | 'pro' | 'team', org: string, durationDays: number): string {
   const privateKey = process.env.LICENSE_PRIVATE_KEY;
   if (!privateKey) throw new Error('LICENSE_PRIVATE_KEY env var not set');
 
@@ -222,10 +222,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(200).json({ received: true, error: 'no email' });
     }
 
-    // Both Starter and Pro plans issue 'pro' tier JWTs — tier-based rate limiting
-    // will be added when usage patterns justify differentiation.
-    const tier: 'pro' | 'team' = 'pro';
-    const planName = productName.toLowerCase().includes('starter') ? 'Starter' : 'Pro';
+    const tier = productName.toLowerCase().includes('starter') ? 'starter' : 'pro';
+    const planName = tier === 'starter' ? 'Starter' : 'Pro';
     const durationDays = 35; // Monthly with buffer
 
     // Generate license key

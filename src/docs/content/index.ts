@@ -74,7 +74,6 @@ export const docsNavigation: DocSection[] = [
     id: 'core-features',
     title: 'Core Features',
     items: [
-      { slug: 'ai-analysis', title: 'AI Failure Analysis' },
       { slug: 'stability-grades', title: 'Stability Grades' },
       { slug: 'run-comparison', title: 'Run Comparison' },
       { slug: 'retry-analysis', title: 'Retry Analysis' },
@@ -102,6 +101,7 @@ export const docsNavigation: DocSection[] = [
     id: 'pro-features',
     title: 'Pro Features',
     items: [
+      { slug: 'ai-analysis', title: 'AI Failure Analysis', isPro: true },
       { slug: 'pro-themes', title: 'Pro Themes', isPro: true },
       { slug: 'pro-branding', title: 'Report Branding', isPro: true },
       { slug: 'pro-exports', title: 'Export Formats', isPro: true },

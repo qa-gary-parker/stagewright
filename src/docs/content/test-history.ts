@@ -19,7 +19,7 @@ export const testHistory: DocPage = {
       code: {
         language: 'typescript',
         content: `['playwright-smart-reporter', {
-  historyPath: 'reports/history.json',
+  historyFile: 'reports/history.json',
 }]`,
       },
     },
