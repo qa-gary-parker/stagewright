@@ -71,6 +71,7 @@ async function sendLicenseEmail(params: LicenseEmailParams): Promise<boolean> {
 
   const { error } = await resend.emails.send({
     from: 'StageWright <licenses@stagewright.dev>',
+    replyTo: 'support@stagewright.dev',
     to: params.to,
     subject: `Your StageWright ${params.planName} License Key`,
     html: buildLicenseEmailHtml(firstName, params.licenseKey, params.planName),
@@ -146,7 +147,7 @@ function buildLicenseEmailHtml(firstName: string, licenseKey: string, planName: 
         Keep this email safe — you'll need your license key if you set up on a new machine.
       </p>
       <p style="color:#475569;font-size:12px;margin:0;">
-        Questions? Reply to this email or visit <a href="https://stagewright.dev" style="color:#4ade80;text-decoration:none;">stagewright.dev</a>
+        Questions? Reply to this email or contact <a href="mailto:support@stagewright.dev" style="color:#4ade80;text-decoration:none;">support@stagewright.dev</a>
       </p>
     </div>
   </div>
