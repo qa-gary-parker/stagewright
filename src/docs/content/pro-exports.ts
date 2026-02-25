@@ -27,7 +27,7 @@ export const proExports: DocPage = {
       },
       note: {
         type: 'pro',
-        content: 'Export formats require a Pro license. The HTML report is always generated regardless of license status.',
+        content: 'Export formats require a Starter or Pro license. The HTML report is always generated regardless of license status.',
       },
     },
     {
@@ -62,38 +62,19 @@ export const proExports: DocPage = {
       ],
       code: {
         language: 'typescript',
-        content: `// Output structure
-interface ReportExport {
-  metadata: {
-    title: string;
-    timestamp: string;
-    duration: number;
-    branding?: BrandingConfig;
-  };
-  summary: {
-    total: number;
-    passed: number;
-    failed: number;
-    flaky: number;
-    skipped: number;
-    passRate: number;
-  };
-  tests: TestResult[];
-  comparison?: ComparisonResult;
-  trends?: TrendData[];
-}`,
-      },
-    },
-    {
-      heading: 'JSON Export',
-      body: [
-        'JSON exports provide structured data for programmatic consumption. The schema matches the internal report data model.',
-      ],
-      code: {
-        language: 'typescript',
         content: `['playwright-smart-reporter', {
   exportJson: true,
 }]`,
+      },
+      table: {
+        headers: ['Field', 'Type', 'Description'],
+        rows: [
+          ['metadata', 'object', 'Report title, timestamp, duration, and optional branding'],
+          ['summary', 'object', 'Total, passed, failed, flaky, skipped counts and pass rate'],
+          ['tests', 'TestResult[]', 'Full array of individual test results'],
+          ['comparison', 'ComparisonResult?', 'Optional baseline comparison data'],
+          ['trends', 'TrendData[]?', 'Optional historical trend data'],
+        ],
       },
     },
   ],

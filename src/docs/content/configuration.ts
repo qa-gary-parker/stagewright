@@ -67,16 +67,16 @@ export default defineConfig({
     {
       heading: 'Pro Options',
       body: [
-        'These options unlock advanced features like AI analysis, theming, quality gates, and export formats. They require a valid Starter or Pro license key set via the STAGEWRIGHT_LICENSE environment variable.',
+        'These options unlock advanced features like AI analysis, theming, quality gates, and export formats. They require a valid Starter or Pro license key set via the SMART_REPORTER_LICENSE_KEY environment variable.',
       ],
       table: {
         headers: ['Option', 'Type', 'Default', 'Description'],
         rows: [
-          ['theme', 'string', 'default', 'Visual theme — midnight, ocean, forest, sunset, corporate, neon'],
+          ['theme', 'string', 'default', 'Visual theme — ocean, sunset, dracula, cyberpunk, forest, rose'],
           ['brandingLogo', 'string', 'undefined', 'Path or URL to a logo image for the report header'],
           ['brandingName', 'string', 'undefined', 'Company name displayed in the report header'],
           ['qualityGates', 'object', 'undefined', 'Quality gate thresholds — see Quality Gates docs'],
-          ['exportFormats', 'string[]', '[]', 'Additional export formats — pdf, csv, json'],
+          ['exportFormats', 'string[]', '[]', 'Additional export formats — pdf, json, junit'],
           ['quarantine', 'object', 'undefined', 'Flaky test quarantine configuration'],
           ['notifications', 'object', 'undefined', 'Slack/Teams notification settings'],
         ],
@@ -94,7 +94,7 @@ export default defineConfig({
       table: {
         headers: ['Variable', 'Description'],
         rows: [
-          ['STAGEWRIGHT_LICENSE', 'Pro license key to enable premium features'],
+          ['SMART_REPORTER_LICENSE_KEY', 'Pro license key to enable premium features'],
           ['STAGEWRIGHT_TITLE', 'Overrides the title option in config'],
           ['STAGEWRIGHT_OUTPUT', 'Overrides the outputFile option in config'],
           ['STAGEWRIGHT_CLOUD_API_KEY', 'API key for uploading reports to StageWright Cloud'],

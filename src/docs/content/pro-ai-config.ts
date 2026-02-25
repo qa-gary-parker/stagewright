@@ -20,7 +20,7 @@ export const proAiConfig: DocPage = {
       ],
       list: {
         items: [
-          'Automatic with any valid Pro or Team license',
+          'Automatic with any valid Starter or Pro license',
           '2,000 analyses/month (Starter) or 5,000 analyses/month (Pro)',
           'Powered by GPT-4o-mini for fast, cost-effective analysis',
           'No API keys, provider setup, or token budgets to manage',

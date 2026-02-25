@@ -3,7 +3,7 @@ import type { DocPage } from '../types';
 export const proThemes: DocPage = {
   slug: 'pro-themes',
   title: 'Pro Themes',
-  description: 'Customise the report appearance with six built-in themes or create your own.',
+  description: 'Customise the report appearance with six additional themes or create your own.',
   isPro: true,
   sections: [
     {
@@ -39,13 +39,13 @@ export const proThemes: DocPage = {
       },
       note: {
         type: 'pro',
-        content: 'Themes require a valid Pro license. Without a license, the default theme is used.',
+        content: 'Themes require a Starter or Pro license. Without a license, the default theme is used.',
       },
     },
     {
       heading: 'Custom Theme Properties',
       body: [
-        'For teams that need precise brand alignment, the corporate theme accepts custom colour overrides.',
+        'For teams that need precise brand alignment, the ocean theme accepts custom colour overrides.',
       ],
       code: {
         language: 'typescript',

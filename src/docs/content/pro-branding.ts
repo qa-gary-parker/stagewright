@@ -64,12 +64,12 @@ export const proBranding: DocPage = {
     {
       heading: 'Brand Colour Integration',
       body: [
-        'Combine branding with the corporate theme for a fully branded report experience.',
+        'Combine branding with the ocean theme for a fully branded report experience.',
       ],
       code: {
         language: 'typescript',
         content: `['playwright-smart-reporter', {
-  theme: 'corporate',
+  theme: 'ocean',
   themeOptions: {
     primaryColor: '#0052cc',
     accentColor: '#ff5630',
@@ -92,7 +92,7 @@ export const proBranding: DocPage = {
     {
       heading: 'Branding in Exports',
       body: [
-        'Branding elements carry through to all export formats. PDF exports include the logo on the cover page, CSV exports include the company name in the metadata row, and JSON exports include branding in the report metadata object.',
+        'Branding elements carry through to all export formats. PDF exports include the logo on the cover page, JUnit exports include the company name in the metadata, and JSON exports include branding in the report metadata object.',
       ],
       note: {
         type: 'pro',

@@ -21,7 +21,7 @@ export const aiAnalysis: DocPage = {
       code: {
         language: 'bash',
         content: `# Set your license key (Starter or Pro)
-export STAGEWRIGHT_LICENSE="your-license-key"
+export SMART_REPORTER_LICENSE_KEY="your-license-key"
 
 # Run tests — AI analysis happens automatically for failures
 npx playwright test`,

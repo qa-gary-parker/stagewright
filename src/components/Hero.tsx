@@ -61,7 +61,7 @@ export default function Hero() {
           />
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-500/10 border border-green-500/20 rounded-full text-green-400 text-sm font-medium mb-8">
             <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-            Now available — Free + Pro
+            Now available — Free + Starter + Pro
           </div>
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold text-white mb-6 tracking-tight">
             Stage<span className="gradient-text">Wright</span>
@@ -123,7 +123,7 @@ export default function Hero() {
               <svg className="w-5 h-5 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
-              <span className="font-medium">Free + Pro</span>
+              <span className="font-medium">Free + Starter + Pro</span>
             </div>
           </div>
         </motion.div>
