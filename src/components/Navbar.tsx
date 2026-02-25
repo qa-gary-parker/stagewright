@@ -39,6 +39,12 @@ export default function Navbar() {
           >
             Pricing
           </button>
+          <button
+            onClick={() => handleHashLink('#faq')}
+            className="text-sm text-slate-300 hover:text-white transition-colors"
+          >
+            FAQ
+          </button>
           <Link
             to="/docs"
             className="text-sm text-slate-300 hover:text-white transition-colors"
@@ -84,6 +90,12 @@ export default function Navbar() {
               className="text-left text-sm text-slate-300 hover:text-white transition-colors"
             >
               Pricing
+            </button>
+            <button
+              onClick={() => handleHashLink('#faq')}
+              className="text-left text-sm text-slate-300 hover:text-white transition-colors"
+            >
+              FAQ
             </button>
             <Link
               to="/docs"

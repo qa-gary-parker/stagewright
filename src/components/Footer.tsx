@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer className="relative py-12 px-6 border-t border-slate-800">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-8 md:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-6 gap-8 md:gap-12">
           {/* Column 1: Branding */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-4 mb-3">
@@ -101,11 +101,32 @@ export default function Footer() {
               </li>
             </ul>
           </div>
+
+          {/* Column 5: Legal */}
+          <div>
+            <h4 className="text-white font-semibold text-sm uppercase tracking-wider mb-4">Legal</h4>
+            <ul className="space-y-3">
+              <li>
+                <Link to="/privacy" className="text-slate-400 hover:text-white text-sm transition-colors">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link to="/terms" className="text-slate-400 hover:text-white text-sm transition-colors">
+                  Terms of Service
+                </Link>
+              </li>
+            </ul>
+          </div>
         </div>
 
         <div className="mt-8 pt-6 border-t border-slate-800 text-center">
           <p className="text-slate-500 text-sm">
             © {currentYear} StageWright. All rights reserved.
+            {' · '}
+            <Link to="/privacy" className="hover:text-slate-300 transition-colors">Privacy</Link>
+            {' · '}
+            <Link to="/terms" className="hover:text-slate-300 transition-colors">Terms</Link>
           </p>
         </div>
       </div>

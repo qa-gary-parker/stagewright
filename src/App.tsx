@@ -5,6 +5,7 @@ import Features from './components/Features';
 import Demo from './components/Demo';
 import Pricing from './components/Pricing';
 import EmailSignup from './components/EmailSignup';
+import FAQ from './components/FAQ';
 import Footer from './components/Footer';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
       <Demo />
       <Pricing />
       <EmailSignup />
+      <FAQ />
       <Footer />
       <Analytics />
     </div>
