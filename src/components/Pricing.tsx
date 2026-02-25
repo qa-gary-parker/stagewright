@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 const CHECKOUT_URLS = {
-  starter: 'https://stagewright.lemonsqueezy.com/checkout/buy/STARTER_PRODUCT_ID',
+  starter: 'https://stagewright.lemonsqueezy.com/checkout/buy/badb6575-05ee-4b9a-b9c6-77d46e2e51a9',
   pro: 'https://stagewright.lemonsqueezy.com/checkout/buy/f221d597-70cb-4045-8072-f8cd253c7a71',
 };
 
