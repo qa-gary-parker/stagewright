@@ -3,7 +3,7 @@ import type { DocPage } from '../types';
 export const configuration: DocPage = {
   slug: 'configuration',
   title: 'Configuration Reference',
-  description: 'Complete reference for every playwright-smart-reporter option, including Pro features and environment variables.',
+  description: 'Complete reference for every playwright-smart-reporter option, including Starter features and environment variables.',
   sections: [
     {
       heading: 'Basic Options',
@@ -74,7 +74,7 @@ export default defineConfig({
       },
     },
     {
-      heading: 'Pro Options',
+      heading: 'Starter Options',
       body: [
         'These options unlock advanced features like AI analysis, theming, quality gates, and export formats. They require a valid Starter or Pro license key set via the SMART_REPORTER_LICENSE_KEY environment variable.',
       ],
@@ -93,7 +93,7 @@ export default defineConfig({
       },
       note: {
         type: 'pro',
-        content: 'Pro options are silently ignored when no valid license key is present — your config stays portable across free and Pro environments.',
+        content: 'Pro options are silently ignored when no valid license key is present — your config stays portable across free and licensed environments.',
       },
     },
     {

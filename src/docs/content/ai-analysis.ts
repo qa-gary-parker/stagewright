@@ -3,7 +3,7 @@ import type { DocPage } from '../types';
 export const aiAnalysis: DocPage = {
   slug: 'ai-analysis',
   title: 'AI Failure Analysis',
-  description: 'Automatically detect root causes, cluster related failures, and receive actionable fix suggestions — included with Pro.',
+  description: 'Automatically detect root causes, cluster related failures, and receive actionable fix suggestions — included with Starter and Pro.',
   isPro: true,
   sections: [
     {

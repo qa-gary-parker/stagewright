@@ -68,7 +68,7 @@ function renderSection(section: ContentSection, idx: number) {
           <div className="flex items-center gap-2 mb-1">
             {section.note.type === 'pro' && <ProBadge size="sm" />}
             <span className="text-sm font-semibold uppercase">
-              {section.note.type === 'info' ? 'Note' : section.note.type === 'warning' ? 'Warning' : 'Pro Feature'}
+              {section.note.type === 'info' ? 'Note' : section.note.type === 'warning' ? 'Warning' : 'Starter Feature'}
             </span>
           </div>
           <p className="text-sm">{section.note.content}</p>

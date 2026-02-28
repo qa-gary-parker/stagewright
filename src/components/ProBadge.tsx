@@ -5,7 +5,7 @@ export default function ProBadge({ size = 'sm' }: { size?: 'sm' | 'md' }) {
         size === 'sm' ? 'px-1.5 py-0.5 text-[10px]' : 'px-2.5 py-1 text-xs'
       }`}
     >
-      PRO
+      STARTER
     </span>
   );
 }

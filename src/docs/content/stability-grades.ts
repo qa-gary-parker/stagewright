@@ -28,7 +28,7 @@ export const stabilityGrades: DocPage = {
     {
       heading: 'How Grades Are Calculated',
       body: [
-        'The grade formula uses three weighted components. The default weights are optimized for most test suites but can be adjusted in Pro configurations.',
+        'The grade formula uses three weighted components. The default weights are optimized for most test suites but can be adjusted in Starter and Pro configurations.',
       ],
       code: {
         language: 'text',
@@ -77,7 +77,7 @@ Where:
       },
       note: {
         type: 'pro',
-        content: 'Quality gates with grade thresholds are a Pro feature. Free users can view grades but cannot enforce gates.',
+        content: 'Quality gates with grade thresholds are a Starter feature. Free users can view grades but cannot enforce gates.',
       },
     },
     {

@@ -2,14 +2,14 @@ import type { DocPage } from '../types';
 
 export const proThemes: DocPage = {
   slug: 'pro-themes',
-  title: 'Pro Themes',
+  title: 'Themes',
   description: 'Customise the report appearance with six additional themes or create your own.',
   isPro: true,
   sections: [
     {
       heading: 'Overview',
       body: [
-        'Pro themes transform the visual appearance of your test reports. Choose from six professionally designed themes or configure custom colours to match your brand. Themes affect the entire report including charts, badges, code blocks, and the navigation sidebar.',
+        'Additional themes transform the visual appearance of your test reports. Choose from six professionally designed themes or configure custom colours to match your brand. Themes affect the entire report including charts, badges, code blocks, and the navigation sidebar.',
       ],
     },
     {

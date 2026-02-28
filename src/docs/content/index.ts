@@ -24,7 +24,7 @@ import { cucumber } from './cucumber';
 import { cliTools } from './cli-tools';
 import { keyboardShortcuts } from './keyboard-shortcuts';
 
-// Pro Features
+// Starter Features
 import { proThemes } from './pro-themes';
 import { proBranding } from './pro-branding';
 import { proExports } from './pro-exports';
@@ -99,10 +99,10 @@ export const docsNavigation: DocSection[] = [
   },
   {
     id: 'pro-features',
-    title: 'Pro Features',
+    title: 'Starter Features',
     items: [
       { slug: 'ai-analysis', title: 'AI Failure Analysis', isPro: true },
-      { slug: 'pro-themes', title: 'Pro Themes', isPro: true },
+      { slug: 'pro-themes', title: 'Themes', isPro: true },
       { slug: 'pro-branding', title: 'Report Branding', isPro: true },
       { slug: 'pro-exports', title: 'Export Formats', isPro: true },
       { slug: 'pro-quality-gates', title: 'Quality Gates', isPro: true },

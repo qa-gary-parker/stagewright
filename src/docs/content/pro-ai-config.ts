@@ -3,7 +3,7 @@ import type { DocPage } from '../types';
 export const proAiConfig: DocPage = {
   slug: 'pro-ai-config',
   title: 'AI Configuration',
-  description: 'AI failure analysis is fully managed with Pro — no configuration or API keys required.',
+  description: 'AI failure analysis is fully managed with Starter and Pro — no configuration or API keys required.',
   isPro: true,
   sections: [
     {

@@ -9,7 +9,7 @@ export const proExports: DocPage = {
     {
       heading: 'Overview',
       body: [
-        'Pro users can export test reports in multiple formats beyond the default HTML. PDF exports are ideal for stakeholder distribution, JSON exports integrate with custom dashboards and automation, and JUnit XML provides CI/CD compatibility.',
+        'Starter and Pro users can export test reports in multiple formats beyond the default HTML. PDF exports are ideal for stakeholder distribution, JSON exports integrate with custom dashboards and automation, and JUnit XML provides CI/CD compatibility.',
       ],
     },
     {
