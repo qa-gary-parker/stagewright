@@ -39,6 +39,26 @@ export const proAiConfig: DocPage = {
       },
     },
     {
+      heading: 'Suite Health Summary',
+      body: [
+        'The AI suite health summary generates a natural-language executive overview at the top of the Overview tab. It is enabled by default for Starter and Pro users and counts as one AI analysis request per run.',
+        'If you want to preserve quota (for example in a high-frequency CI pipeline), you can disable it:',
+      ],
+      code: {
+        language: 'typescript',
+        content: `reporter: [
+  ['playwright-smart-reporter', {
+    licenseKey: process.env.SMART_REPORTER_LICENSE_KEY,
+    enableAISuiteHealth: false,  // Disable AI health summary
+  }],
+]`,
+      },
+      note: {
+        type: 'info',
+        content: 'Disabling the suite health summary does not affect individual failure analysis — those continue to run normally.',
+      },
+    },
+    {
       heading: 'Privacy and Data Handling',
       body: [
         'The StageWright proxy forwards failure data (error messages, stack traces, and test steps) to OpenAI for analysis. No data is stored by the proxy — it acts as a pass-through that validates your license and enforces rate limits.',

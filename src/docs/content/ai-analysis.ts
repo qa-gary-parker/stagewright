@@ -80,6 +80,23 @@ Confidence:  87%`,
       },
     },
     {
+      heading: 'Suite Health Summary',
+      body: [
+        'With Starter or Pro, the Overview tab displays an AI-generated executive summary of your entire test suite. It combines failure clusters, flakiness trends, performance regressions, and historical pass rate data into a concise natural-language paragraph — giving you an at-a-glance health assessment without reading individual test results.',
+        'The health summary is enabled by default and counts as one AI analysis request per run. To disable it and preserve quota, set `enableAISuiteHealth: false` in your reporter config.',
+      ],
+      code: {
+        language: 'typescript',
+        content: `// Disable the AI suite health summary to save quota
+reporter: [
+  ['playwright-smart-reporter', {
+    licenseKey: process.env.SMART_REPORTER_LICENSE_KEY,
+    enableAISuiteHealth: false,
+  }],
+]`,
+      },
+    },
+    {
       heading: 'Privacy',
       body: [
         'AI analysis sends failure data (error messages, stack traces, and test steps) to OpenAI via the StageWright proxy. No screenshots or video attachments are sent. The proxy does not store your test data — it is forwarded to the AI provider and discarded.',

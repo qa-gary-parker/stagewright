@@ -49,6 +49,7 @@ const tiers = [
       'JSON and JUnit XML export',
       'Quality gates \u2014 fail CI when thresholds are breached',
       'Auto-quarantine flaky tests',
+      'AI suite health summary in Overview tab',
       'Custom logo and report title',
     ],
   },
