@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -9,6 +10,16 @@ import FAQ from './components/FAQ';
 import Footer from './components/Footer';
 
 function App() {
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash) {
+      const el = document.querySelector(hash);
+      if (el) {
+        requestAnimationFrame(() => el.scrollIntoView({ behavior: 'smooth' }));
+      }
+    }
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
       <Navbar />
