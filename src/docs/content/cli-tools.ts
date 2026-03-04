@@ -23,7 +23,7 @@ export const cliTools: DocPage = {
           ['playwright-smart-reporter gate', 'Evaluate quality gates against a JSON export'],
           ['playwright-smart-reporter digest', 'Generate a test health digest from history'],
           ['playwright-smart-reporter-merge-history', 'Merge multiple test-history.json files from parallel CI runs'],
-          ['playwright-smart-reporter-serve', 'Serve the report locally so the trace viewer can load trace files'],
+          ['playwright-smart-reporter-serve', 'Serve the report locally with trace viewer and optional live mode'],
         ],
       },
     },
@@ -86,7 +86,7 @@ npx playwright-smart-reporter-merge-history 'blob-reports/**/test-history.json' 
     {
       heading: 'Serving Reports Locally',
       body: [
-        'The serve command starts a local HTTP server so the embedded trace viewer can load trace files. This is needed because trace files cannot be loaded from file:// URLs.',
+        'The serve command starts a local HTTP server so the embedded trace viewer can load trace files. This is needed because trace files cannot be loaded from file:// URLs. It also supports live mode for real-time SSE streaming.',
       ],
       code: {
         language: 'bash',
@@ -97,7 +97,14 @@ npx playwright-smart-reporter-serve
 npx playwright-smart-reporter-serve ./example/smart-report.html --port 3000
 
 # Serve without opening the browser
-npx playwright-smart-reporter-serve --no-open`,
+npx playwright-smart-reporter-serve --no-open
+
+# Serve with live execution mode
+npx playwright-smart-reporter-serve --live --run-command "npx playwright test" --cwd ./my-project`,
+      },
+      note: {
+        type: 'info',
+        content: 'The --live flag enables SSE streaming and the /run endpoint. See the Live Execution docs for full details.',
       },
     },
     {

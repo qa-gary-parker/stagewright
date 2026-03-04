@@ -27,6 +27,7 @@ const tiers = [
       'Screenshot, video, and trace gallery',
       'One-click Playwright trace viewer',
       'Network request logs',
+      'Live execution progress (read-only)',
     ],
   },
   {
@@ -51,6 +52,7 @@ const tiers = [
       'Auto-quarantine flaky tests',
       'AI suite health summary in Overview tab',
       'Custom logo and report title',
+      'Live run/cancel/filter controls',
     ],
   },
   {

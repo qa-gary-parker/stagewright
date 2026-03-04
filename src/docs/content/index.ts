@@ -25,6 +25,7 @@ import { cliTools } from './cli-tools';
 import { keyboardShortcuts } from './keyboard-shortcuts';
 
 // Starter Features
+import { liveExecution } from './live-execution';
 import { proThemes } from './pro-themes';
 import { proBranding } from './pro-branding';
 import { proExports } from './pro-exports';
@@ -52,6 +53,7 @@ export {
   cucumber,
   cliTools,
   keyboardShortcuts,
+  liveExecution,
   proThemes,
   proBranding,
   proExports,
@@ -101,6 +103,7 @@ export const docsNavigation: DocSection[] = [
     id: 'pro-features',
     title: 'Starter Features',
     items: [
+      { slug: 'live-execution', title: 'Live Execution', isPro: true },
       { slug: 'ai-analysis', title: 'AI Failure Analysis', isPro: true },
       { slug: 'pro-themes', title: 'Themes', isPro: true },
       { slug: 'pro-branding', title: 'Report Branding', isPro: true },
@@ -116,6 +119,7 @@ export const docsNavigation: DocSection[] = [
 export const allPages: Record<string, DocPage> = {
   'getting-started': gettingStarted,
   configuration,
+  'live-execution': liveExecution,
   'ai-analysis': aiAnalysis,
   'stability-grades': stabilityGrades,
   'run-comparison': runComparison,

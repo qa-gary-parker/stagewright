@@ -26,6 +26,7 @@ export const configuration: DocPage = {
           ['enableTrendsView', 'boolean', 'true', 'Show trend charts in the report'],
           ['enableGalleryView', 'boolean', 'true', 'Show screenshot/video/trace gallery'],
           ['filterPwApiSteps', 'boolean', 'false', 'Hide verbose pw:api internal steps'],
+          ['live', '{ enabled: boolean; outputFile?: string }', 'undefined', 'Enable live execution progress via SSE streaming'],
           ['slackWebhook', 'string', 'undefined', 'Slack incoming webhook URL for basic notifications'],
           ['teamsWebhook', 'string', 'undefined', 'Microsoft Teams webhook URL for basic notifications'],
           ['cspSafe', 'boolean', 'false', 'Use system fonts and avoid base64 data URIs for CSP compliance'],
