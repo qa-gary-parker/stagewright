@@ -107,7 +107,7 @@ export default function Pricing() {
               transition={{ duration: 0.5, delay: i * 0.15 }}
               className={`relative rounded-2xl p-6 sm:p-8 flex flex-col ${
                 tier.highlighted
-                  ? 'bg-slate-800/50 border-2 border-green-500/60 shadow-lg shadow-green-500/10 md:-mt-4 md:mb-[-16px]'
+                  ? 'bg-slate-800/50 border-2 border-green-500/60 shadow-lg shadow-green-500/10 md:-mt-4 md:-mb-4'
                   : 'bg-slate-800/30 border border-slate-700'
               }`}
             >
@@ -167,7 +167,7 @@ export default function Pricing() {
                 }`}
               >
                 {tier.name === 'Local' ? (
-                  <code className="text-sm">npm i playwright-smart-reporter</code>
+                  <code className="text-xs sm:text-sm break-all">npm i playwright-smart-reporter</code>
                 ) : (
                   tier.cta
                 )}

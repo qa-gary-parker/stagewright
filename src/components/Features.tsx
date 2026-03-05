@@ -191,7 +191,7 @@ export default function Features() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature, index) => (
             <motion.div
               key={feature.title}
@@ -268,13 +268,13 @@ export default function Features() {
         >
           <div className="text-center mb-12">
             <p className="text-purple-400 text-sm font-semibold uppercase tracking-wider mb-4">Roadmap</p>
-            <h3 className="text-3xl font-bold text-white mb-4">Coming Soon</h3>
-            <p className="text-slate-400 max-w-2xl mx-auto">
+            <h3 className="text-3xl font-bold text-white mb-4 px-2">Coming Soon</h3>
+            <p className="text-slate-400 max-w-2xl mx-auto px-2">
               We're constantly improving StageWright. Here's what's on our roadmap.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {[
               {
                 title: 'GitHub PR Comments',

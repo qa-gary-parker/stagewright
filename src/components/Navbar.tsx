@@ -45,6 +45,12 @@ export default function Navbar() {
           >
             FAQ
           </button>
+          <a
+            href="/demo-report.html"
+            className="text-sm text-slate-300 hover:text-white transition-colors"
+          >
+            Demo
+          </a>
           <Link
             to="/docs"
             className="text-sm text-slate-300 hover:text-white transition-colors"
@@ -97,6 +103,13 @@ export default function Navbar() {
             >
               FAQ
             </button>
+            <a
+              href="/demo-report.html"
+              onClick={() => setMobileOpen(false)}
+              className="text-sm text-slate-300 hover:text-white transition-colors"
+            >
+              Demo
+            </a>
             <Link
               to="/docs"
               onClick={() => setMobileOpen(false)}

@@ -6,9 +6,9 @@ export default function Footer() {
   return (
     <footer className="relative py-12 px-6 border-t border-slate-800">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-6 gap-8 md:gap-12">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-8 md:gap-12">
           {/* Column 1: Branding */}
-          <div className="md:col-span-2">
+          <div className="col-span-2">
             <div className="flex items-center gap-4 mb-3">
               <img src="/logo.png" alt="StageWright Logo" className="w-14 h-14 rounded-xl" />
               <h3 className="text-2xl font-bold text-white">
