@@ -53,6 +53,7 @@ const tiers = [
       'AI health summary \u2014 executive overview of suite quality',
       'Brand reports with your logo and team name',
       'Run, cancel, and filter tests from the live dashboard',
+      'WCAG accessibility scanning with axe-core integration',
     ],
   },
   {

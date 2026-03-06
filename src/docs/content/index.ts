@@ -33,6 +33,7 @@ import { proQualityGates } from './pro-quality-gates';
 import { proQuarantine } from './pro-quarantine';
 import { proNotifications } from './pro-notifications';
 import { proAiConfig } from './pro-ai-config';
+import { accessibility } from './accessibility';
 
 export {
   gettingStarted,
@@ -61,6 +62,7 @@ export {
   proQuarantine,
   proNotifications,
   proAiConfig,
+  accessibility,
 };
 
 export const docsNavigation: DocSection[] = [
@@ -112,6 +114,7 @@ export const docsNavigation: DocSection[] = [
       { slug: 'pro-quarantine', title: 'Flaky Quarantine', isPro: true },
       { slug: 'pro-notifications', title: 'Advanced Notifications', isPro: true },
       { slug: 'pro-ai-config', title: 'AI Configuration', isPro: true },
+      { slug: 'accessibility', title: 'Accessibility Scanning', isPro: true },
     ],
   },
 ];
@@ -143,4 +146,5 @@ export const allPages: Record<string, DocPage> = {
   'pro-quarantine': proQuarantine,
   'pro-notifications': proNotifications,
   'pro-ai-config': proAiConfig,
+  accessibility,
 };
