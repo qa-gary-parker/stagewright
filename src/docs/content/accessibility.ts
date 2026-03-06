@@ -10,7 +10,7 @@ export const accessibility: DocPage = {
       heading: 'Overview',
       body: [
         'Accessibility scanning integrates axe-core into your Playwright tests via a custom test fixture. Each test automatically runs a WCAG compliance audit after completion, and results are aggregated into a dedicated Accessibility tab in your report.',
-        'This feature requires the Starter tier or above.',
+        'Basic accessibility scanning (per-test violations, severity badges, WCAG links) is available on all tiers. The dedicated Accessibility tab, AI-powered analysis, and accessibility quality gates require the Starter tier or above.',
       ],
     },
     {
@@ -73,16 +73,56 @@ export default defineConfig({
       heading: 'Report Features',
       body: [
         'When accessibility scanning is enabled, the report includes:',
-        '**Per-test violation cards** — Each test with violations shows an expandable accessibility section with impact badges (critical, serious, moderate, minor), WCAG criterion links, and affected DOM elements.',
-        '**Dedicated Accessibility tab** — A suite-wide dashboard with an overall score rating (excellent/good/fair/poor/critical), severity breakdown bar, top recurring issues across all tests, and worst offender tests sorted by violation count.',
-        '**Copy Prompt button** — One-click copy of a structured fix prompt for each violation, ready to paste into an AI assistant for remediation guidance.',
-        '**AI accessibility analysis** — When AI recommendations are enabled, an AI-generated summary provides prioritised remediation advice based on your violation patterns.',
       ],
+      list: {
+        icon: 'check',
+        items: [
+          'Per-test violation cards with impact badges (critical, serious, moderate, minor), WCAG criterion links, and affected DOM elements',
+          'Dedicated Accessibility tab with suite-wide score rating, severity breakdown bar, top recurring issues, and worst offender tests (Starter+)',
+          'Copy Prompt button to generate AI-ready fix prompts for each violation',
+          'Accessibility tree viewer for visual tree snapshot inspection when tree data is present (Starter+)',
+          'AI-powered accessibility analysis with prioritised remediation advice (Starter+, uses AI quota)',
+        ],
+      },
+    },
+    {
+      heading: 'Tier Availability',
+      body: [
+        'Accessibility features are split across tiers to give every team useful violation data while reserving advanced analysis for paid plans.',
+      ],
+      table: {
+        headers: ['Feature', 'Local (Free)', 'Starter', 'Pro'],
+        rows: [
+          ['Per-test violation cards with impact badges', 'Yes', 'Yes', 'Yes'],
+          ['WCAG criterion links and Copy Prompt button', 'Yes', 'Yes', 'Yes'],
+          ['Dedicated Accessibility tab', '', 'Yes', 'Yes'],
+          ['Accessibility tree viewer', '', 'Yes', 'Yes'],
+          ['AI accessibility analysis', '', 'Yes', 'Yes'],
+          ['Accessibility quality gates', '', 'Yes', 'Yes'],
+        ],
+      },
+    },
+    {
+      heading: 'AI Accessibility Analysis',
+      body: [
+        'When AI recommendations are enabled (Starter tier and above), the Accessibility tab includes an AI-generated summary that analyses your violation patterns and provides prioritised remediation advice.',
+        'AI analysis is enabled by default when you have a valid license key. To disable it (e.g., to preserve AI quota), set enableAIRecommendations to false:',
+      ],
+      code: {
+        language: 'typescript',
+        content: `reporter: [
+  ['playwright-smart-reporter', {
+    outputFile: 'smart-report.html',
+    licenseKey: process.env.SMART_REPORTER_LICENSE_KEY,
+    enableAIRecommendations: false,  // disables AI for both failure analysis and a11y
+  }],
+]`,
+      },
     },
     {
       heading: 'Quality Gates',
       body: [
-        'Add accessibility thresholds to your quality gates to fail CI when accessibility standards are not met:',
+        'Add accessibility thresholds to your quality gates to fail CI when accessibility standards are not met (Starter tier and above):',
       ],
       code: {
         language: 'typescript',
@@ -100,14 +140,18 @@ export default defineConfig({
     {
       heading: 'Configuration Options',
       body: [
-        '| Option | Type | Default | Description |',
-        '|---|---|---|---|',
-        '| `enabled` | `boolean` | `false` | Enable accessibility scanning |',
-        '| `standard` | `string` | `WCAG2AA` | WCAG conformance level (`WCAG2A`, `WCAG2AA`, `WCAG2AAA`) |',
-        '| `include` | `string[]` | `[]` | Only run these specific axe rule IDs |',
-        '| `exclude` | `string[]` | `[]` | Skip these specific axe rule IDs |',
-        '| `selector` | `string` | — | CSS selector to scope the scan to a specific element |',
+        'Customise accessibility scanning behaviour with the following options in the smartReporterA11y config:',
       ],
+      table: {
+        headers: ['Option', 'Type', 'Default', 'Description'],
+        rows: [
+          ['enabled', 'boolean', 'false', 'Enable accessibility scanning'],
+          ['standard', 'string', 'WCAG2AA', 'WCAG conformance level (WCAG2A, WCAG2AA, WCAG2AAA)'],
+          ['include', 'string[]', '[]', 'Only run these specific axe rule IDs'],
+          ['exclude', 'string[]', '[]', 'Skip these specific axe rule IDs'],
+          ['selector', 'string', '\u2014', 'CSS selector to scope the scan to a specific element'],
+        ],
+      },
     },
   ],
 };

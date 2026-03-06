@@ -28,6 +28,7 @@ const tiers = [
       'Debug failures visually with the built-in trace viewer',
       'Network request logs to pinpoint API issues',
       'Live progress dashboard \u2014 watch results as tests execute',
+      'WCAG accessibility scanning with axe-core integration',
     ],
   },
   {
@@ -53,7 +54,7 @@ const tiers = [
       'AI health summary \u2014 executive overview of suite quality',
       'Brand reports with your logo and team name',
       'Run, cancel, and filter tests from the live dashboard',
-      'WCAG accessibility scanning with axe-core integration',
+      'AI accessibility analysis and a11y quality gates',
     ],
   },
   {

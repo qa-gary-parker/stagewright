@@ -156,9 +156,8 @@ const features: Feature[] = [
   {
     icon: Icons.accessibility,
     title: 'Accessibility Scanning',
-    description: 'Automatic WCAG compliance scanning powered by axe-core. Per-test violations, severity breakdown, and copy-to-clipboard fix prompts.',
+    description: 'Automatic WCAG compliance scanning powered by axe-core. Per-test violations, severity breakdown, and copy-to-clipboard fix prompts. AI analysis on Starter+.',
     color: 'from-indigo-500 to-blue-500',
-    pro: true,
   },
   {
     icon: Icons.shield,

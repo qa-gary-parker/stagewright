@@ -52,8 +52,8 @@ export default function DocsSidebar({
                     }`
                   }
                 >
-                  {item.title}
-                  {item.isPro && <ProBadge size="sm" />}
+                  <span className="truncate">{item.title}</span>
+                  {item.isPro && <span className="ml-auto shrink-0"><ProBadge size="sm" /></span>}
                 </NavLink>
               ))}
             </div>
