@@ -156,7 +156,7 @@ export default function Pricing() {
                   <div className="text-blue-400 font-bold text-lg">{tier.aiQuota}</div>
                   <div className="text-blue-300/70 text-xs">AI analyses per month</div>
                   {'trialQuota' in tier && tier.trialQuota && (
-                    <div className="text-emerald-400/80 text-xs mt-1.5 font-medium">{tier.trialQuota} free during trial — no credit card required</div>
+                    <div className="text-emerald-400/80 text-xs mt-1.5 font-medium">{tier.trialQuota} free during trial</div>
                   )}
                 </div>
               )}
