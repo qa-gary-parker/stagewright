@@ -19,7 +19,7 @@ function base64UrlDecode(str: string): Buffer {
   return Buffer.from(base64, 'base64');
 }
 
-function validateLicenseToken(token: string): { valid: boolean; tier?: string; org?: string; trial?: boolean; error?: string } {
+function validateLicenseToken(token: string): { valid: boolean; tier?: string; org?: string; error?: string } {
   try {
     const parts = token.split('.');
     if (parts.length !== 3) return { valid: false, error: 'Malformed token' };
@@ -38,14 +38,13 @@ function validateLicenseToken(token: string): { valid: boolean; tier?: string; o
     if (payload.exp && payload.exp < Math.floor(Date.now() / 1000)) return { valid: false, error: 'Token expired' };
     if (!payload.tier || !payload.org) return { valid: false, error: 'Missing required claims' };
 
-    return { valid: true, tier: payload.tier, org: payload.org, trial: payload.trial === true };
+    return { valid: true, tier: payload.tier, org: payload.org };
   } catch {
     return { valid: false, error: 'Token validation failed' };
   }
 }
 
 const redis = new Redis({ url: process.env.UPSTASH_REDIS_REST_URL!, token: process.env.UPSTASH_REDIS_REST_TOKEN! });
-const trialLimiter = new Ratelimit({ redis, limiter: Ratelimit.fixedWindow(100, '7d'), prefix: 'ai-trial' });
 const starterLimiter = new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(2000, '30d'), prefix: 'ai-starter' });
 const proLimiter = new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(5000, '30d'), prefix: 'ai-pro' });
 
@@ -71,10 +70,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(403).json({ error: 'AI analysis requires a Starter or Pro license' });
   }
 
-  const limiter = validation.trial ? trialLimiter : validation.tier === 'starter' ? starterLimiter : proLimiter;
+  const limiter = validation.tier === 'starter' ? starterLimiter : proLimiter;
   const orgKey = (validation.org || 'unknown').toLowerCase().trim();
-  const limiterKey = validation.trial ? `ai-trial:${orgKey}` : `ai:${orgKey}`;
-  const { success, remaining, reset } = await limiter.limit(limiterKey);
+  const { success, remaining, reset } = await limiter.limit(`ai:${orgKey}`);
 
   if (!success) {
     return res.status(429).json({
@@ -93,7 +91,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: `Prompt exceeds maximum length of ${MAX_PROMPT_LENGTH} characters` });
   }
 
-  if (type && !['failure', 'cluster', 'suite-health'].includes(type)) {
+  if (type && !['failure', 'cluster'].includes(type)) {
     return res.status(400).json({ error: 'Invalid type — must be failure or cluster' });
   }
 
