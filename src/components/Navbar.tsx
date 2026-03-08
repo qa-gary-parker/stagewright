@@ -58,9 +58,7 @@ export default function Navbar() {
             Docs
           </Link>
           <a
-            href="https://stagewright.lemonsqueezy.com/checkout/buy/f221d597-70cb-4045-8072-f8cd253c7a71"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/api/checkout?product=0a2847d1-0162-4c75-a015-a89a62eac4cc"
             className="px-4 py-2 bg-green-600 hover:bg-green-500 text-white text-sm font-semibold rounded-lg transition-colors"
           >
             Get Pro
@@ -118,9 +116,7 @@ export default function Navbar() {
               Docs
             </Link>
             <a
-              href="https://stagewright.lemonsqueezy.com/checkout/buy/f221d597-70cb-4045-8072-f8cd253c7a71"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/api/checkout?product=0a2847d1-0162-4c75-a015-a89a62eac4cc"
               className="px-4 py-2 bg-green-600 hover:bg-green-500 text-white text-sm font-semibold rounded-lg transition-colors text-center block"
             >
               Get Pro

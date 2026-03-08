@@ -83,9 +83,7 @@ export default function EmailSignup() {
               {/* CTAs */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
                 <a
-                  href="https://stagewright.lemonsqueezy.com/checkout/buy/f221d597-70cb-4045-8072-f8cd253c7a71"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="/api/checkout?product=0a2847d1-0162-4c75-a015-a89a62eac4cc"
                   className="px-6 sm:px-8 py-3 sm:py-4 bg-white text-green-700 text-base sm:text-lg font-bold rounded-xl hover:bg-green-50 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
                 >
                   Get Pro License
