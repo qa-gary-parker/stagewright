@@ -20,7 +20,7 @@ export default function Privacy() {
           </li>
           <li>
             <strong className="text-slate-300">License key</strong> — generated
-            by LemonSqueezy when you purchase a Starter or Pro license. We
+            by Polar when you purchase a Starter or Pro license. We
             validate it on each reporter run.
           </li>
           <li>
@@ -52,7 +52,7 @@ export default function Privacy() {
       <Section title="Third-Party Services">
         <ul className="list-disc pl-5 space-y-2 text-slate-400">
           <li>
-            <strong className="text-slate-300">LemonSqueezy</strong> — payment
+            <strong className="text-slate-300">Polar</strong> — payment
             processing and license key management.
           </li>
           <li>
@@ -76,7 +76,7 @@ export default function Privacy() {
 
       <Section title="Data Retention">
         <ul className="list-disc pl-5 space-y-2 text-slate-400">
-          <li>License keys are managed by LemonSqueezy for the duration of your subscription.</li>
+          <li>License keys are managed by Polar for the duration of your subscription.</li>
           <li>Rate-limit counters expire automatically after 30 days.</li>
           <li>No test data is stored server-side.</li>
           <li>Newsletter subscriptions can be removed at any time via the unsubscribe link in each email.</li>

@@ -160,8 +160,8 @@ export default function Pricing() {
               {/* CTA */}
               <a
                 href={tier.ctaHref}
-                target={tier.price > 0 ? '_blank' : undefined}
-                rel={tier.price > 0 ? 'noopener noreferrer' : undefined}
+                target={tier.ctaHref.startsWith('http') ? '_blank' : undefined}
+                rel={tier.ctaHref.startsWith('http') ? 'noopener noreferrer' : undefined}
                 className={`block w-full text-center py-3 rounded-xl font-semibold text-sm transition-all mb-8 ${
                   tier.highlighted
                     ? 'bg-green-600 hover:bg-green-500 text-white shadow-lg shadow-green-500/25 hover:shadow-green-500/40'

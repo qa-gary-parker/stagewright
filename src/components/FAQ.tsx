@@ -25,7 +25,7 @@ const faqs = [
   {
     question: 'How do I activate my license?',
     answer:
-      'Set the SMART_REPORTER_LICENSE_KEY environment variable to the key from your LemonSqueezy purchase email. The reporter validates it automatically on each run.',
+      'Set the SMART_REPORTER_LICENSE_KEY environment variable to the key from your Polar purchase email. The reporter validates it automatically on each run.',
   },
   {
     question: 'Does it work in CI?',

@@ -29,7 +29,7 @@ export default function Terms() {
           </li>
           <li>
             <strong className="text-slate-300">Starter / Pro</strong> —
-            commercial licenses purchased via LemonSqueezy. These unlock AI
+            commercial licenses purchased via Polar. These unlock AI
             failure analysis, additional themes, exports, quality gates, and
             other premium features as described on the pricing page.
           </li>
@@ -70,7 +70,7 @@ export default function Terms() {
         <p className="text-slate-400 leading-relaxed">
           We may revoke a commercial licence if these terms are violated. The
           free community tier remains available regardless. You may cancel your
-          subscription at any time through LemonSqueezy.
+          subscription at any time through Polar.
         </p>
       </Section>
 
