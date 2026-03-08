@@ -2,8 +2,8 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 const CHECKOUT_URLS = {
-  starter: 'https://stagewright.lemonsqueezy.com/checkout/buy/badb6575-05ee-4b9a-b9c6-77d46e2e51a9',
-  pro: 'https://stagewright.lemonsqueezy.com/checkout/buy/f221d597-70cb-4045-8072-f8cd253c7a71',
+  starter: '/api/checkout?product=e9fa1a5f-01af-460e-9e14-ece23828ae84',
+  pro: '/api/checkout?product=0a2847d1-0162-4c75-a015-a89a62eac4cc',
 };
 
 const tiers = [
