@@ -33,17 +33,16 @@ const tiers = [
   },
   {
     name: 'Starter',
-    badge: '7-day free trial',
+    badge: '',
     price: 5,
     usdEquiv: '~$6',
     description: 'AI explains every failure so you fix bugs faster.',
-    cta: 'Start Free Trial',
+    cta: 'Get Starter',
     ctaHref: CHECKOUT_URLS.starter,
     delivery: 'License key (same npm package)',
     highlighted: false,
     comingSoon: false,
     aiQuota: '2,000',
-    trialQuota: '100',
     features: [
       'Everything in Local, plus:',
       '2,000 AI-powered root cause analyses per month',
@@ -118,7 +117,7 @@ export default function Pricing() {
               {tier.badge && (
                 <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
                   <span className={`px-4 py-1.5 text-white text-xs font-bold rounded-full uppercase tracking-wider shadow-lg ${
-                    tier.highlighted ? 'bg-green-600' : tier.badge.toLowerCase().includes('trial') ? 'bg-emerald-600' : 'bg-slate-600'
+                    tier.highlighted ? 'bg-green-600' : 'bg-slate-600'
                   }`}>
                     {tier.badge}
                   </span>
@@ -155,9 +154,6 @@ export default function Pricing() {
                 <div className="mb-6 p-3 rounded-lg bg-blue-500/10 border border-blue-500/20">
                   <div className="text-blue-400 font-bold text-lg">{tier.aiQuota}</div>
                   <div className="text-blue-300/70 text-xs">AI analyses per month</div>
-                  {'trialQuota' in tier && tier.trialQuota && (
-                    <div className="text-emerald-400/80 text-xs mt-1.5 font-medium">{tier.trialQuota} free during trial — no credit card required</div>
-                  )}
                 </div>
               )}
 
