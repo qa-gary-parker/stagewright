@@ -16,7 +16,7 @@ function escapeHtml(s: string): string {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-function generateLicenseJwt(tier: 'starter' | 'pro' | 'team', org: string, durationDays: number): string {
+function generateLicenseJwt(tier: 'starter' | 'pro' | 'team', org: string, durationDays: number, trial?: boolean): string {
   const privateKey = process.env.LICENSE_PRIVATE_KEY;
   if (!privateKey) throw new Error('LICENSE_PRIVATE_KEY env var not set');
 
@@ -24,7 +24,8 @@ function generateLicenseJwt(tier: 'starter' | 'pro' | 'team', org: string, durat
   const exp = now + durationDays * 24 * 60 * 60;
 
   const header = { alg: 'ES256', typ: 'JWT' };
-  const payload = { tier, org, iat: now, exp };
+  const payload: Record<string, unknown> = { tier, org, iat: now, exp };
+  if (trial) payload.trial = true;
 
   const headerB64 = base64UrlEncode(Buffer.from(JSON.stringify(header)));
   const payloadB64 = base64UrlEncode(Buffer.from(JSON.stringify(payload)));
@@ -193,9 +194,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       : productName.toLowerCase().includes('pro') ? 'pro' as const
       : 'starter' as const;
     const planName = tier === 'starter' ? 'Starter' : 'Pro';
-    const durationDays = 35; // Monthly with buffer
 
-    const licenseKey = generateLicenseJwt(tier, customerEmail, durationDays);
+    // Detect trial: Polar sets subscription.started_at in the future during trial,
+    // or the checkout amount is 0 for a free trial period
+    const isTrial = (checkout as Record<string, unknown>).amount === 0
+      || (checkout as Record<string, unknown>).isFreeTrialRedemption === true;
+    const durationDays = isTrial ? 7 : 35; // 7d trial or monthly with buffer
+
+    const licenseKey = generateLicenseJwt(tier, customerEmail, durationDays, isTrial || undefined);
 
     console.log(JSON.stringify({
       action: 'license_generated',
@@ -205,6 +211,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       name: customerName,
       product: productName,
       plan: planName,
+      trial: isTrial,
       duration: `${durationDays} days`,
     }));
 
